@@ -10,6 +10,12 @@ public class Admin extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.admin_activity);
+
+        // if event is clicked
+        // if profiles is clicked
+        // if images is clicked
+
     }
+
 
 }
