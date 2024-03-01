@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This drawable file is so the address edittext on the settings page can have a rectangle around it-->
+<!--Citation: OpenAI, 2024-02-28, ChatGPT, How to create rectangular border in edittext -->
+<!-- output was to create drawable file and use the code below-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <stroke
+        android:color="#000000"
+        android:width="1dp"/>
+</shape>

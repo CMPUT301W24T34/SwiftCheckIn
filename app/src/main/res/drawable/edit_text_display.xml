@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--This drawable file is so the edit texts on the settings page do not have an underline anymore-->
+<!--Citation: OpenAI, 2024-02-28, ChatGPT, How to get rid of underline in edittext -->
+<!-- output was to create drawable file and use the code below-->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="@android:color/white" />
+        </shape>
+    </item>
+</selector>
