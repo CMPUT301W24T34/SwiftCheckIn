@@ -61,6 +61,7 @@
         app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toEndOf="@+id/word_email"
         app:layout_constraintTop_toBottomOf="@+id/phonenumber" />
+
     <EditText
         android:id="@+id/website"
         android:layout_width="wrap_content"
@@ -73,7 +74,6 @@
         app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toEndOf="@+id/word_website"
         app:layout_constraintTop_toBottomOf="@+id/email" />
-
 
     <EditText
         android:id="@+id/address"
@@ -122,7 +122,6 @@
             tools:layout_editor_absoluteY="17dp" />
 
     </androidx.appcompat.widget.Toolbar>
-
 
     <TextView
         android:id="@+id/my_account_title"
