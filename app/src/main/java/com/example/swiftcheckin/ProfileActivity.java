@@ -1,5 +1,5 @@
 package com.example.swiftcheckin;
-
+// This is the activity that represents the profile view
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +19,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
 
+/**
+ * This deals with the user's profile information
+ */
 public class ProfileActivity extends AppCompatActivity {
     private TextView nameText;
     private TextView phoneNumber;

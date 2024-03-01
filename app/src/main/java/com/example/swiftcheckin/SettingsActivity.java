@@ -1,5 +1,5 @@
 package com.example.swiftcheckin;
-
+// This activity deals with the settings the user wants
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
@@ -29,7 +29,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
-
+/**
+ * This deals with the settings activity where users can update their contact information and settings
+ */
 public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;

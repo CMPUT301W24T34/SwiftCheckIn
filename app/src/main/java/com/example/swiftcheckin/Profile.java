@@ -1,5 +1,8 @@
 package com.example.swiftcheckin;
-
+// This represents a user's profile
+/**
+ * This represents a user's profile, includes their contact and personal information
+ */
 public class Profile {
 
     private String name;
@@ -59,7 +62,6 @@ public class Profile {
     }
     // Citation: OpenAI, 02-26-2024, ChatGPT, Converting String to Boolean
     // ChatGPT gave me this code boolean myBool = Boolean.parseBoolean(userInput);
-    // Using AI Tools contributed to my learning process by helping me realize that I can convert the string to a boolean and how to do so
     public void setCameraPermission(String cameraPermission) {
         this.cameraPermission = Boolean.parseBoolean(cameraPermission);
     }
