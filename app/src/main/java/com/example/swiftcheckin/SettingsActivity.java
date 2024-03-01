@@ -72,7 +72,7 @@ public class SettingsActivity extends AppCompatActivity {
                 boolean cameraPermission = cameraCheckBox.isChecked();
                 boolean locationPermission = locationCheckBox.isChecked();
                 saveData(name, birthday, phoneNumber, email, website, address, cameraPermission, locationPermission);
-                startActivity(new Intent(SettingsActivity.this, ProfileActivity.class));
+                finish();
             }
         });
         findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
