@@ -75,7 +75,7 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        // Citation: How to clear focus, Stack Overflow, License CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-02-20, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
+        // Citation: How to clear focus, Stack Overflow, License: CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-02-20, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
         findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -177,7 +177,7 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
-    // Citation: How to hide a keyboard, Stack Overflow, License CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+    // Citation: How to hide a keyboard, Stack Overflow, License: CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
     private void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View v = activity.getCurrentFocus();
