@@ -18,10 +18,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.706"
         app:layout_constraintStart_toEndOf="@+id/word_birthday"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="108dp"
@@ -95,7 +95,7 @@
         android:text="Name"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintTop_toBottomOf="@+id/my_account_title" />
 
     <!-- Citation: Creating a toolbar, Stack Overflow, License: CC-BY-SA, user name vesii (edited by Gabriele Mariotti), "Which dependencies are needed for using the Toolbar?", 2020-05-13 (edited 2020-05-13), https://stackoverflow.com/questions/61774131/which-dependencies-are-needed-for-using-the-toolbar-->
     <androidx.appcompat.widget.Toolbar
@@ -123,7 +123,7 @@
 
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/my_account_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
