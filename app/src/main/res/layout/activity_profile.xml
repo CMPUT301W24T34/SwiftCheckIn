@@ -21,6 +21,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.872" />
 
+<!--    To change the image displayed, take out the sample avatar line and replace with a different image-->
+<!--    The sample avatar image does not actually show when the app is run, only in display mode-->
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="170dp"
