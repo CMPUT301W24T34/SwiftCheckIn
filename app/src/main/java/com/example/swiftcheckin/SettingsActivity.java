@@ -76,6 +76,7 @@ public class SettingsActivity extends AppCompatActivity {
         findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                hideKeyboard(SettingsActivity.this);
                 nameEditText.clearFocus();
                 birthdayEditText.clearFocus();
                 phoneNumberEditText.clearFocus();
@@ -87,7 +88,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void getData() {
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         DocumentReference profileRef = db.collection("profiles").document(deviceId);
 
         profileRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -136,7 +137,7 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void saveData(String name, String birthday, String phoneNumber, String email, String website, String address, boolean cameraPermission, boolean locationPermission) {
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         HashMap<String, String> data = new HashMap<>();
         data.put("name", name);
         data.put("birthday", birthday);
@@ -173,6 +174,13 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
-
-
+    // Citation: How to hide a keyboard, Stack Overflow, License CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+    private void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View v = activity.getCurrentFocus();
+        if (v == null) {
+            v = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
 }

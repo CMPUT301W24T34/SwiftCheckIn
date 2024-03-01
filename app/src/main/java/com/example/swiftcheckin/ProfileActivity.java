@@ -46,7 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
 
     private void getData() {
         // Citation: Getting unique device id, Stack Overflow, License CC-BY-SA, user name Chintan Rathod, "How to get unique device hardware id in Android?", 2013-06-01, https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
-        String deviceId = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+        String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
 
         nameText = findViewById(R.id.nameText);
         phoneNumber = findViewById(R.id.phoneNumberText);
@@ -87,7 +87,5 @@ public class ProfileActivity extends AppCompatActivity {
             }
         });
     }
-
-
 
 }
