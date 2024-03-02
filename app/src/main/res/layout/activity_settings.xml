@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/settings"
+    android:background="#FFFFFF"
     tools:context=".SettingsActivity">
     <!--Citation: OpenAI, 2024-02-28, ChatGPT, How to use drawables -->
     <!-- output is that you call the drawable file with android:background-->
@@ -116,9 +117,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white">
 
         <TextView
