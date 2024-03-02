@@ -3,4 +3,10 @@
     <string name="organizer_mode">Organizer Mode</string>
     <string name="mode">Mode</string>
     <string name="swiftcheckin">SwiftCheckIn</string>
+    <string name="_02_00" />
+    <string name="march_22_2023">March 22, 2023</string>
+    <string name="_03_00">03:00</string>
+    <string name="pm">PM</string>
+    <string name="dash">-</string>
+    <string name="upcoming">Upcoming</string>
 </resources>
