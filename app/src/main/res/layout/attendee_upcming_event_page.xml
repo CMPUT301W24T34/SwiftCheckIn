@@ -7,62 +7,6 @@
     android:background="#FDFCFC">
 
     <!--TODO: Add view constraints - alignement to all the fields-->
-    <TextView
-        android:id="@+id/timeHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/time"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.487"
-        tools:layout_editor_absoluteX="362dp" />
-
-    <TextView
-        android:id="@+id/noOfCheckInsHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="no_of_check_ins"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.488"
-        tools:layout_editor_absoluteX="237dp" />
-
-    <TextView
-        android:id="@+id/attendeeListIcon"
-        android:layout_width="150dp"
-        android:layout_height="41dp"
-        android:layout_marginTop="236dp"
-        android:layout_marginEnd="228dp"
-        android:background="@drawable/grey_circle_background"
-        android:gravity="center"
-        android:text="attendee_list"
-        android:textAlignment="center"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
-
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="189dp"
-        android:layout_height="46dp"
-        android:layout_marginTop="612dp"
-        android:layout_marginEnd="108dp"
-        android:background="@drawable/circle_background"
-        android:gravity="center"
-        android:text="@string/push_notification"
-        android:textAlignment="center"
-        android:textColor="@android:color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
         android:id="@+id/appName"
