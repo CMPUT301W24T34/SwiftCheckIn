@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">SwiftCheckIn</string>
+    <string name="time">Time</string>
+    <string name="no_of_check_ins">No. of Check-ins</string>
+    <string name="attendee_list">Attendee List</string>
+    <string name="map">Map</string>
+    <string name="push_notification">Push Notification</string>
+    <string name="swiftcheckin">SWIFTCHECKIN</string>
+    <string name="real_time_attendance">Real-Time Attendance:</string>
+    <string name="_42">42</string>
+    <string name="startup_pitch_details">Startup Pitch - Details</string>
+    <string name="organizer_mode">Organizer Mode</string>
+    <string name="_02_00_pm">02:00 PM</string>
+    <string name="_2">2</string>
+    <string name="attendee_name_1">Attendee Name 1</string>
+    <string name="dash">-</string>
+    <string name="_02_00">02:00</string>
+    <string name="pm">PM</string>
+    <string name="_03_00">03:00</string>
+    <string name="march_22_2023">March 22, 2023</string>
+    <string name="mode">Mode</string>
+    <string name="todo">TODO</string>
 </resources>

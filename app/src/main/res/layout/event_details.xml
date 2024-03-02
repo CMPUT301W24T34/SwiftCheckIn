@@ -8,38 +8,38 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Time"
+        android:text="@string/time"
         android:textAlignment="center"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.473"
-        tools:layout_editor_absoluteX="367dp" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="No. of Check-ins"
-        android:textAlignment="center"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.473"
-        tools:layout_editor_absoluteX="224dp" />
+        app:layout_constraintVertical_bias="0.487"
+        tools:layout_editor_absoluteX="362dp" />
 
     <TextView
         android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_of_check_ins"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.488"
+        tools:layout_editor_absoluteX="237dp" />
+
+    <TextView
+        android:id="@+id/textView3"
         android:layout_width="150dp"
         android:layout_height="41dp"
         android:layout_marginTop="236dp"
         android:layout_marginEnd="228dp"
         android:background="@drawable/grey_circle_background"
         android:gravity="center"
-        android:text="Attendee List"
+        android:text="@string/attendee_list"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -48,13 +48,13 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView4"
         android:layout_width="130dp"
         android:layout_height="38dp"
         android:layout_marginTop="236dp"
         android:layout_marginEnd="44dp"
         android:gravity="center"
-        android:text="Map"
+        android:text="@string/map"
         android:textAlignment="center"
         android:textColor="@android:color/black"
         android:textSize="16sp"
@@ -63,14 +63,14 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView5"
         android:layout_width="189dp"
         android:layout_height="46dp"
         android:layout_marginTop="612dp"
         android:layout_marginEnd="108dp"
         android:background="@drawable/circle_background"
         android:gravity="center"
-        android:text="Push Notification"
+        android:text="@string/push_notification"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="16sp"
@@ -79,12 +79,12 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView6"
         android:layout_width="153dp"
         android:layout_height="28dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="196dp"
-        android:text="SWIFTCHECKIN"
+        android:text="@string/swiftcheckin"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -93,10 +93,10 @@
 
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Real-Time Attendance: "
+        android:text="@string/real_time_attendance"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -105,10 +105,10 @@
         tools:layout_editor_absoluteX="45dp" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/textVie8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="42"
+        android:text="@string/_42"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -116,10 +116,10 @@
         tools:layout_editor_absoluteX="219dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textVie9"
         android:layout_width="266dp"
         android:layout_height="23dp"
-        android:text="Startup Pitch - Details"
+        android:text="@string/startup_pitch_details"
         android:textAlignment="textStart"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -127,20 +127,21 @@
         tools:layout_editor_absoluteY="104dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView10"
         android:layout_width="114dp"
         android:layout_height="27dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/circle_background"
         android:gravity="center"
-        android:text="Organizer Mode"
+        android:text="@string/organizer_mode"
         android:textAlignment="center"
         android:textColor="@android:color/white"
         android:textSize="10sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider" />
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        tools:ignore="SmallSp" />
 
     <View
         android:id="@+id/divider"
@@ -150,56 +151,56 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="56dp" />
-
-    <RadioGroup
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="155dp"
-        tools:layout_editor_absoluteY="206dp" />
+        tools:layout_editor_absoluteY="56dp"
+        tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.helper.widget.Layer
         android:id="@+id/layer"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
 
     <Switch
         android:id="@+id/switch2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Mode"
+        android:text="@string/mode"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="323dp" />
+        tools:layout_editor_absoluteX="323dp"
+        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageView
-        android:id="@+id/imageView14"
+        android:id="@+id/imageView1"
         android:layout_width="48dp"
         android:layout_height="45dp"
         app:srcCompat="@drawable/profile_pic"
         tools:layout_editor_absoluteX="8dp"
-        tools:layout_editor_absoluteY="11dp" />
+        tools:layout_editor_absoluteY="11dp"
+        tools:ignore="MissingConstraints"
+        android:contentDescription="@string/todo" />
 
     <LinearLayout
         android:layout_width="383dp"
         android:layout_height="296dp"
         android:orientation="horizontal"
         tools:layout_editor_absoluteX="20dp"
-        tools:layout_editor_absoluteY="367dp">
+        tools:layout_editor_absoluteY="367dp"
+        tools:ignore="MissingConstraints">
 
         <TextView
             android:id="@+id/column1"
             android:layout_width="223dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Attendee Name 1" />
+            android:text="@string/attendee_name_1" />
 
         <TextView
             android:id="@+id/column2"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="2"
+            android:text="@string/_2"
             android:textAlignment="center" />
 
         <TextView
@@ -207,22 +208,24 @@
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="02:00 PM"
+            android:text="@string/_02_00_pm"
             android:textAlignment="textEnd" />
 
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView16"
+        android:id="@+id/imageView2"
         android:layout_width="22dp"
         android:layout_height="21dp"
         android:layout_marginBottom="604dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:srcCompat="@drawable/notification"
-        tools:layout_editor_absoluteX="362dp" />
+        tools:layout_editor_absoluteX="362dp"
+        tools:ignore="ContentDescription,MissingConstraints"
+        android:contentDescription="TODO" />
 
     <ImageView
-        android:id="@+id/imageView20"
+        android:id="@+id/imageView3"
         android:layout_width="328dp"
         android:layout_height="86dp"
         app:srcCompat="@drawable/event_poster"
@@ -230,7 +233,7 @@
         tools:layout_editor_absoluteY="135dp" />
 
     <ImageView
-        android:id="@+id/imageView15"
+        android:id="@+id/imageView4"
         android:layout_width="23dp"
         android:layout_height="26dp"
         app:srcCompat="@drawable/clock"
@@ -238,36 +241,36 @@
         tools:layout_editor_absoluteY="221dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView7"
         android:layout_width="4dp"
         android:layout_height="18dp"
-        android:text="-"
+        android:text="@string/dash"
         tools:layout_editor_absoluteX="310dp"
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView16"
         android:layout_width="37dp"
         android:layout_height="18dp"
-        android:text="02:00 "
+        android:text="@string/_02_00"
         android:textAlignment="center"
         tools:layout_editor_absoluteX="271dp"
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView17"
         android:layout_width="25dp"
         android:layout_height="18dp"
-        android:text="PM"
+        android:text="@string/pm"
         android:textAlignment="center"
         tools:layout_editor_absoluteX="355dp"
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/textView18"
         android:layout_width="42dp"
         android:layout_height="18dp"
-        android:text="03:00"
+        android:text="@string/_03_00"
         android:textAlignment="center"
         tools:layout_editor_absoluteX="314dp"
         tools:layout_editor_absoluteY="228dp" />
@@ -281,10 +284,10 @@
         tools:layout_editor_absoluteY="135dp" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/textView19"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="March 22, 2023"
+        android:text="@string/march_22_2023"
         android:textAlignment="center"
         tools:layout_editor_absoluteX="62dp"
         tools:layout_editor_absoluteY="228dp" />
