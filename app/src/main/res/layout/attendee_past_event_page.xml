@@ -201,13 +201,12 @@
         tools:layout_editor_absoluteY="232dp" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="45dp"
-        android:layout_height="34dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@drawable/plus_icon"
-        tools:layout_editor_absoluteY="687dp" />
+        android:id="@+id/imageView7"
+        android:layout_width="66dp"
+        android:layout_height="44dp"
+        app:srcCompat="@drawable/camera_icon"
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="685dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
