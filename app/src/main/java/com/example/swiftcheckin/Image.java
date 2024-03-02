@@ -2,6 +2,11 @@ package com.example.swiftcheckin;
 
 public class Image {
     String imageName;
+    String imagePath;
+    String profileName;
+    String eventName;
+
+
 
     public String getImagePath() {
         return imagePath;
@@ -11,8 +16,6 @@ public class Image {
         this.imagePath = imagePath;
     }
 
-    String imagePath;
-
     public String getProfileName() {
         return profileName;
     }
@@ -20,8 +23,6 @@ public class Image {
     public void setProfileName(String profileName) {
         this.profileName = profileName;
     }
-
-    String profileName;
 
     public String getEventName() {
         return eventName;
@@ -31,9 +32,6 @@ public class Image {
         this.eventName = eventName;
     }
 
-    String eventName;
-
-
     public String getImageName() {
         return imageName;
     }
@@ -41,8 +39,6 @@ public class Image {
     public void setImageName(String imageName) {
         this.imageName = imageName;
     }
-
-
 
 
 }
