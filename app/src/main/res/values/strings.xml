@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SwiftCheckIn</string>
+    <string name="time">time</string>
 </resources>
