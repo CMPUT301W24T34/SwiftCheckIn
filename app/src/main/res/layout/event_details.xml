@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:background="#FDFCFC">
 
-
+<!--TODO: Add view constraints - alignement to all the fields-->
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/timeHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/time"
@@ -20,7 +20,7 @@
         tools:layout_editor_absoluteX="362dp" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/noOfCheckInsHeader"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/no_of_check_ins"
@@ -32,7 +32,7 @@
         tools:layout_editor_absoluteX="237dp" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/attendeeListIcon"
         android:layout_width="150dp"
         android:layout_height="41dp"
         android:layout_marginTop="236dp"
@@ -48,7 +48,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/mapIcon"
         android:layout_width="130dp"
         android:layout_height="38dp"
         android:layout_marginTop="236dp"
@@ -79,7 +79,7 @@
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/appName"
         android:layout_width="153dp"
         android:layout_height="28dp"
         android:layout_marginTop="16dp"
@@ -93,7 +93,7 @@
 
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/realTimeAttendance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/real_time_attendance"
@@ -105,7 +105,7 @@
         tools:layout_editor_absoluteX="45dp" />
 
     <TextView
-        android:id="@+id/textVie8"
+        android:id="@+id/attendanceNum"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/_42"
@@ -116,7 +116,7 @@
         tools:layout_editor_absoluteX="219dp" />
 
     <TextView
-        android:id="@+id/textVie9"
+        android:id="@+id/eventName"
         android:layout_width="266dp"
         android:layout_height="23dp"
         android:text="@string/startup_pitch_details"
@@ -127,7 +127,7 @@
         tools:layout_editor_absoluteY="104dp" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/currMode"
         android:layout_width="114dp"
         android:layout_height="27dp"
         android:layout_marginTop="4dp"
@@ -161,7 +161,7 @@
         tools:ignore="MissingConstraints" />
 
     <Switch
-        android:id="@+id/switch2"
+        android:id="@+id/switchMode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -189,14 +189,14 @@
         tools:ignore="MissingConstraints">
 
         <TextView
-            android:id="@+id/column1"
+            android:id="@+id/attendeeNameCol"
             android:layout_width="223dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/attendee_name_1" />
 
         <TextView
-            android:id="@+id/column2"
+            android:id="@+id/numOfCheckImCol"
             android:layout_width="1dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -204,7 +204,7 @@
             android:textAlignment="center" />
 
         <TextView
-            android:id="@+id/column3"
+            android:id="@+id/timeCol"
             android:layout_width="40dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -214,7 +214,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/notificationBell"
         android:layout_width="22dp"
         android:layout_height="21dp"
         android:layout_marginBottom="604dp"
@@ -224,12 +224,22 @@
         tools:ignore="ContentDescription,MissingConstraints"
         android:contentDescription="TODO" />
 
+<!--   TODO: Delete on of the posterImageView-->
+
     <ImageView
-        android:id="@+id/imageView3"
+        android:id="@+id/eventPoster2"
         android:layout_width="328dp"
         android:layout_height="86dp"
         app:srcCompat="@drawable/event_poster"
         tools:layout_editor_absoluteX="114dp"
+        tools:layout_editor_absoluteY="135dp" />
+
+    <ImageView
+        android:id="@+id/eventPoster1"
+        android:layout_width="328dp"
+        android:layout_height="86dp"
+        app:srcCompat="@drawable/event_poster"
+        tools:layout_editor_absoluteX="-29dp"
         tools:layout_editor_absoluteY="135dp" />
 
     <ImageView
@@ -241,7 +251,7 @@
         tools:layout_editor_absoluteY="221dp" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/timeDash"
         android:layout_width="4dp"
         android:layout_height="18dp"
         android:text="@string/dash"
@@ -249,7 +259,7 @@
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView16"
+        android:id="@+id/startTime"
         android:layout_width="37dp"
         android:layout_height="18dp"
         android:text="@string/_02_00"
@@ -258,7 +268,7 @@
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView17"
+        android:id="@+id/am_pm"
         android:layout_width="25dp"
         android:layout_height="18dp"
         android:text="@string/pm"
@@ -267,7 +277,7 @@
         tools:layout_editor_absoluteY="228dp" />
 
     <TextView
-        android:id="@+id/textView18"
+        android:id="@+id/endTime"
         android:layout_width="42dp"
         android:layout_height="18dp"
         android:text="@string/_03_00"
@@ -275,16 +285,10 @@
         tools:layout_editor_absoluteX="314dp"
         tools:layout_editor_absoluteY="228dp" />
 
-    <ImageView
-        android:id="@+id/imageView20"
-        android:layout_width="328dp"
-        android:layout_height="86dp"
-        app:srcCompat="@drawable/event_poster"
-        tools:layout_editor_absoluteX="-29dp"
-        tools:layout_editor_absoluteY="135dp" />
+
 
     <TextView
-        android:id="@+id/textView19"
+        android:id="@+id/date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/march_22_2023"
