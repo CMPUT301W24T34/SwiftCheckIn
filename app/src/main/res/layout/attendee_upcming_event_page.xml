@@ -13,22 +13,8 @@
         android:layout_width="66dp"
         android:layout_height="44dp"
         app:srcCompat="@drawable/camera_icon"
-        tools:layout_editor_absoluteX="183dp"
-        tools:layout_editor_absoluteY="687dp" />
-
-    <TextView
-        android:id="@+id/appName"
-        android:layout_width="153dp"
-        android:layout_height="28dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="196dp"
-        android:text="@string/swiftcheckin"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+        tools:layout_editor_absoluteX="182dp"
+        tools:layout_editor_absoluteY="685dp" />
 
     <TextView
         android:id="@+id/currMode"
@@ -44,6 +30,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="SmallSp"
         tools:layout_editor_absoluteY="687dp" />
+
+    <TextView
+        android:id="@+id/appName"
+        android:layout_width="153dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="196dp"
+        android:text="@string/swiftcheckin"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/currMode"
