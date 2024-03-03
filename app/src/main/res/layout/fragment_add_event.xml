@@ -27,10 +27,10 @@
 <!--        android:hint="Maximum Attendees"/>-->
     <EditText
         android:id="@+id/edit_event_description_text"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
-        android:hint="Description"/>
+        android:hint="Description"
+        android:inputType="text" />
 
 </LinearLayout>

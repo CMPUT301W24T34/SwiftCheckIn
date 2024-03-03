@@ -2,6 +2,7 @@ package com.example.swiftcheckin;
 
 import android.location.Location;
 import android.media.Image;
+import android.provider.Settings;
 
 import java.util.Date;
 
@@ -16,8 +17,8 @@ public class Event {
     private Date date;
     private String eventTitle;
 //    private Image poster;
-
     private String location;
+    private String deviceId;
     private String description;
     private int maxAttendees;
 
@@ -30,11 +31,19 @@ public class Event {
      * @param eventTitle - Represents the name of the event
      * @param location - Represents the event location.
      * @param description - Brief description of the event
+     * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location){
+    public Event(String eventTitle, String description, String location, String deviceId){
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
+        this.deviceId = deviceId;
+
+
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 
     /**
