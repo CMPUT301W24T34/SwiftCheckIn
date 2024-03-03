@@ -20,7 +20,6 @@ public class ProfileTest {
     @Test
     public void activitySwitch(){
         onView(withId(R.id.main)).check(matches(isDisplayed()));
-
         onView(withId(R.id.profile_button)).perform(click());
         onView(withId(R.id.profile)).check(matches(isDisplayed()));
         onView(withId(R.id.settings_button)).perform(click());
