@@ -14,8 +14,16 @@ import androidx.fragment.app.DialogFragment;
 
 public class AddEventFragment extends DialogFragment {
 
+    private String deviceId;
+
     interface AddEventDialogListener{
         void addEvent(Event event);
+    }
+
+    public AddEventFragment(String deviceId){
+        this.deviceId = deviceId;
+    }
+    public AddEventFragment(){
     }
 
     private AddEventDialogListener listener;
@@ -48,7 +56,7 @@ public class AddEventFragment extends DialogFragment {
                     String descriptionText = editDescriptionText.getText().toString();
                     String eventLocation = editEventLocation.getText().toString();
 //                    String maxAttendees = editMaxAttendees.getText().toString();
-                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation));
+                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, deviceId));
                 })
                 .create();
     }
