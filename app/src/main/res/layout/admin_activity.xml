@@ -63,40 +63,27 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         app:cornerRadius="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/browse_tab_button"
+        app:layout_constraintBottom_toTopOf="@+id/remove_tab_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchView" />
 
-    <Button
-        android:id="@+id/browse_tab_button"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:textColor="#673AB7"
-        app:cornerRadius="0dp"
-        android:backgroundTint="#EEEEEE"
-        android:drawableTop="@drawable/ic_browse"
-        android:text="Browse"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/remove_tab_button"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintWidth_percent="0.33" />
 
     <Button
         android:id="@+id/remove_tab_button"
         android:layout_width="0dp"
         android:layout_height="80dp"
-        android:text="Remove"
-        android:textColor="#673AB7"
         android:backgroundTint="#EEEEEE"
         android:drawableTop="@drawable/ic_remove"
+        android:text="Remove"
+        android:textColor="#673AB7"
         app:cornerRadius="0dp"
-        app:layout_constraintStart_toEndOf="@+id/browse_tab_button"
-        app:layout_constraintEnd_toStartOf="@+id/profile_tab_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.009"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintWidth_percent="0.33"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintWidth_percent="0.50" />
 
     <Button
         android:id="@+id/profile_tab_button"
@@ -110,7 +97,7 @@
         app:layout_constraintStart_toEndOf="@+id/remove_tab_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintWidth_percent="0.33"
+        app:layout_constraintWidth_percent="0.50"
         app:layout_constraintBottom_toBottomOf="parent" />
 
 
