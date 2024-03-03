@@ -16,6 +16,7 @@
         android:text="Profile"/>
 
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/switch_modes"
         android:layout_width="wrap_content"
