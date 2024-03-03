@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -56,20 +57,29 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_organizer);
 
-        db = FirebaseFirestore.getInstance();
-        eventsRef = db.collection("Events");
+//        db = FirebaseFirestore.getInstance();
+//        eventsRef = db.collection("Events");
 
         eventList = findViewById(R.id.event_list);
         dataList = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(this, dataList);
         eventList.setAdapter(eventAdapter);
+        FloatingActionButton backButtonOrg = findViewById(R.id.back_button_org);
 
         addEventButton = findViewById(R.id.add_event_button);
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "To be continued", Toast.LENGTH_SHORT).show();
+
+                new AddEventFragment().show(getSupportFragmentManager(), "Add Event");
+            }
+        });
+
+        backButtonOrg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
             }
         });
 

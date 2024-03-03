@@ -29,12 +29,12 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = getItem(position);
         TextView eventTitle = view.findViewById(R.id.event_title_text);
         TextView eventLocation = view.findViewById(R.id.event_location_text);
-        TextView maxAttendees = view.findViewById(R.id.event_max_attend_text);
+//        TextView maxAttendees = view.findViewById(R.id.event_max_attend_text);
         TextView description = view.findViewById(R.id.event_description_text);
 
         eventTitle.setText(event.getEventTitle());
         eventLocation.setText(event.getLocation());
-        maxAttendees.setText(event.getMaxAttendees());
+//        maxAttendees.setText(event.getMaxAttendees());
         description.setText(event.getDescription());
 
         return view;

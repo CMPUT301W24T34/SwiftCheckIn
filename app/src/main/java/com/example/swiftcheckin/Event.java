@@ -24,8 +24,6 @@ public class Event {
     public Event(){
     }
 
-
-
     /**
      * This creates an event.
 
@@ -67,11 +65,6 @@ public class Event {
         return eventTitle;
     }
 
-    /**
-     * Returns poster of the event
-     * @return
-     * returns poster
-     */
 //    public Image getPoster() {
 //        return poster;
 //    }
