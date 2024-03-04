@@ -4,6 +4,7 @@ import android.location.Location;
 import android.media.Image;
 import android.provider.Settings;
 
+import java.sql.Time;
 import java.util.Date;
 
 public class Event {
@@ -20,6 +21,9 @@ public class Event {
     private String location;
     private String deviceId;
     private String description;
+    private Time startTime;
+    private Time endTime;
+    private String amPM;
     private int maxAttendees;
 
     public Event(){
@@ -55,6 +59,17 @@ public class Event {
         return maxAttendees;
     }
 
+    public Time getStartTime() {
+        return startTime;
+    }
+
+    public Time getEndTime() {
+        return endTime;
+    }
+
+    public String getAmPM() {
+        return amPM;
+    }
 
     /**
      * Returns the date
