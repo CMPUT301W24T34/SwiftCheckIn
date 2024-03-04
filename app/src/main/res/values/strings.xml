@@ -10,4 +10,6 @@
     <string name="dash">-</string>
     <string name="upcoming">Upcoming</string>
     <string name="some_important_announcements">Some Important announcements</string>
+    <string name="event_name">Event Name</string>
+    <string name="_02_00_pm_03_00_pm">02:00 PM - 03:00 PM</string>
 </resources>

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFCFC">
+
+    <!--TODO: Add view constraints - alignement to all the fields-->
+
+    <ImageView
+        android:id="@+id/ClockIcon"
+        android:layout_width="23dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="76dp"
+        app:layout_constraintStart_toEndOf="@+id/date"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
+        app:srcCompat="@drawable/clock" />
+
+    <TextView
+        android:id="@+id/startTime"
+        android:layout_width="37dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="2dp"
+        android:text="02:00"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/timeDash"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+    <ImageView
+        android:id="@+id/calendarIcon"
+        android:layout_width="21dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="23dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster1"
+        app:srcCompat="@drawable/calendar" />
+
+    <ImageView
+        android:id="@+id/eventPoster2"
+        android:layout_width="328dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventName"
+        app:srcCompat="@drawable/event_poster" />
+
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="9dp"
+        android:layout_marginTop="7dp"
+        android:text="@string/march_22_2023"
+        android:textAlignment="center"
+        app:layout_constraintStart_toEndOf="@+id/calendarIcon"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+
+    <TextView
+        android:id="@+id/eventName"
+        android:layout_width="296dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="18dp"
+        android:text="Event Name"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:ignore="UnknownIdInLayout" />
+
+    <TextView
+        android:id="@+id/timeDash"
+        android:layout_width="4dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp"
+        android:text="@string/dash"
+        app:layout_constraintEnd_toStartOf="@+id/endTime"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+
+
+    <TextView
+        android:id="@+id/am_pm"
+        android:layout_width="25dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="40dp"
+        android:text="@string/pm"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+
+    <ImageView
+        android:id="@+id/eventPoster1"
+        android:layout_width="328dp"
+        android:layout_height="86dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventName"
+        app:srcCompat="@drawable/event_poster" />
+
+    <TextView
+        android:id="@+id/endTime"
+        android:layout_width="42dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="7dp"
+        android:text="@string/_03_00"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toStartOf="@+id/am_pm"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
