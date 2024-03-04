@@ -76,7 +76,7 @@
         app:srcCompat="@drawable/event_poster" />
 
     <TextView
-        android:id="@+id/startTime"
+        android:id="@+id/eventStartTime"
         android:layout_width="37dp"
         android:layout_height="18dp"
         android:layout_marginStart="12dp"
@@ -93,7 +93,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="29dp"
         android:text="@string/dash"
-        app:layout_constraintStart_toEndOf="@+id/startTime"
+        app:layout_constraintStart_toEndOf="@+id/eventStartTime"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster1" />
 
     <ImageView
@@ -107,7 +107,7 @@
         app:srcCompat="@drawable/calendar" />
 
     <TextView
-        android:id="@+id/date"
+        android:id="@+id/eventDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -118,7 +118,7 @@
         app:layout_constraintTop_toBottomOf="@+id/eventPoster1" />
 
     <TextView
-        android:id="@+id/endTime"
+        android:id="@+id/eventEndTime"
         android:layout_width="42dp"
         android:layout_height="18dp"
         android:layout_marginTop="29dp"
@@ -133,7 +133,7 @@
         android:layout_height="26dp"
         android:layout_marginStart="77dp"
         android:layout_marginTop="22dp"
-        app:layout_constraintStart_toEndOf="@+id/date"
+        app:layout_constraintStart_toEndOf="@+id/eventDate"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster1"
         app:srcCompat="@drawable/clock" />
 
@@ -145,7 +145,7 @@
         android:layout_marginTop="208dp"
         android:text="@string/pm"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/endTime"
+        app:layout_constraintStart_toEndOf="@+id/eventEndTime"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
