@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,8 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = getItem(position);
         TextView eventTitle = view.findViewById(R.id.event_title_text);
         TextView eventLocation = view.findViewById(R.id.event_location_text);
+
+        // Fetching event ids for attendee_event section
         TextView eventName = view.findViewById(R.id.eventName);
         TextView eventDate = view.findViewById(R.id.eventDate);
         TextView eventStartTime = view.findViewById(R.id.eventStartTime);
@@ -41,9 +42,17 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView description = view.findViewById(R.id.event_description_text);
 
         eventTitle.setText(event.getEventTitle());
+        eventDate.setText(event.getDate());
+        eventStartTime.setText(event.getStartTime());
+        eventEndTime.setText(event.getEndTime());
+        eventAM_PM.setText(event.getEventTitle());
+
+        eventTitle.setText(event.getEventTitle());
         eventLocation.setText(event.getLocation());
 //        maxAttendees.setText(event.getMaxAttendees());
         description.setText(event.getDescription());
+
+
 
         return view;
     }

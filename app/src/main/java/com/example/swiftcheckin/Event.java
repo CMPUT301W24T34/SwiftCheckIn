@@ -15,14 +15,14 @@ public class Event {
     * Needs an Image
     * Needs a Location
     * */
-    private Date date;
+    private String date;
     private String eventTitle;
 //    private Image poster;
     private String location;
     private String deviceId;
     private String description;
-    private Time startTime;
-    private Time endTime;
+    private String startTime;
+    private String endTime;
     private String amPM;
     private int maxAttendees;
 
@@ -59,11 +59,11 @@ public class Event {
         return maxAttendees;
     }
 
-    public Time getStartTime() {
+    public String getStartTime() {
         return startTime;
     }
 
-    public Time getEndTime() {
+    public String getEndTime() {
         return endTime;
     }
 
@@ -76,7 +76,7 @@ public class Event {
      * @return
      * Returns date
      */
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
