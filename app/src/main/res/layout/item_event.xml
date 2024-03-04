@@ -13,28 +13,28 @@
         android:layout_width="23dp"
         android:layout_height="26dp"
         android:layout_marginStart="76dp"
-        app:layout_constraintStart_toEndOf="@+id/eventDate"
+        app:layout_constraintStart_toEndOf="@+id/edit_event_date"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
         app:srcCompat="@drawable/clock" />
 
     <TextView
-        android:id="@+id/eventStartTime"
+        android:id="@+id/edit_event_start_time"
         android:layout_width="37dp"
         android:layout_height="18dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="2dp"
         android:text="02:00"
         android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/timeDash"
+        app:layout_constraintEnd_toStartOf="@+id/time_dash"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
     <ImageView
-        android:id="@+id/calendarIcon"
+        android:id="@+id/calendar_icon"
         android:layout_width="21dp"
         android:layout_height="26dp"
         android:layout_marginStart="23dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster1"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1"
         app:srcCompat="@drawable/calendar" />
 
     <ImageView
@@ -43,24 +43,24 @@
         android:layout_height="86dp"
         android:layout_marginTop="5dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventName"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
         app:srcCompat="@drawable/event_poster" />
 
 
     <TextView
-        android:id="@+id/eventDate"
+        android:id="@+id/edit_event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="9dp"
         android:layout_marginTop="7dp"
         android:text="@string/march_22_2023"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/calendarIcon"
+        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
 
     <TextView
-        android:id="@+id/eventName"
+        android:id="@+id/event_name"
         android:layout_width="296dp"
         android:layout_height="24dp"
         android:layout_marginStart="44dp"
@@ -72,18 +72,18 @@
         tools:ignore="UnknownIdInLayout" />
 
     <TextView
-        android:id="@+id/timeDash"
+        android:id="@+id/time_dash"
         android:layout_width="4dp"
         android:layout_height="18dp"
         android:layout_marginTop="7dp"
         android:text="@string/dash"
-        app:layout_constraintEnd_toStartOf="@+id/eventEndTime"
+        app:layout_constraintEnd_toStartOf="@+id/edit_event_end_Time"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
 
 
     <TextView
-        android:id="@+id/am_pm"
+        android:id="@+id/edit_am_pm"
         android:layout_width="25dp"
         android:layout_height="18dp"
         android:layout_marginTop="7dp"
@@ -95,22 +95,22 @@
 
 
     <ImageView
-        android:id="@+id/eventPoster1"
+        android:id="@+id/event_poster1"
         android:layout_width="328dp"
         android:layout_height="86dp"
         android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventName"
+        app:layout_constraintTop_toBottomOf="@+id/event_name"
         app:srcCompat="@drawable/event_poster" />
 
     <TextView
-        android:id="@+id/eventEndTime"
+        android:id="@+id/edit_event_end_Time"
         android:layout_width="42dp"
         android:layout_height="18dp"
         android:layout_marginTop="7dp"
         android:text="@string/_03_00"
         android:textAlignment="center"
-        app:layout_constraintEnd_toStartOf="@+id/am_pm"
+        app:layout_constraintEnd_toStartOf="@+id/edit_am_pm"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

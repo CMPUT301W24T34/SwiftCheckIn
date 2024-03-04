@@ -37,13 +37,16 @@ public class Event {
      * @param description - Brief description of the event
      * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location, String deviceId){
+    public Event(String eventTitle, String description, String location, String deviceId,
+                 String date, String startTime, String endTime,  String amPM){
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
         this.deviceId = deviceId;
-
-
+        this.date = date;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.amPM = amPM;
     }
 
     public String getDeviceId() {

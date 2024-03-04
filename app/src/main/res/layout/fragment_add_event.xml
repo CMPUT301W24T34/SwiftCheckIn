@@ -33,4 +33,36 @@
         android:hint="Description"
         android:inputType="text" />
 
+    <EditText
+        android:id="@+id/edit_event_date"
+        android:layout_width="match_parent"
+        android:layout_height="17dp"
+        android:ems="10"
+        android:text="TextView"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/edit_event_start_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="TextView"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/edit_event_end_Time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="TextView"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/edit_am_pm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:text="TextView"
+        android:inputType="text"/>
+
 </LinearLayout>

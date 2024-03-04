@@ -69,7 +69,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <ImageButton
-        android:id="@+id/cameraButton"
+        android:id="@+id/camera_button"
         android:layout_width="87dp"
         android:layout_height="57dp"
         android:backgroundTint="@color/black"

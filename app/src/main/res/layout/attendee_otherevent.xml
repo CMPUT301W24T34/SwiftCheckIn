@@ -9,7 +9,7 @@
     <!--TODO: Add view constraints - alignement to all the fields-->
 
     <TextView
-        android:id="@+id/appName"
+        android:id="@+id/app_name"
         android:layout_width="153dp"
         android:layout_height="28dp"
         android:layout_marginTop="16dp"
@@ -23,7 +23,7 @@
 
 
     <TextView
-        android:id="@+id/Footer"
+        android:id="@+id/footer"
         android:layout_width="400dp"
         android:layout_height="42dp"
         android:layout_marginStart="7dp"
@@ -41,7 +41,7 @@
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/otherEvents"
+        android:id="@+id/other_events"
         android:layout_width="148dp"
         android:layout_height="28dp"
         android:layout_marginStart="36dp"
@@ -55,12 +55,12 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/myEvents"
+        app:layout_constraintStart_toEndOf="@+id/my_events"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/myEvents"
+        android:id="@+id/my_events"
         android:layout_width="148dp"
         android:layout_height="28dp"
         android:layout_marginStart="23dp"
@@ -73,7 +73,7 @@
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/otherEvents"
+        app:layout_constraintEnd_toStartOf="@+id/other_events"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
@@ -84,7 +84,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="7dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/otherEvents"
+        app:layout_constraintBottom_toTopOf="@+id/other_events"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -95,7 +95,7 @@
         tools:ignore="MissingConstraints" />
 
     <Switch
-        android:id="@+id/switchMode"
+        android:id="@+id/switch_mode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="108dp"
@@ -103,12 +103,12 @@
         android:layout_marginBottom="13dp"
         android:text="@string/mode"
         app:layout_constraintBottom_toTopOf="@+id/divider"
-        app:layout_constraintStart_toEndOf="@+id/appName"
+        app:layout_constraintStart_toEndOf="@+id/app_name"
         app:layout_constraintTop_toTopOf="parent"
         tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageView
-        android:id="@+id/profilePicture"
+        android:id="@+id/profile_picture"
         android:layout_width="48dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
@@ -123,17 +123,8 @@
     <!-- Adjustments or additional views can be added here -->
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/eventsRecyclerView"
-        android:layout_width="364dp"
-        android:layout_height="442dp"
-        android:layout_marginTop="49dp"
-        android:layout_marginEnd="24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/otherEvents" />
-
     <ImageView
-        android:id="@+id/cameraButton"
+        android:id="@+id/camera_button"
         android:layout_width="64dp"
         android:layout_height="41dp"
         android:layout_marginBottom="1dp"
@@ -141,6 +132,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:srcCompat="@drawable/camera_icon" />
+
+    <ListView
+        android:layout_width="406dp"
+        android:layout_height="552dp"
+        android:layout_marginBottom="64dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

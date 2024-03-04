@@ -98,8 +98,15 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                     String eventTitle = doc.getId();
                     String eventLocation = (String) doc.getData().get("eventLocation");
                     String eventDescription = (String) doc.getData().get("eventDescription");
-                    String deviceID = (String) doc.getData().get("deviceId");
-                    dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId)); // Adding the cities and provinces from FireStore
+                    String eventDate = (String) doc.getData().get("eventDate");
+                    String eventStartTime = (String) doc.getData().get("eventStartTime");
+                    String eventEndTime = (String) doc.getData().get("eventEndTime");
+                    String eventAM_PM = (String) doc.getData().get("eventAM_PM");
+
+
+                    dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                            eventDate, eventStartTime, eventEndTime, eventAM_PM
+                            )); // Adding the cities and provinces from FireStore
                 }
                 eventAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
 

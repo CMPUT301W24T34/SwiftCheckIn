@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -45,6 +46,10 @@ public class AddEventFragment extends DialogFragment {
         EditText editEventTitle = view.findViewById(R.id.edit_event_title_text);
         EditText editDescriptionText = view.findViewById(R.id.edit_event_description_text);
         EditText editEventLocation = view.findViewById(R.id.edit_event_location_text);
+        EditText editEventDate = view.findViewById(R.id.edit_event_date);
+        EditText editEventStartTime = view.findViewById(R.id.edit_event_start_time);
+        EditText editEventEndTime = view.findViewById(R.id.edit_event_end_Time);
+        EditText editEventAM_PM = view.findViewById(R.id.edit_am_pm);
 //        EditText editMaxAttendees = view.findViewById(R.id.edit_max_attendees_text);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder
@@ -55,8 +60,14 @@ public class AddEventFragment extends DialogFragment {
                     String eventTitle = editEventTitle.getText().toString();
                     String descriptionText = editDescriptionText.getText().toString();
                     String eventLocation = editEventLocation.getText().toString();
+                    String eventDate = editEventDate.getText().toString();
+                    String eventStartTime = editEventStartTime.getText().toString();
+                    String eventEndTime = editEventEndTime.getText().toString();
+                    String eventAM_PM = editEventAM_PM.getText().toString();
+
 //                    String maxAttendees = editMaxAttendees.getText().toString();
-                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, deviceId));
+                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation,
+                            deviceId,eventDate, eventStartTime, eventEndTime, eventAM_PM));
                 })
                 .create();
     }
