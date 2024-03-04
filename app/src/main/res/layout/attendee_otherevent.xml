@@ -23,7 +23,7 @@
 
 
     <TextView
-        android:id="@+id/currMode"
+        android:id="@+id/Footer"
         android:layout_width="400dp"
         android:layout_height="42dp"
         android:layout_marginStart="7dp"
@@ -41,39 +41,39 @@
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/currMode"
+        android:id="@+id/otherEvents"
         android:layout_width="148dp"
         android:layout_height="28dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
         android:background="@drawable/grey_circle_background"
-        android:backgroundTint="#FFFFFF"
         android:gravity="center"
-        android:text="Other Events"
+        android:text="@string/other_events"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/currMode"
+        app:layout_constraintStart_toEndOf="@+id/myEvents"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
 
     <TextView
-        android:id="@+id/currMode"
+        android:id="@+id/myEvents"
         android:layout_width="148dp"
         android:layout_height="28dp"
         android:layout_marginStart="23dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="36dp"
-        android:background="@drawable/grey_circle_background"
+        android:backgroundTint="#9A9797"
         android:gravity="center"
-        android:text="My Events"
+        android:text="@string/my_events"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/otherEvents"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
@@ -84,7 +84,7 @@
         android:layout_height="1dp"
         android:layout_marginBottom="7dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/currMode"
+        app:layout_constraintBottom_toTopOf="@+id/otherEvents"
         app:layout_constraintEnd_toEndOf="parent"
         tools:ignore="MissingConstraints" />
 
@@ -108,38 +108,39 @@
         tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageView
-        android:id="@+id/imageView1"
+        android:id="@+id/profilePicture"
         android:layout_width="48dp"
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
-        android:contentDescription="@string/todo"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile_pic"
         tools:ignore="MissingConstraints" />
 
+    <!-- RecyclerView added here -->
 
+    <!-- Adjustments or additional views can be added here -->
 
-
-    <ImageView
-        android:id="@+id/imageView7"
-        android:layout_width="64dp"
-        android:layout_height="41dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginBottom="2dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/currMode"
-        app:srcCompat="@drawable/camera_icon" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="333dp"
-        android:layout_height="553dp"
-        android:layout_marginTop="108dp"
+        android:id="@+id/eventsRecyclerView"
+        android:layout_width="364dp"
+        android:layout_height="442dp"
+        android:layout_marginTop="49dp"
+        android:layout_marginEnd="24dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.409"
+        app:layout_constraintTop_toBottomOf="@+id/otherEvents" />
+
+    <ImageView
+        android:id="@+id/cameraButton"
+        android:layout_width="64dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:srcCompat="@drawable/camera_icon" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
