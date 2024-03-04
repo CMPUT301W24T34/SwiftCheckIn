@@ -37,8 +37,8 @@
 
     <TextView
         android:id="@+id/nameText"
-        android:layout_width="321dp"
-        android:layout_height="33dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="28dp"
         android:text="Name"
@@ -49,8 +49,8 @@
 
     <TextView
         android:id="@+id/emailText"
-        android:layout_width="245dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
         android:layout_marginTop="24dp"
         android:text="Email"
@@ -60,8 +60,8 @@
 
     <TextView
         android:id="@+id/phoneNumberText"
-        android:layout_width="245dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
         android:layout_marginTop="20dp"
         android:text="Phone"
@@ -71,8 +71,8 @@
 
     <TextView
         android:id="@+id/locationText"
-        android:layout_width="245dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
         android:layout_marginTop="20dp"
         android:text="Location"
