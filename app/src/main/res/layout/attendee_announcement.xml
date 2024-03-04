@@ -181,12 +181,23 @@
         android:layout_marginStart="36dp"
         android:layout_marginEnd="79dp"
         android:layout_marginBottom="400dp"
-        android:text="Some Important announcements"
+        android:text="@string/some_important_announcements"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="326dp"
+        android:layout_height="377dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginEnd="57dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+    " />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
