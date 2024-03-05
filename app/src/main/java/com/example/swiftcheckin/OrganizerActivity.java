@@ -10,14 +10,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.auth.api.signin.internal.Storage;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -28,6 +32,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.Serializable;
 import java.lang.ref.Reference;
@@ -58,10 +64,11 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventStartTime = intent.getStringExtra("eventStartTime");
             String eventEndTime = intent.getStringExtra("eventEndTime");
             String eventDescription = intent.getStringExtra("eventDescription");
+            String eventPosterURL = intent.getStringExtra("eventPosterURL");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Call the method with arguments in OrganizingActivity
-                addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
             }
         }
     };
@@ -81,14 +88,14 @@ public class OrganizerActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//        DocumentReference deviceRef = db.collection("events").document(deviceId);
-//        DocumentReference deviceIdRef = db.collection("deviceIds").document(deviceId);
         getData();
 
 
         // registering receiver
         IntentFilter filter = new IntentFilter("com.example.ADD_EVENT");
-        registerReceiver(receiver, filter);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            registerReceiver(receiver, filter, Context.RECEIVER_EXPORTED);
+        }
 
         eventList = findViewById(R.id.event_list);
         dataList = new ArrayList<>();
@@ -120,10 +127,7 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     private void getData(){
-        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         CollectionReference eventCol = db.collection("events");
-//        DocumentReference deviceRef = eventCol.document(deviceId);
-//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
 
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -141,12 +145,14 @@ public class OrganizerActivity extends AppCompatActivity {
                         String eventLocation = (String) doc.getData().get("eventLocation");
                         String eventDescription = (String) doc.getData().get("eventDescription");
                         String deviceID = (String) doc.getData().get("deviceId");
+
+                        String eventImageURL = (String) doc.getData().get("eventPosterURL");
                         String startDate = (String) doc.getData().get("eventStartDate");
                         String endDate = (String) doc.getData().get("eventEndDate");
                         String startTime = (String) doc.getData().get("eventStartTime");
                         String endTime = (String) doc.getData().get("eventEndTime");
 
-                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, startDate, endDate, startTime, endTime));
+                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
                     }// Adding event details from FireStore
 
                 }
@@ -156,12 +162,10 @@ public class OrganizerActivity extends AppCompatActivity {
             }
         });
     }
-
-    private void saveData(Event event){
-        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    private void saveData(Event event){;
         // Ensure we have 3 columns in firestore for simple reference.
         DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
-//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
+
 
 
         HashMap<String, String> data = new HashMap<>();
@@ -169,6 +173,8 @@ public class OrganizerActivity extends AppCompatActivity {
         data.put("eventLocation", event.getLocation());
         data.put("deviceId", event.getDeviceId());
         data.put("eventDescription", event.getDescription());
+        data.put("eventPosterURL", event.getEventImageUrl());
+
         data.put("eventStartDate", event.getStartDate());
         data.put("eventEndDate", event.getEndDate());
         data.put("eventStartTime", event.getStartTime());
@@ -189,8 +195,8 @@ public class OrganizerActivity extends AppCompatActivity {
                         Toast.makeText(OrganizerActivity.this, "Event could not be added.", Toast.LENGTH_SHORT).show();
                     }
                 });
-
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

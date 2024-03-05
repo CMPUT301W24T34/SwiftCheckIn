@@ -5,10 +5,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 
@@ -31,11 +34,15 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eventLocation = view.findViewById(R.id.event_location_text);
 //        TextView maxAttendees = view.findViewById(R.id.event_max_attend_text);
         TextView description = view.findViewById(R.id.event_description_text);
+        ImageView eventPoster = view.findViewById(R.id.event_poster_image);
 
         eventTitle.setText(event.getEventTitle());
         eventLocation.setText(event.getLocation());
 //        maxAttendees.setText(event.getMaxAttendees());
         description.setText(event.getDescription());
+            Glide.with(getContext())
+                    .load(event.getEventImageUrl())
+                    .into(eventPoster);
 
         return view;
     }
