@@ -2,8 +2,21 @@ package com.example.swiftcheckin;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 
 public class MainActivity extends AppCompatActivity {
     Button organizerTestButton;
@@ -39,4 +53,5 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
 }

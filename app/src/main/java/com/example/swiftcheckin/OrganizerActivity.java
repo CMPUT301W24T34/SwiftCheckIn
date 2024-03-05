@@ -101,6 +101,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                 dataList.clear();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
+
                     String eventTitleFrame = doc.getId();
                     if (eventTitleFrame.contains(deviceId)) {
                         String eventTitle = (String) doc.getData().get("eventTitle");
