@@ -3,14 +3,11 @@ package com.example.swiftcheckin;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.arch.core.executor.ArchTaskExecutor;
 
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
@@ -19,7 +16,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -27,15 +23,14 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-
-public class Admin extends AppCompatActivity {
+/**
+ * This is the administration activity
+ */
+public class AdminActivity extends AppCompatActivity {
     ListView dataList;
     Button deleteButton;
     Button eventButton;
     Button profileButton;
-
     ArrayList<Profile> profileList;
     ArrayList<Event> eventList;
     private int selectedPosition = -1;
@@ -48,10 +43,11 @@ public class Admin extends AppCompatActivity {
 
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.admin_activity);
+        setContentView(R.layout.activity_admin);
         deleteButton = findViewById(R.id.remove_tab_button);
         eventButton = findViewById(R.id.event_button);
         profileButton = findViewById(R.id.profile_button);
@@ -62,6 +58,7 @@ public class Admin extends AppCompatActivity {
         tab = "Event";
         ProfileArrayAdapter profileArrayAdapter = new ProfileArrayAdapter(this, profileList);
         EventArrayAdapter eventArrayAdapter = new EventArrayAdapter(this, eventList);
+        //Make the default view the events tab
         displayEventsTab(eventArrayAdapter);
 
         eventButton.setOnClickListener(new View.OnClickListener() {
@@ -102,8 +99,11 @@ public class Admin extends AppCompatActivity {
         });
     }
 
-    private void displayEventsTab(EventArrayAdapter eventArrayAdapter) {
+    /**
+     * This displays the events tab
+     */
 
+    private void displayEventsTab(EventArrayAdapter eventArrayAdapter) {
         tab = "Event";
         collectionReference = db.collection("events");
         dataList.setAdapter(eventArrayAdapter);
@@ -121,6 +121,9 @@ public class Admin extends AppCompatActivity {
         });
 
     }
+    /**
+     * This displays the profiles tab
+     */
     private void displayProfilesTab(ProfileArrayAdapter profileArrayAdapter) {
         tab = "Profile";
         collectionReference = db.collection("profiles");
@@ -139,15 +142,19 @@ public class Admin extends AppCompatActivity {
         });
 
     }
+    /**
+     * This deletes the profile and all associated events
+     */
     private void deleteProfile(ProfileArrayAdapter profileArrayAdapter,EventArrayAdapter eventArrayAdapter){
         //delete not just profile but all events associated with that profile
-        String nameToDelete = profileList.get(selectedPosition).getName(); // Assuming 'getName()' returns the name field in your Profile class
+        String nameToDelete = profileList.get(selectedPosition).getName();
         collectionReference.whereEqualTo("name", nameToDelete)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
+                            //Citation: For the following code, OpenAI, 2024, ChatGPT, Prompt: How to delete all items with a certain device ID
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
                                 collectionReference.document(documentId)
@@ -176,15 +183,16 @@ public class Admin extends AppCompatActivity {
                     }
                 });
     }
+    /**
+     * This deletes the events`
+     */
     private void deleteEvent(EventArrayAdapter eventArrayAdapter, String deviceId) {
-        int iterations;
-        Log.d(TAG, "In delete event ");
         tab = "Event";
         collectionReference = db.collection("events");
-        // if device Id is "pass" do normal deletion, else for every event with that device ID delete it
+        // if device Id is "pass" do normal deletion, or else for every event with that device ID delete it
             String nameToDelete = eventList.get(selectedPosition).getDeviceId();
+        //Citation: For the following code, OpenAI, 2024, ChatGPT, Prompt: How to check if the device Id is not "pass"
             if (!"pass".equals(deviceId)){
-                Log.d(TAG, "In this if statement!");
                 nameToDelete = deviceId;
             }
             collectionReference.whereEqualTo("deviceId", nameToDelete)

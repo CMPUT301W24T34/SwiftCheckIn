@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Admin"
+            android:name=".AdminActivity"
             android:exported="true">
         </activity>
         <activity

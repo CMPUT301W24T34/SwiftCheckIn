@@ -1,5 +1,7 @@
 package com.example.swiftcheckin;
-
+/**
+ * This is the promotional QR
+ */
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -17,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+//Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
 public class PromotionQR extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

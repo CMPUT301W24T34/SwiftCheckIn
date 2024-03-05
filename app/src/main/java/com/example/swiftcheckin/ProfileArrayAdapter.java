@@ -10,7 +10,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
-
+/**
+ * This is the profile array adapter
+ */
 public class ProfileArrayAdapter extends ArrayAdapter<Profile>{
     private ArrayList<Profile> profiles;
     private Context context;
@@ -29,7 +31,7 @@ public class ProfileArrayAdapter extends ArrayAdapter<Profile>{
         View view = convertView;
 
         if(view == null){
-            view = LayoutInflater.from(context).inflate(R.layout.content_profile, parent,false);
+            view = LayoutInflater.from(context).inflate(R.layout.profile_content, parent,false);
         }
 
         Profile profile = profiles.get(position);
