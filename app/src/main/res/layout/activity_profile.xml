@@ -18,14 +18,17 @@
         android:text="Profile"
         android:textSize="25sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintBottom_toTopOf="@+id/avatarImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.69" />
 
+<!--    To change the image displayed, take out the sample avatar line and replace with a different image-->
+<!--    The sample avatar image does not actually show when the app is run, only in display mode-->
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/avatarImage"
         android:layout_width="170dp"
         android:layout_height="168dp"
         android:layout_marginBottom="432dp"
@@ -45,7 +48,7 @@
         android:textSize="23sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@+id/avatarImage" />
 
     <TextView
         android:id="@+id/emailText"

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <!-- Citation: How to get the buttons not round, StackOverflow, Shihab Uddin, 03/07/2021/ android material button cannot remove round corners, https://stackoverflow.com/questions/63317689/android-material-button-cannot-remove-round-corners -->
+    <!-- Citation: How to add Icons, Youtube, Brandan Jones,Add icon to ImageButton in Android Studio, 2024, https://www.youtube.com/watch?v=YaWmNhlOXYk -->
+
+    <Button
+        android:id="@+id/event_button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:text="Events"
+        app:cornerRadius="0dp"
+        android:backgroundTint="#EEEEEE"
+        android:textColor="#673AB7"
+        app:layout_constraintEnd_toStartOf="@+id/profile_button"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.33"
+        tools:layout_editor_absoluteY="0dp" />
+
+    <Button
+        android:id="@+id/profile_button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:textColor="#673AB7"
+        android:backgroundTint="#EEEEEE"
+        app:cornerRadius="0dp"
+        android:text="Profiles"
+        app:layout_constraintEnd_toStartOf="@+id/images_button"
+        app:layout_constraintHorizontal_weight="1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.33" />
+
+    <Button
+        android:id="@+id/images_button"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        app:cornerRadius="0dp"
+        android:text="Images"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight="1"
+        android:textColor="#673AB7"
+        android:backgroundTint="#EEEEEE"
+        app:layout_constraintWidth_percent="0.33" />
+
+    <SearchView
+        android:id="@+id/searchView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/images_button" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="409dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/remove_tab_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+
+
+    <Button
+        android:id="@+id/remove_tab_button"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:backgroundTint="#EEEEEE"
+        android:drawableTop="@drawable/ic_remove"
+        android:text="Remove"
+        android:textColor="#673AB7"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.009"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintWidth_percent="0.50" />
+
+    <Button
+        android:id="@+id/profile_tab_button"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:text="Profile"
+        app:cornerRadius="0dp"
+        android:textColor="#673AB7"
+        android:backgroundTint="#EEEEEE"
+        android:drawableTop="@drawable/ic_profile"
+        app:layout_constraintStart_toEndOf="@+id/remove_tab_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/listView"
+        app:layout_constraintWidth_percent="0.50"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
