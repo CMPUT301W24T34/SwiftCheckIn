@@ -21,6 +21,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switch_modes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:fabCustomSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.005"
+        app:maxImageSize="24dp"
+        app:srcCompat="@android:drawable/ic_menu_set_as" />
+
 
     <TextView
         android:id="@+id/footer"
@@ -44,7 +59,6 @@
         android:id="@+id/other_events"
         android:layout_width="148dp"
         android:layout_height="28dp"
-        android:layout_marginStart="36dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
         android:background="@drawable/grey_circle_background"
@@ -56,7 +70,6 @@
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/my_events"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
 
@@ -64,16 +77,14 @@
         android:id="@+id/my_events"
         android:layout_width="148dp"
         android:layout_height="28dp"
-        android:layout_marginStart="23dp"
+        android:layout_marginStart="22dp"
         android:layout_marginTop="7dp"
-        android:layout_marginEnd="36dp"
         android:gravity="center"
         android:text="@string/my_events"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/other_events"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         tools:ignore="SmallSp" />
@@ -82,10 +93,11 @@
         android:id="@+id/divider"
         android:layout_width="378dp"
         android:layout_height="1dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginStart="34dp"
         android:background="#000000"
-        app:layout_constraintBottom_toTopOf="@+id/other_events"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_picture"
         tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.helper.widget.Layer
@@ -93,19 +105,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints" />
-
-    <Switch
-        android:id="@+id/switch_mode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="108dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="13dp"
-        android:text="@string/mode"
-        app:layout_constraintBottom_toTopOf="@+id/divider"
-        app:layout_constraintStart_toEndOf="@+id/app_name"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
 
     <ImageView
         android:id="@+id/profile_picture"

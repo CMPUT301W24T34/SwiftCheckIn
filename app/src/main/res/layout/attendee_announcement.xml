@@ -13,12 +13,12 @@
         android:layout_width="153dp"
         android:layout_height="28dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="108dp"
+        android:layout_marginEnd="147dp"
         android:text="@string/swiftcheckin"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/switch_mode"
+        app:layout_constraintEnd_toStartOf="@+id/switch_modes"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -39,16 +39,20 @@
         android:layout_height="wrap_content"
         tools:ignore="MissingConstraints" />
 
-    <Switch
-        android:id="@+id/switch_mode"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switch_modes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="6dp"
-        android:text="@string/mode"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:fabCustomSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints,UseSwitchCompatOrMaterialXml" />
+        app:layout_constraintVertical_bias="0.005"
+        app:maxImageSize="24dp"
+        app:srcCompat="@android:drawable/ic_menu_set_as" />
 
     <ImageView
         android:id="@+id/profile_picture"
