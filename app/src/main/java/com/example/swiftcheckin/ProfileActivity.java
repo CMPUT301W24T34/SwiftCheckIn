@@ -34,7 +34,7 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         Button settingsButton = findViewById(R.id.settings_button);
-//        Button backButton = findViewById(R.id.back_button);
+        Button backButton = findViewById(R.id.back_button);
         db = FirebaseFirestore.getInstance();
         getData();
         settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -45,13 +45,13 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-//        backButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                finish();
-//
-//            }
-//        });
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+
+            }
+        });
     }
 
     private void getData() {
