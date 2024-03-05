@@ -112,10 +112,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+
                 android:layout_marginStart="30dp"
+                android:layout_marginEnd="2dp"
+
                 android:background="@drawable/rounded_edit_text"
                 android:hint=" Start Date(DD/MM/YYYY)"
+
                 android:padding="5dp"
+
                 android:textSize="15sp"
                 android:maxLength="10"
                 android:inputType="date"
@@ -125,8 +130,11 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+
                 android:layout_marginEnd="30dp"
+                android:layout_marginStart = "2dp"
                 android:background="@drawable/rounded_edit_text"
+
                 android:hint=" In Time"
                 android:textSize="15sp"
                 android:padding="5dp" />
@@ -145,10 +153,15 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
+
                 android:layout_marginStart="30dp"
+                android:layout_marginEnd="2dp"
+
                 android:background="@drawable/rounded_edit_text"
+
                 android:textSize="15sp"
                 android:hint=" End Date(DD/MM/YYYY)"
+
                 android:padding="5dp"
                 android:maxLength="10"
                 android:inputType="date"
@@ -158,7 +171,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+
                 android:layout_marginEnd="30dp"
+                android:layout_marginStart = "2dp"
+
                 android:textSize="15sp"
                 android:background="@drawable/rounded_edit_text"
                 android:hint="Out Time"
@@ -199,7 +215,8 @@
             android:layout_weight="1"
             android:layout_marginStart="30dp"
             android:text="Cancel"
-            android:background="@drawable/button_rounded_black"
+            android:backgroundTint="@color/black"
+            android:layout_marginEnd="5dp"
             />
         <Button
             android:id="@+id/eventPageSaveButton"
@@ -208,7 +225,8 @@
             android:layout_weight="1"
             android:layout_marginEnd="30dp"
             android:text="Save"
-            android:background="@drawable/button_rounded_black"
+            android:backgroundTint="@color/black"
+            android:layout_marginStart="5dp"
             />
 
     </LinearLayout>
