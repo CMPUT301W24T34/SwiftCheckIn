@@ -80,7 +80,9 @@
         android:id="@+id/divider"
         android:layout_width="378dp"
         android:layout_height="1dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
         android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -108,21 +110,21 @@
         app:maxImageSize="24dp"
         app:srcCompat="@android:drawable/ic_menu_set_as" />
 
-    <ImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile_pic"
-        tools:ignore="MissingConstraints" />
-
     <!-- RecyclerView added here -->
 
     <!-- Adjustments or additional views can be added here -->
 
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_pic"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/camera_button"
@@ -135,8 +137,8 @@
         app:srcCompat="@drawable/camera_icon" />
 
     <ListView
-        android:layout_width="406dp"
-        android:layout_height="552dp"
+        android:layout_width="423dp"
+        android:layout_height="609dp"
         android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

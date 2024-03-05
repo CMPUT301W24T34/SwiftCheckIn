@@ -30,7 +30,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eventTitle = view.findViewById(R.id.event_title_text);
         TextView eventLocation = view.findViewById(R.id.event_location_text);
         // Fetching event ids for attendee_event section
-        TextView eventName = view.findViewById(R.id.event_name);
+        TextView eventName = view.findViewById(R.id.event_Title);
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);

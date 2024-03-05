@@ -30,7 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.606"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView1"
         tools:ignore="MissingConstraints" />
 
     <androidx.constraintlayout.helper.widget.Layer
@@ -80,7 +79,7 @@
         app:srcCompat="@drawable/event_poster" />
 
     <TextView
-        android:id="@+id/edit_event_start_time"
+        android:id="@+id/annoucement_edit_event_start_time"
         android:layout_width="37dp"
         android:layout_height="18dp"
         android:layout_marginStart="12dp"
@@ -97,7 +96,7 @@
         android:layout_marginStart="2dp"
         android:layout_marginTop="29dp"
         android:text="@string/dash"
-        app:layout_constraintStart_toEndOf="@+id/edit_event_start_time"
+        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_date"
         app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
 
     <ImageView
@@ -111,7 +110,7 @@
         app:srcCompat="@drawable/calendar" />
 
     <TextView
-        android:id="@+id/edit_event_date"
+        android:id="@+id/annoucement_edit_event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -122,7 +121,7 @@
         app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
 
     <TextView
-        android:id="@+id/edit_event_end_Time"
+        android:id="@+id/announcement_edit_event_end_Time"
         android:layout_width="42dp"
         android:layout_height="18dp"
         android:layout_marginTop="29dp"
@@ -137,23 +136,23 @@
         android:layout_height="26dp"
         android:layout_marginStart="77dp"
         android:layout_marginTop="22dp"
-        app:layout_constraintStart_toEndOf="@+id/edit_event_date"
+        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_date"
         app:layout_constraintTop_toBottomOf="@+id/event_poster1"
         app:srcCompat="@drawable/clock" />
 
     <TextView
-        android:id="@+id/edit_am_pm"
+        android:id="@+id/annoucement_edit_am_pm"
         android:layout_width="25dp"
         android:layout_height="18dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="208dp"
         android:text="@string/pm"
         android:textAlignment="center"
-        app:layout_constraintStart_toEndOf="@+id/edit_event_end_Time"
+        app:layout_constraintStart_toEndOf="@+id/announcement_edit_event_end_Time"
         app:layout_constraintTop_toBottomOf="@+id/divider" />
 
     <TextView
-        android:id="@+id/event_name"
+        android:id="@+id/annoucnement_event_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"

@@ -46,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
 
+        Log.e("D", "hELLFDSFDFDSFDSFS");
+        Log.d("D", "hELLFDSFDFDSFDSFS");
+
+        Log.w("D", "hELLFDSFDFDSFDSFS");
+
+
         // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
@@ -90,8 +96,8 @@ public class MainActivity extends AppCompatActivity {
 
                 eventList.clear(); // Clear the old list
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    String eventTitleFrame = doc.getId();
-                    String eventTitle = (String) doc.getData().get("eventName");
+//                    String eventId = doc.getId();
+                    String eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDate = (String) doc.getData().get("eventDate");
                     String eventStartTime = (String) doc.getData().get("eventStartTime");
                     String eventEndTime = (String) doc.getData().get("eventEndTime");
@@ -99,7 +105,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.d(TAG, "Event added successfully");
 
-//                    eventList.add(new Event(eventTitle, null, null, null, eventDate, eventStartTime, eventEndTime, eventAmPm));
+                    eventList.add(new Event(eventTitle, "frfr", "grgrf", "fre", eventDate,
+                            eventStartTime, eventEndTime, eventAmPm));
                 }
                 eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
             }
