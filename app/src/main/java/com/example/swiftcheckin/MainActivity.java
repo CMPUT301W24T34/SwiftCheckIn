@@ -1,23 +1,18 @@
 package com.example.swiftcheckin;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,7 +21,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -46,20 +40,39 @@ public class MainActivity extends AppCompatActivity {
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
 
-        Log.e("D", "hELLFDSFDFDSFDSFS");
-        Log.d("D", "hELLFDSFDFDSFDSFS");
-
-        Log.w("D", "hELLFDSFDFDSFDSFS");
-
-
         // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
-        // Setup UI elements
-        setupUI();
+        setupUI();         // Setup UI elements
+        getData();          // Fetch data from Firestore
+    }
 
-        // Fetch data from Firestore
-        getData();
+    private void getData(){
+        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        CollectionReference eventCol = db.collection("attendeeEventList");
+
+        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+
+                eventList.clear(); // Clear the old list
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+//                    String eventId = doc.getId();
+                    String eventTitle = (String) doc.getData().get("eventTitle");
+                    String eventDate = (String) doc.getData().get("eventDate");
+                    String eventStartTime = (String) doc.getData().get("eventStartTime");
+                    String eventEndTime = (String) doc.getData().get("eventEndTime");
+                    String eventAmPm = (String) doc.getData().get("eventAmPm");
+
+                    eventList.add(new Event(eventTitle, "frfr", "grgrf", "fre", eventDate,
+                            eventStartTime, eventEndTime, eventAmPm));
+                }
+                eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
+            }
+        });
     }
 
     private void setupUI() {
@@ -74,42 +87,20 @@ public class MainActivity extends AppCompatActivity {
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
 
+
         // Camera Button
         ImageView cameraButton = findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "This does nothing yet", Toast.LENGTH_SHORT).show());
-    }
 
-    private void getData(){
-        Log.d("D", "Opening get DATA FUNC");
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        CollectionReference eventCol = db.collection("attendeeEventList");
+        listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
+            Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
 
-        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
+            annoucementIntent.putExtra("Message", "hello world");
+            startActivity(annoucementIntent);
 
-                    Log.e(TAG, "Error fetching events", error);
-                    return;
-                }
-                Log.d("TAG","Opening firebaes");
-
-                eventList.clear(); // Clear the old list
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                    String eventId = doc.getId();
-                    String eventTitle = (String) doc.getData().get("eventTitle");
-                    String eventDate = (String) doc.getData().get("eventDate");
-                    String eventStartTime = (String) doc.getData().get("eventStartTime");
-                    String eventEndTime = (String) doc.getData().get("eventEndTime");
-                    String eventAmPm = (String) doc.getData().get("eventAmPm");
-
-                    Log.d(TAG, "Event added successfully");
-
-                    eventList.add(new Event(eventTitle, "frfr", "grgrf", "fre", eventDate,
-                            eventStartTime, eventEndTime, eventAmPm));
-                }
-                eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
-            }
         });
     }
-}
+
+
+    }
+
