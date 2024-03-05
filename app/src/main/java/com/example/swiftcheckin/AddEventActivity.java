@@ -41,12 +41,6 @@ public class AddEventActivity extends AppCompatActivity {
     ImageView editEventPoster;
     Uri imageUri;
 
-//    interface AddEventListener{
-//        void addE(Event event);
-//    }
-//
-//    private AddEventListener listener;
-
     Event event = new Event();
     private String deviceId;
 
@@ -117,12 +111,6 @@ public class AddEventActivity extends AppCompatActivity {
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
         String eventDescription = descriptionEditText.getText().toString();
 
-//        event.setEventTitle(eventName);
-//        event.setDescription(eventDescription);
-//        event.setLocation(eventLocation);
-//        event.setEventPoster(imageUri);
-//        event.setDeviceId(getUserId());
-//        listener.addE(event);
         Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
 
         EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
@@ -136,10 +124,6 @@ public class AddEventActivity extends AppCompatActivity {
 
         EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
         String eventEndTime = eventEndTimeEditText.getText().toString();
-
-        EditText eventDescriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
-//        String eventDescription = eventDescriptionEditText.getText().toString();
-//        Toast.makeText(getApplicationContext(), eventDescription, Toast.LENGTH_LONG).show();
 
         Intent intent = new Intent("com.example.ADD_EVENT");
         intent.putExtra("eventName", eventName);
@@ -229,12 +213,10 @@ public class AddEventActivity extends AppCompatActivity {
                     // When the image has successfully uploaded, get its download URL
                     eventImageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
                         // Save the download URL to the Firestore document for the user
-//                        Toast.makeText(getContext(), "Save imageURL", Toast.LENGTH_SHORT).show();
                         event.setEventImageUrl(downloadUri.toString());
                         Glide.with(AddEventActivity.this)
                                 .load(downloadUri.toString())
                                 .into(editEventPoster);
-//                        saveEventImageUrlToFirestore(downloadUri.toString());
                     });
                 })
                 .addOnFailureListener(e -> {

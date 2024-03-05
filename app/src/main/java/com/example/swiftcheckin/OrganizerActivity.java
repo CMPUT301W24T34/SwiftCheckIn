@@ -51,18 +51,6 @@ public class OrganizerActivity extends AppCompatActivity {
     Button addEventButton;
 
 
-//    FirebaseStorage storage = FirebaseStorage.getInstance();
-//
-//
-
-
-//    @Override
-//    public void addE(Event event) {
-//        eventAdapter.add(event);
-//        eventAdapter.notifyDataSetChanged();
-//        saveData(event);
-//    }
-
     // add JAVADOC
     // receives signal from edit event activity to save new Event
 
@@ -100,8 +88,6 @@ public class OrganizerActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
 
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//        DocumentReference deviceRef = db.collection("events").document(deviceId);
-//        DocumentReference deviceIdRef = db.collection("deviceIds").document(deviceId);
         getData();
 
 
@@ -141,10 +127,7 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     private void getData(){
-        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         CollectionReference eventCol = db.collection("events");
-//        DocumentReference deviceRef = eventCol.document(deviceId);
-//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
 
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -164,11 +147,6 @@ public class OrganizerActivity extends AppCompatActivity {
                         String deviceID = (String) doc.getData().get("deviceId");
 
                         String eventImageURL = (String) doc.getData().get("eventPosterURL");
-//                        Event event = new Event(eventTitle, eventDescription, eventLocation, eventImageURL, deviceID);
-//                        dataList.add(event);
-////                        Glide.with(OrganizerActivity.this)
-////                                .load(eventImageURL)
-////                                .into(eventPoster);
                         String startDate = (String) doc.getData().get("eventStartDate");
                         String endDate = (String) doc.getData().get("eventEndDate");
                         String startTime = (String) doc.getData().get("eventStartTime");
@@ -184,12 +162,9 @@ public class OrganizerActivity extends AppCompatActivity {
             }
         });
     }
-    private void saveData(Event event){
-        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    private void saveData(Event event){;
         // Ensure we have 3 columns in firestore for simple reference.
         DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
-//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
-//        StorageReference eventPosterRef = storage.getReference().child("eventPosterImages");
 
 
 
