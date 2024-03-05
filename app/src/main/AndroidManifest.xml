@@ -19,10 +19,16 @@
 
 
         <activity
+            android:name=".OrganizerActivity"
+            android:exported="false" />
+        <activity
             android:name=".SettingsActivity"
             android:exported="false" />
         <activity
             android:name=".ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AddEventActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

@@ -17,6 +17,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/switch_modes"
         android:layout_width="wrap_content"
@@ -39,7 +40,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:fontFamily="casual"
-        android:text="SwiftCheckIn"
+        android:text="@string/AppName"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_button"

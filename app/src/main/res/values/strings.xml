@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">SwiftCheckIn</string>
+    <string name="event_plus">+</string>
+    <string name="AppName">SwiftCheckIn</string>
 </resources>
