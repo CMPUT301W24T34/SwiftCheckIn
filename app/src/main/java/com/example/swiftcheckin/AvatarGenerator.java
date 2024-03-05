@@ -10,6 +10,12 @@ import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+
+/**
+ * A utility class to generate avatars for users.
+
+ */
+
 public class AvatarGenerator {
 
     /**
@@ -20,7 +26,7 @@ public class AvatarGenerator {
     public static void generateAvatar(String name, AvatarImageCallback avatarImageCallback) {
         new Thread(() -> {
             try {
-                // Create a pseudo-email from the name to use with Gravatar
+                // Because the Gravatar API requires an email address, we'll generate a pseudo-email address using the name(requirement of the project).
                 String pseudoEmail = name.replaceAll("\\s+", "").toLowerCase() + "@example.com";
                 String hash = md5Hex(pseudoEmail);
                 String gravatarUrl = "https://www.gravatar.com/avatar/" + hash + "?d=identicon";
@@ -35,6 +41,12 @@ public class AvatarGenerator {
     }
 
 
+    /**
+     * Generates an MD5 hash of a given input.
+     * @param input The input to hash.
+     * @return The MD5 hash of the input.
+     * * Citation: Some reference is from the https://docs.gravatar.com/gravatar-images/java/
+     */
     private static String md5Hex(String input) {
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
@@ -49,6 +61,12 @@ public class AvatarGenerator {
         }
     }
 
+    /**
+     * Gets a Bitmap from a URL.
+     * @param src The URL to get the Bitmap from.
+     * @return The Bitmap from the URL.
+     */
+    // Citation: This method is referenced from the https://stackoverflow.com/questions/11831188/how-to-get-bitmap-from-a-url-in-android
     private static Bitmap getBitmapFromURL(String src) {
         try {
             URL url = new URL(src);
@@ -62,6 +80,7 @@ public class AvatarGenerator {
             return null;
         }
     }
+
 
     public interface AvatarImageCallback {
         void onAvatarLoaded(Bitmap avatar);

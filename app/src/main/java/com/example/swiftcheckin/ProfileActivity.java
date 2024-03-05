@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -25,12 +26,17 @@ import android.content.pm.PackageManager;
 import android.widget.Toast;
 
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
+
+import java.io.ByteArrayOutputStream;
 
 /**
  * This deals with the user's profile information
@@ -76,8 +82,10 @@ public class ProfileActivity extends AppCompatActivity {
     private static final int PICK_IMAGE_REQUEST = 101;
     private static final int CAPTURE_IMAGE_REQUEST = 102;
 
-
-
+    /**
+     * This requests permissions for the camera and external storage
+     * Citation: Requesting permissions. Android Developers , https://developer.android.com/training/permissions/requesting#java
+     */
     private void requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -87,6 +95,7 @@ public class ProfileActivity extends AppCompatActivity {
                     PERMISSIONS_REQUEST);
         }
     }
+
 
     private void getData() {
         // Citation: Getting unique device id, Stack Overflow, License: CC-BY-SA, user name Chintan Rathod, "How to get unique device hardware id in Android?", 2013-06-01, https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
@@ -133,6 +142,9 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This shows the options to choose from gallery or take a photo
+     */
 
     private void showImagePickerOptions() {
         // Check for permissions
@@ -161,43 +173,141 @@ public class ProfileActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            Uri imageUri = null;
             if (requestCode == PICK_IMAGE_REQUEST && data != null) {
-                Uri selectedImage = data.getData();
-                // Handle the selected image from the gallery
-                avatarImage.setImageURI(selectedImage);
+                imageUri = data.getData();
             } else if (requestCode == CAPTURE_IMAGE_REQUEST && data != null) {
-                Bundle extras = data.getExtras();
-                Bitmap imageBitmap = (Bitmap) extras.get("data");
-                // Handle the captured photo
-                avatarImage.setImageBitmap(imageBitmap);
+                Bitmap imageBitmap = (Bitmap) data.getExtras().get("data");
+                imageUri = getImageUri(getApplicationContext(), imageBitmap);
+            }
+
+            if (imageUri != null) {
+                uploadImageToFirebaseStorage(imageUri);
             }
         }
     }
 
+    /**
+     * This gets the image uri
+     * @param inContext
+     * @param inImage
+     * @return the uri of the image
+     */
+    private Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
+
+
+    /** Uploads an image to Firebase Storage under the path 'profileImages/{userId}.jpg'.
+     * This method first retrieves the user's unique ID to use as part of the storage path.
+     * Upon successful upload, it retrieves the download URL of the uploaded image and save this URL in Firestore.
+     * If the upload fails, it logs an error message.
+     *
+     * @param imageUri The URI of the image to be uploaded. This should not be null and must
+     *                 point to a valid image file.
+     */
+    private void uploadImageToFirebaseStorage(Uri imageUri) {
+        String userId = getUserId(); // Implement this method to retrieve the user's ID.
+
+       // Create a storage reference from our app
+        StorageReference profileImageRef = FirebaseStorage.getInstance()
+                .getReference("profileImages/" + userId + ".jpg");
+
+        // Upload file to Firebase Storage
+        profileImageRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // When the image has successfully uploaded, get its download URL
+                    profileImageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        saveProfileImageUrlToFirestore(downloadUri.toString());
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Handle unsuccessful uploads
+                    Log.e("ProfileActivity", "Image upload failed", e);
+                });
+    }
+
+    /**
+     * This saves the profile image url to firestore
+     * @param imageUrl
+     */
+    private void saveProfileImageUrlToFirestore(String imageUrl) {
+        String deviceId = getUserId(); // Retrieve device/user ID
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("profiles").document(deviceId)
+                .update("profileImageUrl", imageUrl)
+                .addOnSuccessListener(aVoid -> {
+                    // Image URL saved to Firestore, now load it into the ImageView
+                    // Citation : https://www.youtube.com/watch?v=xrVD7LcQ5nY
+                    Glide.with(ProfileActivity.this)
+                            .load(imageUrl)
+                            .into(avatarImage);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("ProfileActivity", "Error saving image URL to Firestore", e);
+                });
+    }
+
+
+    /**
+     * This gets the user's id
+     * @return the user's id
+     */
+    private String getUserId() {
+        return Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
+    }
+
+
+    /**
+     * Handles the request permission result
+     * @param requestCode The request code passed in requestPermissions
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSIONS_REQUEST) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 showImagePickerOptions();
-            } else {
-                Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+            // else {
+            // Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
+        //}
+        }
+    }
+
+
+
+
+    /**
+     * This updates the UI with the profile data
+     * @param profile
+     */
+    private void updateUIWithProfileData(Profile profile) {
+        // Load the profile image URL into the ImageView
+        String profileImageUrl = profile.getProfileImageUrl();
+        if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+            // If URL is not empty, load it with Glide or your chosen image loading library.
+            Glide.with(this).load(profileImageUrl).into(avatarImage);
+        } else {
+            // If no URL, then generate the avatar image.
+            String profileName = profile.getName();
+            if (profileName != null && !profileName.isEmpty()) {
+                AvatarGenerator.generateAvatar(profileName, new AvatarGenerator.AvatarImageCallback() {
+                    @Override
+                    public void onAvatarLoaded(Bitmap avatar) {
+                        runOnUiThread(() -> avatarImage.setImageBitmap(avatar));
+                    }
+                });
             }
         }
     }
 
-
-
-
-    private void updateUIWithProfileData(Profile profile) {
-        String profileName = profile.getName();
-        if (profileName != null && !profileName.isEmpty()) {
-            AvatarGenerator.generateAvatar(profileName, new AvatarGenerator.AvatarImageCallback() {
-                @Override
-                public void onAvatarLoaded(Bitmap avatar) {
-                    runOnUiThread(() -> avatarImage.setImageBitmap(avatar));
-                }
-            });
-        }
-    }
 }
