@@ -17,7 +17,7 @@ public class Event {
     * */
     private Date date;
     private String eventTitle;
-    private Uri eventPoster;
+    private Uri eventPoster;  // May not need this
 //    private Image poster;
     private String eventImageUrl;
     private String location;
@@ -36,13 +36,13 @@ public class Event {
      * @param description - Brief description of the event
      * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location, Uri eventPoster, String deviceId){
-        this.eventTitle = eventTitle;
-        this.location = location;
-        this.description = description;
-        this.deviceId = deviceId;
-        this.eventPoster = eventPoster;
-    }
+//    public Event(String eventTitle, String description, String location, Uri eventPoster, String deviceId){
+//        this.eventTitle = eventTitle;
+//        this.location = location;
+//        this.description = description;
+//        this.deviceId = deviceId;
+//        this.eventPoster = eventPoster;
+//    }
     public Event(String eventTitle, String description, String location, String eventImageUrl, String deviceId){
         this.eventTitle = eventTitle;
         this.location = location;
@@ -56,9 +56,9 @@ public class Event {
         return deviceId;
     }
 
-    public Uri getEventPoster() {
-        return eventPoster;
-    }
+//    public Uri getEventPoster() {
+//        return eventPoster;
+//    }
 
     /**
      * This returns the maximum number of attendees.

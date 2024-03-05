@@ -50,6 +50,13 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
 //
 
 
+//    @Override
+//    public void addE(Event event) {
+//        eventAdapter.add(event);
+//        eventAdapter.notifyDataSetChanged();
+//        saveData(event);
+//    }
+
     public void addEvent(Event event) {
         eventAdapter.add(event);
         eventAdapter.notifyDataSetChanged();
