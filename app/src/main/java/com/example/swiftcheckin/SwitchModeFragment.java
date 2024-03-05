@@ -1,6 +1,5 @@
 package com.example.swiftcheckin;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
@@ -8,14 +7,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
-
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-public class SwitchModeFragment extends DialogFragment{
+public class SwitchModeFragment extends DialogFragment {
+
 
     @NonNull
     @Override
@@ -39,7 +38,10 @@ public class SwitchModeFragment extends DialogFragment{
             @Override
             public void onClick(View v) {
                 Toast.makeText(getContext(), "Switched to admin", Toast.LENGTH_SHORT).show();
-                dismiss();
+                Intent intent;
+                intent = new Intent(getActivity(), AdminActivity.class);
+                startActivity(intent);
+
             }
         });
 

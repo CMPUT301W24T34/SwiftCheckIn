@@ -14,7 +14,12 @@ public class Event {
     * Needs an Image
     * Needs a Location
     * */
-    private Date date;
+    private String startDate;
+    private String endDate;
+
+    private String startTime;
+    private String endTime;
+
     private String eventTitle;
 //    private Image poster;
     private String location;
@@ -33,11 +38,15 @@ public class Event {
      * @param description - Brief description of the event
      * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location, String deviceId){
+    public Event(String eventTitle, String description, String location, String deviceId, String startDate, String endDate, String startTime, String endTime){
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
         this.deviceId = deviceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public String getDeviceId() {
@@ -53,16 +62,6 @@ public class Event {
         return maxAttendees;
     }
 
-
-    /**
-     * Returns the date
-     * @return
-     * Returns date
-     */
-    public Date getDate() {
-        return date;
-    }
-
     /**
      * Returns the title of the event
      * @return
@@ -71,20 +70,6 @@ public class Event {
     public String getEventTitle() {
         return eventTitle;
     }
-
-//    public Image getPoster() {
-//        return poster;
-//    }
-//
-//    /**
-//     * Sets event poster
-//     * @param poster
-//     * Represents a poster image.
-//     */
-
-//    public void setPoster(Image poster) {
-//        this.poster = poster;
-//    }
 
     /**
      * Returns location of the event
@@ -103,4 +88,89 @@ public class Event {
     public String getDescription() {
         return description;
     }
+
+    // setters
+
+    /**
+     * Returns the date
+     * @return
+     * Returns date
+     */
+    public String getStartDate() {
+        return this.startDate;
+    }
+
+    public String getEndDate()
+    {
+        return this.endDate;
+    }
+
+    public String getStartTime() {
+        return this.startTime;
+    }
+
+    public String getEndTime()
+    {
+        return this.endTime;
+    }
+
+    /**
+     * Returns the title of the event
+     * @return
+     * Returns eventTitle
+     */
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+    /**
+     * Returns location of the event
+     * @return
+     * Returns location
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    /**
+     * Returns the event description
+     * @return
+     * Returns description.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate)
+    {
+        this.endDate = endDate;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime)
+    {
+        this.endTime = endTime;
+    }
+
+
+    //    public Image getPoster() {
+//        return poster;
+//    }
+//
+//    /**
+//     * Sets event poster
+//     * @param poster
+//     * Represents a poster image.
+//     */
+
+//    public void setPoster(Image poster) {
+//        this.poster = poster;
+//    }
+
 }
