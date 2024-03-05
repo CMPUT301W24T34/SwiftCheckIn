@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -34,6 +35,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     private ListView eventList;
     private EventArrayAdapter eventAdapter;
 
+    private String deviceId;
     private FirebaseFirestore db;
 
     Button addEventButton;
@@ -52,7 +54,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
 
         db = FirebaseFirestore.getInstance();
 
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 //        DocumentReference deviceRef = db.collection("events").document(deviceId);
 //        DocumentReference deviceIdRef = db.collection("deviceIds").document(deviceId);
         getData();
@@ -70,7 +72,9 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
             @Override
             public void onClick(View v) {
 
-                new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                //new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                Intent intent = new Intent(OrganizerActivity.this, AddEventActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -83,7 +87,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     }
 
     private void getData(){
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         CollectionReference eventCol = db.collection("events");
 //        DocumentReference deviceRef = eventCol.document(deviceId);
 //        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
@@ -115,7 +119,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     }
 
     private void saveData(Event event){
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         // Ensure we have 3 columns in firestore for simple reference.
         DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
 //        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
