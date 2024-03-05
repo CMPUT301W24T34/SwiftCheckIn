@@ -53,7 +53,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="SmallSp" />
+/>
 
     <TextView
         android:id="@+id/other_events"
@@ -71,7 +71,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        tools:ignore="SmallSp" />
+        />
 
     <TextView
         android:id="@+id/my_events"
@@ -87,7 +87,7 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        tools:ignore="SmallSp" />
+         />
 
     <View
         android:id="@+id/divider"
@@ -100,11 +100,6 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_picture"
         tools:ignore="MissingConstraints" />
 
-    <androidx.constraintlayout.helper.widget.Layer
-        android:id="@+id/layer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/profile_picture"
@@ -115,7 +110,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile_pic"
-        tools:ignore="MissingConstraints" />
+        />
 
     <!-- RecyclerView added here -->
 

@@ -8,18 +8,20 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 public class MainActivity extends AppCompatActivity {
-    Button organizerTestButton;
+//    Button organizerTestButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Button profileButton = findViewById(R.id.profile_button);
+        ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -31,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(v -> {
             new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes");
         });
-        ImageButton cameraButton = findViewById(R.id.camera_button);
+        ImageView cameraButton = findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
