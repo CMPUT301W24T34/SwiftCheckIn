@@ -14,7 +14,12 @@ public class Event {
     * Needs an Image
     * Needs a Location
     * */
-    private Date date;
+    private String startDate;
+    private String endDate;
+
+    private String startTime;
+    private String endTime;
+
     private String eventTitle;
 //    private Image poster;
     private String location;
@@ -33,11 +38,15 @@ public class Event {
      * @param description - Brief description of the event
      * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location, String deviceId){
+    public Event(String eventTitle, String description, String location, String deviceId, String startDate, String endDate, String startTime, String endTime){
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
         this.deviceId = deviceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
     public String getDeviceId() {
@@ -59,8 +68,22 @@ public class Event {
      * @return
      * Returns date
      */
-    public Date getDate() {
-        return date;
+    public String getStartDate() {
+        return this.startDate;
+    }
+
+    public String getEndDate()
+    {
+        return this.endDate;
+    }
+
+    public String getStartTime() {
+        return this.startTime;
+    }
+
+    public String getEndTime()
+    {
+        return this.endTime;
     }
 
     /**

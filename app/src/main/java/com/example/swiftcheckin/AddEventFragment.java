@@ -56,7 +56,7 @@ public class AddEventFragment extends DialogFragment {
                     String descriptionText = editDescriptionText.getText().toString();
                     String eventLocation = editEventLocation.getText().toString();
 //                    String maxAttendees = editMaxAttendees.getText().toString();
-                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, deviceId));
+                    //listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, deviceId));
                 })
                 .create();
     }

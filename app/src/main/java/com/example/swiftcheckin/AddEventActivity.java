@@ -1,22 +1,29 @@
 package com.example.swiftcheckin;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 public class AddEventActivity extends AppCompatActivity {
 
+    private String deviceId;
     Event CurrentEvent;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        deviceId = getIntent().getStringExtra("deviceId");
+
+        // making button onclick listeners
         Button cancelButton = findViewById(R.id.eventPageCancelButton);
         Button saveButton = findViewById(R.id.eventPageSaveButton);
 
@@ -35,8 +42,8 @@ public class AddEventActivity extends AppCompatActivity {
         });
 
         // textWatcher to enforce proper Date format in start and end date
-        EditText startDateEditText = findViewById(R.id.eventStartDate);
-        EditText endDateEditText = findViewById(R.id.eventEndDate);
+        EditText startDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        EditText endDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
 
         createTextWatcher(startDateEditText);
         createTextWatcher(endDateEditText);
@@ -69,6 +76,32 @@ public class AddEventActivity extends AppCompatActivity {
         EditText addressEditText = findViewById(R.id.eventPageAddressEditText);
         String eventAddress = addressEditText.getText().toString();
 
+        EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        String eventStartDate = eventStartDateEditText.getText().toString();
 
+        EditText eventEndDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
+        String eventEndDate = eventEndDateEditText.getText().toString();
+
+        EditText eventStartTimeEditText = findViewById(R.id.eventAddActivity_eventStartTime_EditText);
+        String eventStartTime = eventStartTimeEditText.getText().toString();
+
+        EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
+        String eventEndTime = eventEndTimeEditText.getText().toString();
+
+        EditText eventDescriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
+        String eventDescription = eventDescriptionEditText.getText().toString();
+        Toast.makeText(getApplicationContext(), eventDescription, Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent("com.example.ADD_EVENT");
+        intent.putExtra("eventName", eventName);
+        intent.putExtra("eventAddress", eventAddress);
+        intent.putExtra("eventStartDate", eventStartDate);
+        intent.putExtra("eventEndDate", eventEndDate );
+        intent.putExtra("eventStartTime", eventStartTime);
+        intent.putExtra("eventEndTime", eventEndTime);
+        intent.putExtra("eventDescription", eventDescription);
+
+        sendBroadcast(intent);
+        finish();
     }
 }
