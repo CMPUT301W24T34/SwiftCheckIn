@@ -38,8 +38,6 @@ public class Event {
         this.location = location;
         this.description = description;
         this.deviceId = deviceId;
-
-
     }
 
     public String getDeviceId() {

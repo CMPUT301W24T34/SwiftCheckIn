@@ -24,6 +24,9 @@
             android:name=".ProfileActivity"
             android:exported="false" />
         <activity
+            android:name=".AddEventActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

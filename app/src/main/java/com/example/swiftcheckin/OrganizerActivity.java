@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -33,6 +35,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     private ListView eventList;
     private EventArrayAdapter eventAdapter;
 
+    private String deviceId;
     private FirebaseFirestore db;
 
     Button addEventButton;
@@ -51,8 +54,9 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
 
         db = FirebaseFirestore.getInstance();
 
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        DocumentReference deviceRef = db.collection("events").document(deviceId);
+        deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//        DocumentReference deviceRef = db.collection("events").document(deviceId);
+//        DocumentReference deviceIdRef = db.collection("deviceIds").document(deviceId);
         getData();
 
 
@@ -68,7 +72,9 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
             @Override
             public void onClick(View v) {
 
-                new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                //new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                Intent intent = new Intent(OrganizerActivity.this, AddEventActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -81,11 +87,12 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     }
 
     private void getData(){
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        DocumentReference deviceRef = db.collection("events").document(deviceId);
-        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
+        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        CollectionReference eventCol = db.collection("events");
+//        DocumentReference deviceRef = eventCol.document(deviceId);
+//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
 
-        deviceRef2.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable
             FirebaseFirestoreException error) {
@@ -94,12 +101,16 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                 dataList.clear();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots)
                 {
-//                    Log.d(TAG, String.valueOf(doc.getData().get("Province Name")));
-                    String eventTitle = doc.getId();
-                    String eventLocation = (String) doc.getData().get("eventLocation");
-                    String eventDescription = (String) doc.getData().get("eventDescription");
-                    String deviceId = (String) doc.getData().get("deviceId");
-                    dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId)); // Adding the cities and provinces from FireStore
+
+                    String eventTitleFrame = doc.getId();
+                    if (eventTitleFrame.contains(deviceId)) {
+                        String eventTitle = (String) doc.getData().get("eventTitle");
+                        String eventLocation = (String) doc.getData().get("eventLocation");
+                        String eventDescription = (String) doc.getData().get("eventDescription");
+                        String deviceID = (String) doc.getData().get("deviceId");
+                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID));
+                    }// Adding event details from FireStore
+
                 }
                 eventAdapter.notifyDataSetChanged(); // Notifying the adapter to render any new data fetched from the cloud
 
@@ -109,9 +120,10 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     }
 
     private void saveData(Event event){
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        DocumentReference deviceRef = db.collection("events").document(deviceId);
-        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
+        // String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        // Ensure we have 3 columns in firestore for simple reference.
+        DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
+//        CollectionReference deviceRef2 = deviceRef.collection(deviceId);
 
 
         HashMap<String, String> data = new HashMap<>();
@@ -120,7 +132,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
         data.put("deviceId", event.getDeviceId());
         data.put("eventDescription", event.getDescription());
 
-        deviceRef2.document(event.getEventTitle())
+        deviceRef
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

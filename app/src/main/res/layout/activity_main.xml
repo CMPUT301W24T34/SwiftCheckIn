@@ -39,7 +39,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="12dp"
         android:fontFamily="casual"
-        android:text="SwiftCheckIn"
+        android:text="@string/AppName"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/profile_button"
