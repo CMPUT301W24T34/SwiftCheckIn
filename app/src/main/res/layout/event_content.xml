@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+
     <TextView
         android:id="@+id/event_title_text"
         android:layout_width="wrap_content"
@@ -32,5 +33,12 @@
         android:padding="20dp"
         android:textSize="30sp"
         android:text="Description"/>
+
+    <ImageView
+        android:id="@+id/event_poster_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:src="@mipmap/ic_launcher"
+        />
 
 </LinearLayout>

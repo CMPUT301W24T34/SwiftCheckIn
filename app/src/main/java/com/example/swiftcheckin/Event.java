@@ -2,6 +2,7 @@ package com.example.swiftcheckin;
 
 import android.location.Location;
 import android.media.Image;
+import android.net.Uri;
 import android.provider.Settings;
 
 import java.util.Date;
@@ -21,7 +22,9 @@ public class Event {
     private String endTime;
 
     private String eventTitle;
+    private Uri eventPoster;  // May not need this
 //    private Image poster;
+    private String eventImageUrl;
     private String location;
     private String deviceId;
     private String description;
@@ -38,10 +41,20 @@ public class Event {
      * @param description - Brief description of the event
      * @param deviceId - Unique identifier for the device.
      */
-    public Event(String eventTitle, String description, String location, String deviceId, String startDate, String endDate, String startTime, String endTime){
+//    public Event(String eventTitle, String description, String location, Uri eventPoster, String deviceId){
+//        this.eventTitle = eventTitle;
+//        this.location = location;
+//        this.description = description;
+//        this.deviceId = deviceId;
+//        this.eventPoster = eventPoster;
+//    }
+
+    public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String startDate, String endDate, String startTime, String endTime){
+
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
+        this.eventImageUrl = eventImageUrl;
         this.deviceId = deviceId;
         this.startDate = startDate;
         this.endDate = endDate;
@@ -49,9 +62,14 @@ public class Event {
         this.endTime = endTime;
     }
 
+
     public String getDeviceId() {
         return deviceId;
     }
+
+//    public Uri getEventPoster() {
+//        return eventPoster;
+//    }
 
     /**
      * This returns the maximum number of attendees.
@@ -89,6 +107,21 @@ public class Event {
         return description;
     }
 
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+
+    public void setEventPoster(Uri eventPoster) {
+        this.eventPoster = eventPoster;
+    }
+
+    public String getEventImageUrl() {
+        return eventImageUrl;
+    }
+
+    public void setEventImageUrl(String eventImageUrl) {
+        this.eventImageUrl = eventImageUrl;
+    }
     // setters
 
     /**
@@ -119,9 +152,6 @@ public class Event {
      * @return
      * Returns eventTitle
      */
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
-    }
     /**
      * Returns location of the event
      * @return
@@ -129,6 +159,10 @@ public class Event {
      */
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
     }
 
     /**
@@ -140,6 +174,9 @@ public class Event {
         this.description = description;
     }
 
+    public void setMaxAttendees(int maxAttendees) {
+        this.maxAttendees = maxAttendees;
+    }
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
@@ -157,20 +194,5 @@ public class Event {
     {
         this.endTime = endTime;
     }
-
-
-    //    public Image getPoster() {
-//        return poster;
-//    }
-//
-//    /**
-//     * Sets event poster
-//     * @param poster
-//     * Represents a poster image.
-//     */
-
-//    public void setPoster(Image poster) {
-//        this.poster = poster;
-//    }
 
 }
