@@ -11,6 +11,8 @@ public class Profile {
     private String email;
     private String website;
     private String address;
+
+    private String profileImageUrl;
     private boolean cameraPermission;
     private boolean locationPermission;
 
@@ -24,10 +26,12 @@ public class Profile {
      * @param email the email of the user - String
      * @param website the website of the user - String
      * @param address the address of the user - String
+     * @param profileImageUrl the url of the user's profile image - String
      * @param cameraPermission if the user wants to allow camera use - Boolean
      * @param locationPermission if the user wants to allow location use - Boolean
+     *
      */
-    public Profile(String name, String birthday, String phoneNumber, String email, String website, String address, boolean cameraPermission, boolean locationPermission) {
+    public Profile(String name, String birthday, String phoneNumber, String email, String website,String profileImageUrl, String address, boolean cameraPermission, boolean locationPermission) {
         this.name = name;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
@@ -36,6 +40,7 @@ public class Profile {
         this.address = address;
         this.locationPermission = locationPermission;
         this.cameraPermission = cameraPermission;
+        this.profileImageUrl = profileImageUrl;
 
     }
     /**
@@ -51,6 +56,22 @@ public class Profile {
      * @return
      * returns the birthday
      */
+
+
+    /**
+     * This returns the user's profile image url
+     * @return
+     */
+    public String getProfileImageUrl() {
+
+        return profileImageUrl;
+    }
+
+    public void setProfileImageUrl(String profileImageUrl) {
+        this.profileImageUrl = profileImageUrl;
+    }
+
+
     public String getBirthday() {
         return birthday;
     }
@@ -91,6 +112,8 @@ public class Profile {
      * @return
      * returns the bool value permission
      */
+
+
     public boolean isCameraPermission() {
         return cameraPermission;
     }
