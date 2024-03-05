@@ -15,4 +15,5 @@
     <string name="announcement">Announcement</string>
     <string name="my_events">My Events</string>
     <string name="other_events">Other Events</string>
+    <string name="qr_code_selection_menu1_title">QR Code Selection</string>
     </resources>
