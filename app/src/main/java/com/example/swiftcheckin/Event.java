@@ -42,8 +42,6 @@ public class Event {
         this.description = description;
         this.deviceId = deviceId;
         this.eventPoster = eventPoster;
-
-
     }
     public Event(String eventTitle, String description, String location, String eventImageUrl, String deviceId){
         this.eventTitle = eventTitle;
