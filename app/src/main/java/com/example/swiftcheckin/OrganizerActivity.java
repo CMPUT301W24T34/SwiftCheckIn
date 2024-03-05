@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -71,7 +72,9 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
             @Override
             public void onClick(View v) {
 
-                new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                //new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
+                Intent intent = new Intent(OrganizerActivity.this, AddEventActivity.class);
+                startActivity(intent);
             }
         });
 

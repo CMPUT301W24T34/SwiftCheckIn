@@ -114,8 +114,9 @@
                 android:layout_weight="2"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/rounded_edit_text"
-                android:hint="    Start Date(DD/MM/YYYY)"
+                android:hint=" Start Date(DD/MM/YYYY)"
                 android:padding="5dp"
+                android:textSize="15sp"
                 android:maxLength="10"
                 android:inputType="date"
                 android:digits="0123456789/"/>
@@ -126,11 +127,9 @@
                 android:layout_weight="1"
                 android:layout_marginEnd="30dp"
                 android:background="@drawable/rounded_edit_text"
-                android:hint="    In Time(DD/MM/YYYY)"
-                android:padding="5dp"
-                android:maxLength="10"
-                android:inputType="date"
-                android:digits="0123456789/"/>
+                android:hint=" In Time"
+                android:textSize="15sp"
+                android:padding="5dp" />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/eventPageTimeOutLayout"
@@ -148,16 +147,21 @@
                 android:layout_weight="2"
                 android:layout_marginStart="30dp"
                 android:background="@drawable/rounded_edit_text"
-                android:hint="    End Date"
-                android:padding="5dp"/>
+                android:textSize="15sp"
+                android:hint=" End Date(DD/MM/YYYY)"
+                android:padding="5dp"
+                android:maxLength="10"
+                android:inputType="date"
+                android:digits="0123456789/"/>
             <EditText
                 android:id="@+id/eventEndTime"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="30dp"
+                android:textSize="15sp"
                 android:background="@drawable/rounded_edit_text"
-                android:hint="    Out Time"
+                android:hint="Out Time"
                 android:padding="5dp"/>
         </LinearLayout>
 
