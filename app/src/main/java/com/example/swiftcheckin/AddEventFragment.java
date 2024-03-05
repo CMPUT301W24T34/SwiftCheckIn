@@ -105,8 +105,9 @@ public class AddEventFragment extends DialogFragment {
                     event.setDeviceId(deviceId);
 //                    String maxAttendees = editMaxAttendees.getText().toString();
 //                    listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, imageUri, deviceId));
-                    listener.addEvent(event);
+//                    listener.addEvent(event);
 
+                    //listener.addEvent(new Event(eventTitle, descriptionText, eventLocation, deviceId));
                 })
                 .create();
     }

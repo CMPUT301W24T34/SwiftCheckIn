@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -47,12 +48,16 @@ public class AddEventActivity extends AppCompatActivity {
 //    private AddEventListener listener;
 
     Event event = new Event();
+    private String deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_event);
 
+        deviceId = getIntent().getStringExtra("deviceId");
+
+        // making button onclick listeners
         Button cancelButton = findViewById(R.id.eventPageCancelButton);
         Button saveButton = findViewById(R.id.eventPageSaveButton);
         editEventPoster = findViewById(R.id.eventImage);
@@ -75,8 +80,8 @@ public class AddEventActivity extends AppCompatActivity {
         });
 
         // textWatcher to enforce proper Date format in start and end date
-        EditText startDateEditText = findViewById(R.id.eventStartDate);
-        EditText endDateEditText = findViewById(R.id.eventEndDate);
+        EditText startDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        EditText endDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
 
         createTextWatcher(startDateEditText);
         createTextWatcher(endDateEditText);
@@ -107,20 +112,47 @@ public class AddEventActivity extends AppCompatActivity {
         String eventName = eventNameEditText.getText().toString();
 
         EditText addressEditText = findViewById(R.id.eventPageAddressEditText);
-        String eventLocation = addressEditText.getText().toString();
+        String eventAddress = addressEditText.getText().toString();
 
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
         String eventDescription = descriptionEditText.getText().toString();
 
-        event.setEventTitle(eventName);
-        event.setDescription(eventDescription);
-        event.setLocation(eventLocation);
-        event.setEventPoster(imageUri);
-        event.setDeviceId(getUserId());
+//        event.setEventTitle(eventName);
+//        event.setDescription(eventDescription);
+//        event.setLocation(eventLocation);
+//        event.setEventPoster(imageUri);
+//        event.setDeviceId(getUserId());
 //        listener.addE(event);
         Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
 
+        EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        String eventStartDate = eventStartDateEditText.getText().toString();
 
+        EditText eventEndDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
+        String eventEndDate = eventEndDateEditText.getText().toString();
+
+        EditText eventStartTimeEditText = findViewById(R.id.eventAddActivity_eventStartTime_EditText);
+        String eventStartTime = eventStartTimeEditText.getText().toString();
+
+        EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
+        String eventEndTime = eventEndTimeEditText.getText().toString();
+
+        EditText eventDescriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
+//        String eventDescription = eventDescriptionEditText.getText().toString();
+//        Toast.makeText(getApplicationContext(), eventDescription, Toast.LENGTH_LONG).show();
+
+        Intent intent = new Intent("com.example.ADD_EVENT");
+        intent.putExtra("eventName", eventName);
+        intent.putExtra("eventAddress", eventAddress);
+        intent.putExtra("eventPosterURL", event.getEventImageUrl());
+        intent.putExtra("eventStartDate", eventStartDate);
+        intent.putExtra("eventEndDate", eventEndDate );
+        intent.putExtra("eventStartTime", eventStartTime);
+        intent.putExtra("eventEndTime", eventEndTime);
+        intent.putExtra("eventDescription", eventDescription);
+
+        sendBroadcast(intent);
+        finish();
     }
 
     private void requestPermissions() {

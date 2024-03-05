@@ -15,7 +15,12 @@ public class Event {
     * Needs an Image
     * Needs a Location
     * */
-    private Date date;
+    private String startDate;
+    private String endDate;
+
+    private String startTime;
+    private String endTime;
+
     private String eventTitle;
     private Uri eventPoster;  // May not need this
 //    private Image poster;
@@ -43,12 +48,18 @@ public class Event {
 //        this.deviceId = deviceId;
 //        this.eventPoster = eventPoster;
 //    }
-    public Event(String eventTitle, String description, String location, String eventImageUrl, String deviceId){
+
+    public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String startDate, String endDate, String startTime, String endTime){
+
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
         this.eventImageUrl = eventImageUrl;
         this.deviceId = deviceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
     }
 
 
@@ -67,16 +78,6 @@ public class Event {
      */
     public int getMaxAttendees() {
         return maxAttendees;
-    }
-
-
-    /**
-     * Returns the date
-     * @return
-     * Returns date
-     */
-    public Date getDate() {
-        return date;
     }
 
     /**
@@ -106,10 +107,6 @@ public class Event {
         return description;
     }
 
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
     }
@@ -125,7 +122,41 @@ public class Event {
     public void setEventImageUrl(String eventImageUrl) {
         this.eventImageUrl = eventImageUrl;
     }
+    // setters
 
+    /**
+     * Returns the date
+     * @return
+     * Returns date
+     */
+    public String getStartDate() {
+        return this.startDate;
+    }
+
+    public String getEndDate()
+    {
+        return this.endDate;
+    }
+
+    public String getStartTime() {
+        return this.startTime;
+    }
+
+    public String getEndTime()
+    {
+        return this.endTime;
+    }
+
+    /**
+     * Returns the title of the event
+     * @return
+     * Returns eventTitle
+     */
+    /**
+     * Returns location of the event
+     * @return
+     * Returns location
+     */
     public void setLocation(String location) {
         this.location = location;
     }
@@ -134,6 +165,11 @@ public class Event {
         this.deviceId = deviceId;
     }
 
+    /**
+     * Returns the event description
+     * @return
+     * Returns description.
+     */
     public void setDescription(String description) {
         this.description = description;
     }
@@ -141,4 +177,22 @@ public class Event {
     public void setMaxAttendees(int maxAttendees) {
         this.maxAttendees = maxAttendees;
     }
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate)
+    {
+        this.endDate = endDate;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime)
+    {
+        this.endTime = endTime;
+    }
+
 }
