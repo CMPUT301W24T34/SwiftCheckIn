@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        CollectionReference eventCol = db.collection("attendeeEventList");
+        CollectionReference eventCol = db.collection("events");
 
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
