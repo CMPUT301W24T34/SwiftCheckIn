@@ -103,7 +103,13 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                         String eventLocation = (String) doc.getData().get("eventLocation");
                         String eventDescription = (String) doc.getData().get("eventDescription");
                         String deviceID = (String) doc.getData().get("deviceId");
-                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID));
+                        String eventDate = (String) doc.getData().get("eventDate");
+                        String eventStartTime = (String) doc.getData().get("eventStartTime");
+                        String eventEndTime = (String) doc.getData().get("eventEndTime");
+                        String eventAmPm = (String) doc.getData().get("eventAmPm");
+
+                        dataList.add(new Event(eventTitle, eventDescription, eventLocation,
+                                deviceID, eventDate,eventStartTime, eventEndTime, eventAmPm));
                     }// Adding event details from FireStore
 
                 }
