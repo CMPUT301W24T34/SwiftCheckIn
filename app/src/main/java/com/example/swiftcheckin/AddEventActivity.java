@@ -1,6 +1,8 @@
 package com.example.swiftcheckin;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,32 @@ public class AddEventActivity extends AppCompatActivity {
                 editAddEvent();
             }
         });
+
+        // textWatcher to enforce proper Date format in start and end date
+        EditText startDateEditText = findViewById(R.id.eventStartDate);
+        EditText endDateEditText = findViewById(R.id.eventEndDate);
+
+        createTextWatcher(startDateEditText);
+        createTextWatcher(endDateEditText);
+    }
+
+    private void createTextWatcher(EditText editText)
+    {
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            // enforcing a few parameters in XML, and adding '/' at proper indexes
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 2 || s.length() == 5) {
+                    s.append("/");
+                }
+            }
+        });
     }
 
     protected void editAddEvent()
@@ -38,6 +66,9 @@ public class AddEventActivity extends AppCompatActivity {
         EditText eventNameEditText = findViewById(R.id.eventName);
         String eventName = eventNameEditText.getText().toString();
 
-        EditText addressEditText = findViewById(R.id.address);
+        EditText addressEditText = findViewById(R.id.eventPageAddressEditText);
+        String eventAddress = addressEditText.getText().toString();
+
+
     }
 }
