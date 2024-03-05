@@ -1,53 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:visibility="invisible">
 
-    <TextView
-        android:id="@+id/fragmentQrCodeMenu1Title"
+        <TextView
+            android:id="@+id/fragmentQrCodeMenu1Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+
+            android:text="@string/qr_code_selection_menu1_title"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+
+            android:layout_marginTop="30dp"
+            />
+
+        <Button
+            android:id="@+id/fragmentQrCodeMenu1NewButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintWidth_percent="0.7"
+            app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1Title"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginTop="10dp"
+            android:text="Create New QR code"
+            android:backgroundTint="@color/black"/>
+        <Button
+            android:id="@+id/fragmentQrCodeMenu1ExistingButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+
+            app:layout_constraintWidth_percent="0.7"
+            app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1NewButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginTop="10dp"
+
+            android:text="Select existing QR code"
+            android:backgroundTint="@color/black"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:id="@+id/existingQrSelectionMenuLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="invisible"
+        android:orientation="vertical">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:text="@string/qr_code_selection_menu1_title"
+            android:textAlignment="center"
+            android:textSize="30sp"
+            android:textStyle="bold"
+
+            android:layout_marginTop="30dp"
+            />
+        <ListView
+            android:id="@+id/existingQrSelectionMenuListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/qrCodeSelectionSuccessLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:gravity="center">
 
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
 
-        android:text="@string/qr_code_selection_menu1_title"
-        android:textAlignment="center"
-        android:textSize="30sp"
-        android:textStyle="bold"
+            android:text="@string/event_created_successfully_qr_menu"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold"
 
-        android:layout_marginTop="30dp"
-        />
-
-    <Button
-        android:id="@+id/fragmentQrCodeMenu1NewButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintWidth_percent="0.7"
-        app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1Title"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:layout_marginTop="10dp"
-        android:text="Create New QR code"
-        android:backgroundTint="@color/black"/>
-    <Button
-        android:id="@+id/fragmentQrCodeMenu1ExistingButton"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-
-        app:layout_constraintWidth_percent="0.7"
-        app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1NewButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-
-        android:layout_marginTop="10dp"
-
-        android:text="Select existing QR code"
-        android:backgroundTint="@color/black"/>
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="30dp"
+            />
+        <ImageView
+            android:id="@+id/eventQrCodeCreationSuccessDialog_ImageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

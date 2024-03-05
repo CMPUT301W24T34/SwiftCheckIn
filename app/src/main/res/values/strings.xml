@@ -3,4 +3,5 @@
     <string name="event_plus">+</string>
     <string name="AppName">SwiftCheckIn</string>
     <string name="qr_code_selection_menu1_title">QR Code Selection</string>
+    <string name="event_created_successfully_qr_menu">Event Created Successfully</string>
 </resources>
