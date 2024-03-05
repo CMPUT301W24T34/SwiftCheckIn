@@ -108,7 +108,7 @@
             app:layout_constraintTop_toBottomOf="@id/eventPageAddressEditText"
             android:orientation="horizontal">
             <EditText
-                android:id="@+id/eventStartDate"
+                android:id="@+id/eventAddActivity_StartDate_EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -126,7 +126,7 @@
                 android:inputType="date"
                 android:digits="0123456789/"/>
             <EditText
-                android:id="@+id/eventStartTime"
+                android:id="@+id/eventAddActivity_eventStartTime_EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -149,7 +149,7 @@
             android:orientation="horizontal">
 
             <EditText
-                android:id="@+id/eventEndDate"
+                android:id="@+id/eventAddActivity_eventEndDate_EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
@@ -167,7 +167,7 @@
                 android:inputType="date"
                 android:digits="0123456789/"/>
             <EditText
-                android:id="@+id/eventEndTime"
+                android:id="@+id/eventAddActivity_eventEndTime_EditText"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

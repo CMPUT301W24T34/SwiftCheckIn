@@ -6,7 +6,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -26,11 +29,12 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.io.Serializable;
 import java.lang.ref.Reference;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class OrganizerActivity extends AppCompatActivity implements AddEventFragment.AddEventDialogListener{
+public class OrganizerActivity extends AppCompatActivity {
     private ArrayList<Event> dataList;
     private ListView eventList;
     private EventArrayAdapter eventAdapter;
@@ -39,6 +43,28 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
     private FirebaseFirestore db;
 
     Button addEventButton;
+
+
+    // add JAVADOC
+    // receives signal from edit event activity to save new Event
+
+    private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String eventName = intent.getStringExtra("eventName");
+            String eventAddress = intent.getStringExtra("eventAddress");
+            String eventStartDate = intent.getStringExtra("eventStartDate");
+            String eventEndDate = intent.getStringExtra("eventEndDate");
+            String eventStartTime = intent.getStringExtra("eventStartTime");
+            String eventEndTime = intent.getStringExtra("eventEndTime");
+            String eventDescription = intent.getStringExtra("eventDescription");
+
+            if ("com.example.ADD_EVENT".equals(intent.getAction())) {
+                // Call the method with arguments in OrganizingActivity
+                addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+            }
+        }
+    };
 
     public void addEvent(Event event) {
         eventAdapter.add(event);
@@ -60,6 +86,10 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
         getData();
 
 
+        // registering receiver
+        IntentFilter filter = new IntentFilter("com.example.ADD_EVENT");
+        registerReceiver(receiver, filter);
+
         eventList = findViewById(R.id.event_list);
         dataList = new ArrayList<>();
         eventAdapter = new EventArrayAdapter(this, dataList);
@@ -74,6 +104,8 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
 
                 //new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
                 Intent intent = new Intent(OrganizerActivity.this, AddEventActivity.class);
+                intent.putExtra("deviceId", deviceId);
+                //intent.putExtra("listener", OrganizerActivity.this);
                 startActivity(intent);
             }
         });
@@ -84,6 +116,7 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                 finish();
             }
         });
+
     }
 
     private void getData(){
@@ -108,7 +141,12 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
                         String eventLocation = (String) doc.getData().get("eventLocation");
                         String eventDescription = (String) doc.getData().get("eventDescription");
                         String deviceID = (String) doc.getData().get("deviceId");
-                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID));
+                        String startDate = (String) doc.getData().get("eventStartDate");
+                        String endDate = (String) doc.getData().get("eventEndDate");
+                        String startTime = (String) doc.getData().get("eventStartTime");
+                        String endTime = (String) doc.getData().get("eventEndTime");
+
+                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, startDate, endDate, startTime, endTime));
                     }// Adding event details from FireStore
 
                 }
@@ -131,21 +169,32 @@ public class OrganizerActivity extends AppCompatActivity implements AddEventFrag
         data.put("eventLocation", event.getLocation());
         data.put("deviceId", event.getDeviceId());
         data.put("eventDescription", event.getDescription());
-
+        data.put("eventStartDate", event.getStartDate());
+        data.put("eventEndDate", event.getEndDate());
+        data.put("eventStartTime", event.getStartTime());
+        data.put("eventEndTime", event.getEndTime());
         deviceRef
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Event Added Successfully");
+                        Toast.makeText(OrganizerActivity.this, "Event Added Successfully", Toast.LENGTH_SHORT).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener(){
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.d(TAG, "Event could not be added.");
+                        Toast.makeText(OrganizerActivity.this, "Event could not be added.", Toast.LENGTH_SHORT).show();
                     }
                 });
 
+    }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // Unregister the BroadcastReceiver
+        unregisterReceiver(receiver);
     }
 }
