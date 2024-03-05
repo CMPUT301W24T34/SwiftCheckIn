@@ -50,8 +50,6 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
 //        maxAttendees.setText(event.getMaxAttendees());
         description.setText(event.getDescription());
 
-
-
         return view;
     }
 
