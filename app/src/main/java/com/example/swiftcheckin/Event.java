@@ -62,6 +62,34 @@ public class Event {
         return maxAttendees;
     }
 
+    /**
+     * Returns the title of the event
+     * @return
+     * Returns eventTitle
+     */
+    public String getEventTitle() {
+        return eventTitle;
+    }
+
+    /**
+     * Returns location of the event
+     * @return
+     * Returns location
+     */
+    public String getLocation() {
+        return location;
+    }
+
+    /**
+     * Returns the event description
+     * @return
+     * Returns description.
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    // setters
 
     /**
      * Returns the date
@@ -91,11 +119,47 @@ public class Event {
      * @return
      * Returns eventTitle
      */
-    public String getEventTitle() {
-        return eventTitle;
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
+    }
+    /**
+     * Returns location of the event
+     * @return
+     * Returns location
+     */
+    public void setLocation(String location) {
+        this.location = location;
     }
 
-//    public Image getPoster() {
+    /**
+     * Returns the event description
+     * @return
+     * Returns description.
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public void setEndDate(String endDate)
+    {
+        this.endDate = endDate;
+    }
+
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    public void setEndTime(String endTime)
+    {
+        this.endTime = endTime;
+    }
+
+
+    //    public Image getPoster() {
 //        return poster;
 //    }
 //
@@ -109,21 +173,4 @@ public class Event {
 //        this.poster = poster;
 //    }
 
-    /**
-     * Returns location of the event
-     * @return
-     * Returns location
-     */
-    public String getLocation() {
-        return location;
-    }
-
-    /**
-     * Returns the event description
-     * @return
-     * Returns description.
-     */
-    public String getDescription() {
-        return description;
-    }
 }
