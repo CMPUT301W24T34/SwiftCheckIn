@@ -43,9 +43,9 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         ImageView eventPoster = view.findViewById(R.id.event_poster_image);
 
 //        eventTitle.setText(event.getEventTitle());
-        eventDate.setText(event.getDate());
+        eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
-        eventStartTime.setText(event.getAmPM());
+//        eventStartTime.setText(event.getAmPM());
         eventEndTime.setText(event.getEndTime());
         eventAM_PM.setText(event.getEventTitle());
 

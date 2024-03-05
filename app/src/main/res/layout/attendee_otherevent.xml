@@ -15,7 +15,7 @@
         android:layout_marginStart="6dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="147dp"
-        android:text="@string/swiftcheckin"
+        android:text="@string/AppName"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"

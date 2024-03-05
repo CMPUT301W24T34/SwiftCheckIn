@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -17,16 +18,25 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -69,13 +79,22 @@ public class MainActivity extends AppCompatActivity {
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
                     String eventTitle = (String) doc.getData().get("eventTitle");
-                    String eventDate = (String) doc.getData().get("eventDate");
-                    String eventStartTime = (String) doc.getData().get("eventStartTime");
-                    String eventEndTime = (String) doc.getData().get("eventEndTime");
-                    String eventAmPm = (String) doc.getData().get("eventAmPm");
+                    String eventDescription = (String) doc.getData().get("eventDescription");
+                    String eventLocation = (String) doc.getData().get("eventLocation");
+                    String deviceId = (String) doc.getData().get("deviceId");
+                    String eventImageUrl = (String) doc.getData().get("eventImageUrl");
 
-                    eventList.add(new Event(eventTitle, "frfr", "grgrf", "fre", eventDate,
-                            eventStartTime, eventEndTime, eventAmPm));
+                    String eventStartDate = (String) doc.getData().get("eventStartDate");
+                    String eventStartTime = (String) doc.getData().get("eventStartTime");
+                    String eventEndDate = (String) doc.getData().get("eventEndDate");
+                    String eventEndTime = (String) doc.getData().get("eventEndTime");
+
+
+//    public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String startDate,
+//                            String endDate, String startTime, String endTime){
+
+                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
+                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
                 }
                 eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
             }

@@ -44,10 +44,10 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         Event event = events.get(position);
 //        eventPoster.setImageURI(event.);
         eventName.setText(event.getEventTitle());
-        eventDate.setText(event.getDate());
+        eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
         eventEndTime.setText(event.getEndTime());
-        eventAmPm.setText(event.getAmPM());
+//        eventAmPm.setText(event.getAmPM());
         // Populate more fields as required
 
         return view;

@@ -1,12 +1,6 @@
 package com.example.swiftcheckin;
 
-import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
-import android.provider.Settings;
-
-import java.sql.Time;
-import java.util.Date;
 
 public class Event {
     /*
@@ -29,12 +23,10 @@ public class Event {
     private String location;
     private String deviceId;
     private String description;
-    private String startTime;
-    private String endTime;
     private String amPM;
     private int maxAttendees;
 
-    public Event(){
+    public Event(String eventTitle, String frfr, String grgrf, String fre, Object o, Object o1, String eventDate, Object o2, String eventStartTime, String eventEndTime, String eventAmPm){
     }
 
     /**
