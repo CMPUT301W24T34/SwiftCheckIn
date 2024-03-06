@@ -24,6 +24,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private Button selectQr;    // to be implemented
     private Button newQr;
     private String eventId;
+    private Button saveButton;
 
     private Bitmap qrCodeGenerated;
     ConstraintLayout layout1;
@@ -34,7 +35,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     {
         void setGeneratedFlag(Boolean flag);
     }
-
     AddActivity listener;
 
     public FragmentQrcodeMenu1(String eventId, Bitmap bitmap)
@@ -64,35 +64,33 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
         layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
-
+        saveButton = view.findViewById(R.id.qrCodeSelectionSuccessLayout_saveButton);
 
         newQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    //createQr(eventId);
                     showSuccessScreen(view);
                 } catch (Exception e) {
                     e.printStackTrace();
                     Log.e("Error in QR", "QR not generated-onclick");
-                    // Handle the exception here, e.g., show an error message
                 }
             }
         });
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        builder.setView(view);
-        if(successLayout.getVisibility()==View.VISIBLE)
-        {
-            builder.setNeutralButton("OK", ((dialog, which) -> {
-                dialog.dismiss();
-                if (getActivity() instanceof AddActivity) {
-                    setFlagInContext();
-                }
 
-            }));
-        }
-        return builder.setCancelable(true).create();
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveEvent();
+            }
+        });
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        return builder.setView(view)
+                .setCancelable(true)
+                .create();
     }
+
     public void setData(String data)
     {
         Log.e("EventID", "The id is "+ data);
@@ -127,5 +125,15 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             qrImage.setImageBitmap(qrCodeGenerated);
         }
         successLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void saveEvent()
+    {
+        AlertDialog dialog = (AlertDialog) getDialog();
+        assert dialog != null;
+        dialog.dismiss();
+        if (getActivity() instanceof AddActivity) {
+            setFlagInContext();
+        }
     }
 }
