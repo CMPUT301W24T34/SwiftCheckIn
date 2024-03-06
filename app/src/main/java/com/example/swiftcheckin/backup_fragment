@@ -25,7 +25,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private Button newQr;
     private String eventId;
 
-    private Bitmap qrCodeGenerated;
     ConstraintLayout layout1;
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;
@@ -37,10 +36,10 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     AddActivity listener;
 
-    public FragmentQrcodeMenu1(String eventId, Bitmap bitmap)
+    public FragmentQrcodeMenu1(String eventId, Bitmap qr)
     {
         this.eventId = eventId;
-        this.qrCodeGenerated = bitmap;
+        this.qrCodeGenerated = qr;
     }
     @Override
     public void onAttach(@NonNull Context context) {
@@ -51,7 +50,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             throw new RuntimeException(context + " must implement AddActivity"); // error
         }
     }
-
+    private Bitmap qrCodeGenerated;
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
@@ -66,28 +65,24 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
 
 
-        newQr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    //createQr(eventId);
-                    showSuccessScreen(view);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Log.e("Error in QR", "QR not generated-onclick");
-                    // Handle the exception here, e.g., show an error message
-                }
-            }
-        });
+//        newQr.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                try {
+//                    //createQr(eventId);
+//                    //showSuccessScreen(view);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                    Log.e("Error in QR", "QR not generated-onclick");
+//                    // Handle the exception here, e.g., show an error message
+//                }
+//            }
+//        });
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         return builder.setView(view).setTitle(" ").setCancelable(true).setNeutralButton("OK", ((dialog, which) -> {
-                    dialog.dismiss();
-                    if (getActivity() instanceof AddActivity) {
-                        setFlagInContext();
-                    }
-
+            dismiss();
                 }))
-                .create();
+            .create();
     }
     public void setData(String data)
     {
@@ -101,8 +96,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     }
     protected void createQr(String data)
     {
-        qrCodeGenerated = QrCodeManager.generateQRCode(data);
-        Log.e("Bitmap", QrCodeManager.convertToBase64String(qrCodeGenerated));
+       qrCodeGenerated = QrCodeManager.generateQRCode(data);
+       Log.e("Bitmap", "bitmap of qr: "+QrCodeManager.convertToBase64String(qrCodeGenerated));
     }
 
     protected void setFlagInContext()
@@ -112,6 +107,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     public void showSuccessScreen(View view)
     {
+        successLayout.setVisibility(View.VISIBLE);
         if(layout1.getVisibility()==View.VISIBLE)
         {
             layout1.setVisibility(View.INVISIBLE);
@@ -121,7 +117,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
         if(qrCodeGenerated != null){
             qrImage.setImageBitmap(qrCodeGenerated);
+            setFlagInContext();
         }
-        successLayout.setVisibility(View.VISIBLE);
     }
 }
