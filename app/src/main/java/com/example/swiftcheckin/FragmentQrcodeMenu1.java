@@ -80,14 +80,18 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             }
         });
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
-        return builder.setView(view).setTitle(" ").setCancelable(true).setNeutralButton("OK", ((dialog, which) -> {
-                    dialog.dismiss();
-                    if (getActivity() instanceof AddActivity) {
-                        setFlagInContext();
-                    }
+        builder.setView(view);
+        if(successLayout.getVisibility()==View.VISIBLE)
+        {
+            builder.setNeutralButton("OK", ((dialog, which) -> {
+                dialog.dismiss();
+                if (getActivity() instanceof AddActivity) {
+                    setFlagInContext();
+                }
 
-                }))
-                .create();
+            }));
+        }
+        return builder.setCancelable(true).create();
     }
     public void setData(String data)
     {
