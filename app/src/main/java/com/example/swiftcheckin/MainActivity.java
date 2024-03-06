@@ -19,6 +19,7 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+
 import java.util.ArrayList;
 
 
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void setupUI() {
         // Profile Picture Button
         ImageView profileButton = findViewById(R.id.profile_picture);
@@ -95,7 +98,12 @@ public class MainActivity extends AppCompatActivity {
 
         // Camera Button
         ImageView cameraButton = findViewById(R.id.camera_button);
-        cameraButton.setOnClickListener(v -> Toast.makeText(MainActivity.this, "This does nothing yet", Toast.LENGTH_SHORT).show());
+        cameraButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+            startActivity(intent);
+        });
+
+
 
         listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
@@ -105,5 +113,8 @@ public class MainActivity extends AppCompatActivity {
 
         });
     }
+
+
+
 
 }
