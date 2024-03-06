@@ -65,10 +65,16 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventEndTime = intent.getStringExtra("eventEndTime");
             String eventDescription = intent.getStringExtra("eventDescription");
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
+            String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Call the method with arguments in OrganizingActivity
-                addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                if (eventMaxAttendees.isEmpty()) {
+                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                } else {
+                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+
+                }
             }
         }
     };
@@ -150,8 +156,15 @@ public class OrganizerActivity extends AppCompatActivity {
                         String endDate = (String) doc.getData().get("eventEndDate");
                         String startTime = (String) doc.getData().get("eventStartTime");
                         String endTime = (String) doc.getData().get("eventEndTime");
+                        String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
 
-                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
+                        if (maxAttendees.isEmpty()) {
+                            dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
+                        } else {
+                            dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime));
+
+
+                        }
                     }// Adding event details from FireStore
 
                 }
@@ -178,6 +191,7 @@ public class OrganizerActivity extends AppCompatActivity {
         data.put("eventEndDate", event.getEndDate());
         data.put("eventStartTime", event.getStartTime());
         data.put("eventEndTime", event.getEndTime());
+        data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
         deviceRef
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

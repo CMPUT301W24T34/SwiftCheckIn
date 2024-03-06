@@ -30,6 +30,8 @@ public class Event {
     private String description;
     private int maxAttendees;
 
+    private int currentAttendees;
+
     public Event(){
     }
 
@@ -60,6 +62,20 @@ public class Event {
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
+    }
+
+    public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String maxAttendees, String startDate, String endDate, String startTime, String endTime){
+
+        this.eventTitle = eventTitle;
+        this.location = location;
+        this.description = description;
+        this.eventImageUrl = eventImageUrl;
+        this.deviceId = deviceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.maxAttendees = Integer.parseInt(maxAttendees);
     }
 
 
@@ -195,4 +211,12 @@ public class Event {
         this.endTime = endTime;
     }
 
+
+    public int getCurrentAttendees() {
+        return currentAttendees;
+    }
+
+    public void setCurrentAttendees(int currentAttendees) {
+        this.currentAttendees = currentAttendees;
+    }
 }

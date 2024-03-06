@@ -141,6 +141,9 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
         String eventEndTime = eventEndTimeEditText.getText().toString();
 
+        EditText eventMaxAttendeesEditText = findViewById(R.id.editMaxAttendeeText);
+        String eventMaxAttendee = eventMaxAttendeesEditText.getText().toString();
+
         broadcastIntent = new Intent("com.example.ADD_EVENT");
         broadcastIntent.putExtra("eventName", eventName);
         broadcastIntent.putExtra("eventAddress", eventAddress);
@@ -150,6 +153,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         broadcastIntent.putExtra("eventStartTime", eventStartTime);
         broadcastIntent.putExtra("eventEndTime", eventEndTime);
         broadcastIntent.putExtra("eventDescription", eventDescription);
+        broadcastIntent.putExtra("eventMaxAttendees", eventMaxAttendee);
 
         Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);
 
