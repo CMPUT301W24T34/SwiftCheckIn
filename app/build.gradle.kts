@@ -44,6 +44,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation("com.google.android.gms:play-services-tasks:18.1.0")
+    implementation("com.google.zxing:core:3.4.1")
     testImplementation("junit:junit:4.13.2")
 
 
