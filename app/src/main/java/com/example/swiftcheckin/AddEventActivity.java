@@ -45,6 +45,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
     Event event = new Event();
     private String deviceId;
+    Intent broadcastIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +87,15 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
     public void setGeneratedFlag(Boolean flag)
     {
         this.qrGenerated = flag;
+        if(this.qrGenerated) {
+            sendBroadcast(broadcastIntent);
+            finish();
+        }
+        else
+        {
+            Toast.makeText(AddEventActivity.this, "Some error occurred.", Toast.LENGTH_SHORT).show();
+        }
+
     }
     private void createTextWatcher(EditText editText)
     {
@@ -131,28 +141,30 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
         String eventEndTime = eventEndTimeEditText.getText().toString();
 
-        Intent intent = new Intent("com.example.ADD_EVENT");
-        intent.putExtra("eventName", eventName);
-        intent.putExtra("eventAddress", eventAddress);
-        intent.putExtra("eventPosterURL", event.getEventImageUrl());
-        intent.putExtra("eventStartDate", eventStartDate);
-        intent.putExtra("eventEndDate", eventEndDate );
-        intent.putExtra("eventStartTime", eventStartTime);
-        intent.putExtra("eventEndTime", eventEndTime);
-        intent.putExtra("eventDescription", eventDescription);
+        broadcastIntent = new Intent("com.example.ADD_EVENT");
+        broadcastIntent.putExtra("eventName", eventName);
+        broadcastIntent.putExtra("eventAddress", eventAddress);
+        broadcastIntent.putExtra("eventPosterURL", event.getEventImageUrl());
+        broadcastIntent.putExtra("eventStartDate", eventStartDate);
+        broadcastIntent.putExtra("eventEndDate", eventEndDate );
+        broadcastIntent.putExtra("eventStartTime", eventStartTime);
+        broadcastIntent.putExtra("eventEndTime", eventEndTime);
+        broadcastIntent.putExtra("eventDescription", eventDescription);
 
-          FragmentQrcodeMenu1 qrCodeFragment = new FragmentQrcodeMenu1();
-          qrCodeFragment.setData(deviceId + eventName);   // sending event ID
-          qrCodeFragment.show(getSupportFragmentManager(), "afterCreationMenu");
+        Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);
 
-        if(this.qrGenerated) {
-            sendBroadcast(intent);
+        // Update flag based on QR code generation
+        if (qr != null) {
+            // QR code generated successfully
+            this.qrGenerated = true;
+            new FragmentQrcodeMenu1(deviceId+eventName, qr).show(getSupportFragmentManager(), "menu");
+        } else {
+            // QR code generation failed
+            this.qrGenerated = false;
+            // Show an error message if QR code generation failed
+            Toast.makeText(AddEventActivity.this, "Error occurred.", Toast.LENGTH_SHORT).show();
+            finish();
         }
-        else
-        {
-            Toast.makeText(AddEventActivity.this, "Some error occurred.", Toast.LENGTH_SHORT).show();
-        }
-        finish();
     }
 
     private void requestPermissions() {

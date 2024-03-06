@@ -13,13 +13,14 @@ import java.io.ByteArrayOutputStream;
 public class QrCodeManager {
 
     /**
-     * Returns Bitmap generated for the event ID
-     * @param data
-     * @return
+     * Generates a QR code bitmap for the given data.
+     *
+     * @param data The data to be encoded into the QR code.
+     * @return The generated QR code bitmap.
      */
     public static Bitmap generateQRCode(String data) {
         try {
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 300, 300);
+            BitMatrix bitMatrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 1500, 1500);
             int width = bitMatrix.getWidth();
             int height = bitMatrix.getHeight();
             Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
@@ -37,14 +38,16 @@ public class QrCodeManager {
     }
 
     /**
-     * Returns
-     * @param code
-     * @return
+     * Converts a bitmap to a Base64-encoded string.
+     *
+     * @param bitmap The bitmap to be converted.
+     * @return The Base64-encoded string representing the bitmap.
      */
-    public static String convertToBase64String(Bitmap code)
-    {
+    public static String convertToBase64String(Bitmap bitmap) {
+        if (bitmap == null) return null;
+
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        code.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
         byte[] byteArray = byteArrayOutputStream.toByteArray();
 
         // returning the string version
@@ -52,15 +55,13 @@ public class QrCodeManager {
     }
 
     /**
-     * Returns Base64 String for Bitmap generated for String input
-     * Combines generateQRCode and convertToString
-     * @param data
-     * @return
+     * Generates a QR code bitmap for the given data and returns it as a Base64-encoded string.
+     *
+     * @param data The data to be encoded into the QR code.
+     * @return The Base64-encoded string representing the generated QR code bitmap.
      */
-    public static String generateAndReturnString(String data)
-    {
-        Bitmap code = generateQRCode(data);
-        assert code != null;
-        return convertToBase64String(code);
+    public static String generateAndReturnBase64String(String data) {
+        Bitmap bitmap = generateQRCode(data);
+        return convertToBase64String(bitmap);
     }
 }
