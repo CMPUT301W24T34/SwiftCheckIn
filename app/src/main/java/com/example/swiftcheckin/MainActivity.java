@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
         getData();          // Fetch data from Firestore
     }
 
+
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         CollectionReference eventCol = db.collection("events");
