@@ -30,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private FirebaseFirestore db;
 
+    String eventTitle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +63,12 @@ public class MainActivity extends AppCompatActivity {
                 eventList.clear(); // Clear the old list
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
 //                    String eventId = doc.getId();
-                    String eventTitle = (String) doc.getData().get("eventTitle");
+
+                    eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDescription = (String) doc.getData().get("eventDescription");
                     String eventLocation = (String) doc.getData().get("eventLocation");
                     String deviceId = (String) doc.getData().get("deviceId");
                     String eventImageUrl = (String) doc.getData().get("eventImageUrl");
-
                     String eventStartDate = (String) doc.getData().get("eventStartDate");
                     String eventStartTime = (String) doc.getData().get("eventStartTime");
                     String eventEndDate = (String) doc.getData().get("eventEndDate");
@@ -100,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
 
-            annoucementIntent.putExtra("Message", "hello world");
+            annoucementIntent.putExtra("Message", eventTitle);
             startActivity(annoucementIntent);
 
         });
