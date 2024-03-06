@@ -2,24 +2,27 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/profile"
+    android:background="#FFFFFF"
     tools:context=".ProfileActivity">
 
 
+    <!--    To change the image displayed, take out the sample avatar line and replace with a different image-->
+    <!--    The sample avatar image does not actually show when the app is run, only in display mode-->
     <TextView
         android:id="@+id/word_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Profile"
-        android:textSize="34sp"
+        android:textSize="25sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/avatarImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.872" />
+        app:layout_constraintVertical_bias="0.69" />
 
 <!--    To change the image displayed, take out the sample avatar line and replace with a different image-->
 <!--    The sample avatar image does not actually show when the app is run, only in display mode-->
@@ -32,7 +35,6 @@
         android:cropToPadding="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -40,10 +42,11 @@
         android:id="@+id/nameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="28dp"
         android:text="Name"
-        android:textSize="24sp"
+        android:textSize="23sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/avatarImage" />
 
@@ -51,8 +54,8 @@
         android:id="@+id/emailText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="24dp"
         android:text="Email"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,8 +65,8 @@
         android:id="@+id/phoneNumberText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="20dp"
         android:text="Phone"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -73,8 +76,8 @@
         android:id="@+id/locationText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="92dp"
+        android:layout_marginTop="20dp"
         android:text="Location"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -87,34 +90,61 @@
         android:layout_marginTop="4dp"
         android:backgroundTint="#00FFFFFF"
         android:text="Settings"
+        android:textAlignment="textEnd"
         android:textColor="#673AB7"
         android:textColorHint="@color/black"
-        android:textSize="16sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/edit_photo_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="56dp"
-        android:layout_marginBottom="120dp"
+        android:layout_width="167dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginBottom="104dp"
         android:backgroundTint="@color/black"
         android:text="Edit Profile Photo"
         android:textColor="@color/white"
+        android:textSize="15sp"
         app:cornerRadius="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
-        android:id="@+id/back_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#00FFFFFF"
-        android:text="Back"
-        android:textColor="#673AB7"
-        android:textColorHint="@color/black"
-        android:textSize="16sp"
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="27dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="232dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/locationText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:srcCompat="@drawable/address_icon" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="27dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/emailText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/nameText"
+        app:srcCompat="@drawable/email_icon" />
+
+    <ImageView
+        android:id="@+id/clock_icon"
+        android:layout_width="27dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintEnd_toStartOf="@+id/phoneNumberText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView3"
+        app:srcCompat="@drawable/phone_icon" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

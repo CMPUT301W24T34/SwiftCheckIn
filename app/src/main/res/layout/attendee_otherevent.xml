@@ -2,39 +2,26 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:background="#FDFCFC">
 
+    <!--TODO: Add view constraints - alignement to all the fields-->
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="153dp"
         android:layout_height="28dp"
+        android:layout_marginStart="6dp"
         android:layout_marginTop="16dp"
-        android:layout_marginEnd="196dp"
+        android:layout_marginEnd="147dp"
         android:text="@string/AppName"
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/switch_modes2"
+        app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/switch_modes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
-        android:clickable="true"
-        app:backgroundTint="@color/white"
-        app:fabCustomSize="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005"
-        app:maxImageSize="24dp"
-        app:srcCompat="@android:drawable/ic_menu_set_as" />
 
 
     <TextView
@@ -53,7 +40,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        />
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/other_events"
@@ -62,7 +49,6 @@
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
         android:background="@drawable/grey_circle_background"
-        android:backgroundTint="#9A9797"
         android:gravity="center"
         android:text="@string/other_events"
         android:textAlignment="center"
@@ -71,7 +57,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        />
+        tools:ignore="SmallSp" />
 
     <TextView
         android:id="@+id/my_events"
@@ -79,6 +65,7 @@
         android:layout_height="28dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="7dp"
+        android:backgroundTint="#9A9797"
         android:gravity="center"
         android:text="@string/my_events"
         android:textAlignment="center"
@@ -87,35 +74,57 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
-        />
+        tools:ignore="SmallSp" />
 
     <View
         android:id="@+id/divider"
         android:layout_width="378dp"
         android:layout_height="1dp"
-        android:layout_marginStart="34dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
         android:background="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_picture"
         tools:ignore="MissingConstraints" />
 
+    <androidx.constraintlayout.helper.widget.Layer
+        android:id="@+id/layer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints" />
 
-    <ImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        app:layout_constraintStart_toStartOf="parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switch_modes2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:fabCustomSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile_pic"
-        />
+        app:layout_constraintVertical_bias="0.005"
+        app:maxImageSize="24dp"
+        app:srcCompat="@android:drawable/ic_menu_set_as" />
 
     <!-- RecyclerView added here -->
 
     <!-- Adjustments or additional views can be added here -->
 
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_pic"
+        tools:ignore="MissingConstraints" />
 
     <ImageView
         android:id="@+id/camera_button"
@@ -128,12 +137,13 @@
         app:srcCompat="@drawable/camera_icon" />
 
     <ListView
-        android:layout_width="410dp"
-        android:layout_height="535dp"
-        android:layout_marginBottom="60dp"
+        android:layout_width="423dp"
+        android:layout_height="609dp"
+        android:layout_marginBottom="64dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

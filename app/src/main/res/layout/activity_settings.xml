@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/settings"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/settings"
+    android:background="#FFFFFF"
     tools:context=".SettingsActivity">
     <!--Citation: OpenAI, 2024-02-28, ChatGPT, How to use drawables -->
     <!-- output is that you call the drawable file with android:background-->
@@ -16,9 +17,10 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
         android:hint="Birthday"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.634"
         app:layout_constraintStart_toEndOf="@+id/word_birthday"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
@@ -29,6 +31,7 @@
         android:layout_marginTop="108dp"
         android:background="@drawable/edit_text_display"
         android:hint="Name"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.706"
@@ -41,11 +44,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
-        android:hint="Number"
         android:digits="0123456789+- "
+        android:hint="Number"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintHorizontal_bias="0.563"
         app:layout_constraintStart_toEndOf="@+id/word_number"
         app:layout_constraintTop_toBottomOf="@+id/birthday" />
 
@@ -56,11 +60,18 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
         android:hint="Email"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.716"
         app:layout_constraintStart_toEndOf="@+id/word_email"
         app:layout_constraintTop_toBottomOf="@+id/phonenumber" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="24dp" />
 
     <EditText
         android:id="@+id/website"
@@ -69,16 +80,17 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
         android:hint="Website"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.716"
+        app:layout_constraintHorizontal_bias="0.688"
         app:layout_constraintStart_toEndOf="@+id/word_website"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
     <EditText
         android:id="@+id/address"
-        android:layout_width="324dp"
-        android:layout_height="38dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_border"
@@ -105,9 +117,9 @@
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
         android:background="@color/black"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:titleTextColor="@color/white">
 
         <TextView
@@ -165,6 +177,7 @@
         android:layout_marginBottom="56dp"
         android:backgroundTint="@color/black"
         android:text="Save"
+        android:textSize="20sp"
         app:cornerRadius="0sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -217,8 +230,8 @@
 
     <CheckBox
         android:id="@+id/cameraCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="129dp"
+        android:layout_height="45dp"
         android:layout_marginStart="44dp"
         android:backgroundTint="@color/black"
         android:text="Camera"
@@ -228,8 +241,8 @@
 
     <CheckBox
         android:id="@+id/locationCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="129dp"
+        android:layout_height="51dp"
         android:layout_marginStart="44dp"
         android:text="Location"
         android:textSize="16sp"

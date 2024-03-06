@@ -56,7 +56,7 @@ public class ProfileActivity extends AppCompatActivity {
         setContentView(R.layout.activity_profile);
         avatarImage = findViewById(R.id.avatarImage);
         Button settingsButton = findViewById(R.id.settings_button);
-        Button backButton = findViewById(R.id.back_button);
+//        Button backButton = findViewById(R.id.back_button);
         db = FirebaseFirestore.getInstance();
         Button editPhotoButton = findViewById(R.id.edit_photo_button);
         editPhotoButton.setOnClickListener(v -> showImagePickerOptions());
@@ -69,13 +69,13 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-
-            }
-        });
+//        backButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//
+//            }
+//        });
     }
 
     private static final int PERMISSIONS_REQUEST = 100;
