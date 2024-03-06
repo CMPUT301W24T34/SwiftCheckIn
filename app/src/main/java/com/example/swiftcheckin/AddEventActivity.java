@@ -33,11 +33,13 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends AppCompatActivity implements FragmentQrcodeMenu1.AddActivity {
 
     private static final int PERMISSIONS_REQUEST = 100;
     private static final int PICK_IMAGE_REQUEST = 101;
     private static final int CAPTURE_IMAGE_REQUEST = 102;
+
+    Boolean qrGenerated = false;
     ImageView editEventPoster;
     Uri imageUri;
 
@@ -81,6 +83,10 @@ public class AddEventActivity extends AppCompatActivity {
         createTextWatcher(endDateEditText);
     }
 
+    public void setGeneratedFlag(Boolean flag)
+    {
+        this.qrGenerated = flag;
+    }
     private void createTextWatcher(EditText editText)
     {
         editText.addTextChangedListener(new TextWatcher() {
@@ -111,7 +117,7 @@ public class AddEventActivity extends AppCompatActivity {
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
         String eventDescription = descriptionEditText.getText().toString();
 
-        Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
 
         EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
         String eventStartDate = eventStartDateEditText.getText().toString();
@@ -135,7 +141,17 @@ public class AddEventActivity extends AppCompatActivity {
         intent.putExtra("eventEndTime", eventEndTime);
         intent.putExtra("eventDescription", eventDescription);
 
-        sendBroadcast(intent);
+          FragmentQrcodeMenu1 qrCodeFragment = new FragmentQrcodeMenu1();
+          qrCodeFragment.setData(deviceId + eventName);   // sending event ID
+          qrCodeFragment.show(getSupportFragmentManager(), "afterCreationMenu");
+
+        if(this.qrGenerated) {
+            sendBroadcast(intent);
+        }
+        else
+        {
+            Toast.makeText(AddEventActivity.this, "Some error occurred.", Toast.LENGTH_SHORT).show();
+        }
         finish();
     }
 
