@@ -15,8 +15,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
-        android:hint="Birthday"
+        android:hint="DD/MM/YYYY"
+        android:maxLength="10"
         android:textSize="18sp"
+        android:inputType="date"
+        android:digits="0123456789/"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.706"
         app:layout_constraintStart_toEndOf="@+id/word_birthday"
@@ -30,6 +33,7 @@
         android:background="@drawable/edit_text_display"
         android:hint="Name"
         android:textSize="18sp"
+        android:maxLength="30"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.706"
         app:layout_constraintStart_toEndOf="@+id/word_name"
@@ -94,7 +98,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="40dp"
-        android:text="Name"
+        android:text="*Name"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/my_account_title" />
@@ -216,17 +220,6 @@
         app:layout_constraintTop_toBottomOf="@+id/address" />
 
     <CheckBox
-        android:id="@+id/cameraCheckbox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:backgroundTint="@color/black"
-        android:text="Camera"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/word_permission" />
-
-    <CheckBox
         android:id="@+id/locationCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -234,5 +227,5 @@
         android:text="Location"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cameraCheckbox" />
+        app:layout_constraintTop_toBottomOf="@+id/word_permission" />
 </androidx.constraintlayout.widget.ConstraintLayout>

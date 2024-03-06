@@ -29,6 +29,8 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
+import java.util.regex.Pattern;
+
 /**
  * This deals with the settings activity where users can update their contact information and settings
  */
@@ -41,7 +43,6 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText phoneNumberEditText;
     private EditText websiteEditText;
     private EditText addressEditText;
-    private CheckBox cameraCheckBox;
     private CheckBox locationCheckBox;
 
     @Override
@@ -54,7 +55,6 @@ public class SettingsActivity extends AppCompatActivity {
         emailEditText = findViewById(R.id.email);
         websiteEditText = findViewById(R.id.website);
         addressEditText = findViewById(R.id.address);
-        cameraCheckBox = findViewById(R.id.cameraCheckbox);
         locationCheckBox = findViewById(R.id.locationCheckbox);
         Button saveButton = findViewById(R.id.save_button);
         db = FirebaseFirestore.getInstance();
@@ -69,9 +69,14 @@ public class SettingsActivity extends AppCompatActivity {
                 String email = emailEditText.getText().toString();
                 String website = websiteEditText.getText().toString();
                 String address = addressEditText.getText().toString();
-                boolean cameraPermission = cameraCheckBox.isChecked();
                 boolean locationPermission = locationCheckBox.isChecked();
-                saveData(name, birthday, phoneNumber, email, website, address, cameraPermission, locationPermission);
+                if (!name.equals("") && isValid(birthday)) {
+                    saveData(name, birthday, phoneNumber, email, website, address, locationPermission);
+                }
+                if (!name.equals("") && !isValid(birthday)) {
+                    saveData(name, "", phoneNumber, email, website, address, locationPermission);
+                }
+
                 finish();
             }
         });
@@ -111,7 +116,6 @@ public class SettingsActivity extends AppCompatActivity {
                         String savedEmail = profile.getEmail();
                         String savedWebsite = profile.getWebsite();
                         String savedAddress = profile.getAddress();
-                        boolean savedCameraPermission = profile.isCameraPermission();
                         boolean savedLocationPermission = profile.isLocationPermission();
                         if (savedName != null && !savedName.isEmpty()) {
                             nameEditText.setText(savedName);
@@ -131,7 +135,6 @@ public class SettingsActivity extends AppCompatActivity {
                         if (savedAddress != null && !savedAddress.isEmpty()){
                             addressEditText.setText(savedAddress);
                         }
-                        cameraCheckBox.setChecked(savedCameraPermission);
                         locationCheckBox.setChecked(savedLocationPermission);
                     }
                 }
@@ -139,7 +142,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
-    private void saveData(String name, String birthday, String phoneNumber, String email, String website, String address, boolean cameraPermission, boolean locationPermission) {
+    private void saveData(String name, String birthday, String phoneNumber, String email, String website, String address, boolean locationPermission) {
         String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         HashMap<String, String> data = new HashMap<>();
         data.put("name", name);
@@ -148,12 +151,7 @@ public class SettingsActivity extends AppCompatActivity {
         data.put("email", email);
         data.put("website", website);
         data.put("address", address);
-        if (cameraPermission){
-            data.put("cameraPermission", "True");
-        }
-        else{
-            data.put("cameraPermission", "False");
-        }
+
         if (locationPermission){
             data.put("locationPermission", "True");
         }
@@ -186,4 +184,16 @@ public class SettingsActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
+
+    private boolean isValid(String birthday){
+        if (birthday.equals("")){
+            return true;
+        }
+        else {
+            String pattern = "\\d{2}/\\d{2}/\\d{4}";
+            return Pattern.matches(pattern, birthday);
+        }
+
+    }
+
 }
