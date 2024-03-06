@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFCFC">
+
+    <!--TODO: Add view constraints - alignement to all the fields-->
+
+    <ImageView
+        android:id="@+id/ClockIcon"
+        android:layout_width="23dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        app:layout_constraintStart_toEndOf="@+id/edit_event_date"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
+        app:srcCompat="@drawable/clock" />
+
+    <TextView
+        android:id="@+id/edit_event_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="02:00 AM"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/ClockIcon"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+
+    <ImageView
+        android:id="@+id/calendar_icon"
+        android:layout_width="21dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="60dp"
+        android:layout_marginEnd="10dp"
+        app:layout_constraintEnd_toStartOf="@+id/edit_event_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/edit_event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/march_22_2023"
+        android:textAlignment="center"
+        android:textColor="#040000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+    <ImageView
+        android:id="@+id/eventPoster2"
+        android:layout_width="463dp"
+        android:layout_height="129dp"
+        android:layout_marginTop="6dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_Title"
+        app:srcCompat="@drawable/event_poster" />
+
+
+    <TextView
+        android:id="@+id/event_Title"
+        android:layout_width="323dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:background="#E6E0E0"
+        android:text="Event Name"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="UnknownIdInLayout" />
+
+    <TextView
+        android:id="@+id/time_dash"
+        android:layout_width="4dp"
+        android:layout_height="17dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/dash"
+        android:textAlignment="center"
+        android:textColor="#020000"
+        app:layout_constraintEnd_toStartOf="@+id/edit_event_end_Time"
+        app:layout_constraintStart_toEndOf="@+id/edit_event_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+    <TextView
+        android:id="@+id/edit_event_end_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="03:00 PM"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/time_dash"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

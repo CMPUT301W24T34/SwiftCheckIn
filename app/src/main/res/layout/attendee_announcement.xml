@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFCFC">
+
+    <!--TODO: Add view constraints - alignement to all the fields-->
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="153dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="147dp"
+        android:text="@string/AppName"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/switch_modes"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="378dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="7dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile_picture" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switch_modes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:fabCustomSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.005"
+        app:maxImageSize="24dp"
+        app:srcCompat="@android:drawable/ic_menu_set_as"
+        android:contentDescription="TODO"
+        android:focusable="true" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="11dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_pic"
+  />
+
+
+    <!--   TODO: Delete on of the posterImageView-->
+
+
+    <ImageView
+        android:id="@+id/event_poster1"
+        android:layout_width="467dp"
+        android:layout_height="131dp"
+        android:layout_marginTop="104dp"
+        android:layout_marginEnd="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/event_poster" />
+
+    <TextView
+        android:id="@+id/announcement_event_name"
+        android:layout_width="322dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"
+        android:background="#EDE6E6"
+        android:text="Event Name"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/event_poster1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/annoucement_edit_event_start_time"
+        android:layout_width="40dp"
+        android:layout_height="19dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:text="02:00"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/time_dash"
+        app:layout_constraintStart_toEndOf="@+id/clock_icon"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+
+    <TextView
+        android:id="@+id/time_dash"
+        android:layout_width="4dp"
+        android:layout_height="18dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/dash"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+
+    <TextView
+        android:id="@+id/announcement_edit_event_end_Time"
+        android:layout_width="42dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/_03_00"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/time_dash"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+
+    <TextView
+        android:id="@+id/annoucement_edit_event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/march_22_2023"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+
+    <ImageView
+        android:id="@+id/clock_icon"
+        android:layout_width="23dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/annoucement_edit_event_start_time"
+        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_date"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1"
+        app:srcCompat="@drawable/clock" />
+
+    <ImageView
+        android:id="@+id/calendar_icon"
+        android:layout_width="21dp"
+        android:layout_height="26dp"
+        android:layout_marginStart="56dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="8dp"
+        android:contentDescription="TODO"
+        app:layout_constraintEnd_toStartOf="@+id/annoucement_edit_event_date"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1"
+        app:srcCompat="@drawable/calendar" />
+
+    <TextView
+        android:id="@+id/annoucement_edit_am_pm"
+        android:layout_width="25dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/pm"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/announcement_edit_event_end_Time"
+        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+
+    <TextView
+        android:id="@+id/announcement_header"
+        android:layout_width="296dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="79dp"
+        android:layout_marginBottom="14dp"
+        android:text="@string/announcement"
+        android:textColor="#000000"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/some_Imp_anncouncement"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clock_icon" />
+
+    <TextView
+        android:id="@+id/some_Imp_anncouncement"
+        android:layout_width="296dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="36dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="79dp"
+        android:text="@string/some_important_announcements"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_header" />
+
+    <ListView
+        android:layout_width="382dp"
+        android:layout_height="395dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="21dp"
+        android:layout_marginBottom="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
