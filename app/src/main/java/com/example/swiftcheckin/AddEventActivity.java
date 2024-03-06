@@ -33,16 +33,19 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 
-public class AddEventActivity extends AppCompatActivity {
+public class AddEventActivity extends AppCompatActivity implements FragmentQrcodeMenu1.AddActivity {
 
     private static final int PERMISSIONS_REQUEST = 100;
     private static final int PICK_IMAGE_REQUEST = 101;
     private static final int CAPTURE_IMAGE_REQUEST = 102;
+
+    Boolean qrGenerated = false;
     ImageView editEventPoster;
     Uri imageUri;
 
     Event event = new Event();
     private String deviceId;
+    Intent broadcastIntent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +84,14 @@ public class AddEventActivity extends AppCompatActivity {
         createTextWatcher(endDateEditText);
     }
 
+    public void setGeneratedFlag(Boolean flag)
+    {
+        this.qrGenerated = flag;
+        if(this.qrGenerated) {
+            sendBroadcast(broadcastIntent);
+            finish();
+        }
+    }
     private void createTextWatcher(EditText editText)
     {
         editText.addTextChangedListener(new TextWatcher() {
@@ -111,7 +122,7 @@ public class AddEventActivity extends AppCompatActivity {
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
         String eventDescription = descriptionEditText.getText().toString();
 
-        Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
+        // Toast.makeText(AddEventActivity.this, "Going to add event", Toast.LENGTH_SHORT).show();
 
         EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
         String eventStartDate = eventStartDateEditText.getText().toString();
@@ -125,18 +136,29 @@ public class AddEventActivity extends AppCompatActivity {
         EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
         String eventEndTime = eventEndTimeEditText.getText().toString();
 
-        Intent intent = new Intent("com.example.ADD_EVENT");
-        intent.putExtra("eventName", eventName);
-        intent.putExtra("eventAddress", eventAddress);
-        intent.putExtra("eventPosterURL", event.getEventImageUrl());
-        intent.putExtra("eventStartDate", eventStartDate);
-        intent.putExtra("eventEndDate", eventEndDate );
-        intent.putExtra("eventStartTime", eventStartTime);
-        intent.putExtra("eventEndTime", eventEndTime);
-        intent.putExtra("eventDescription", eventDescription);
+        broadcastIntent = new Intent("com.example.ADD_EVENT");
+        broadcastIntent.putExtra("eventName", eventName);
+        broadcastIntent.putExtra("eventAddress", eventAddress);
+        broadcastIntent.putExtra("eventPosterURL", event.getEventImageUrl());
+        broadcastIntent.putExtra("eventStartDate", eventStartDate);
+        broadcastIntent.putExtra("eventEndDate", eventEndDate );
+        broadcastIntent.putExtra("eventStartTime", eventStartTime);
+        broadcastIntent.putExtra("eventEndTime", eventEndTime);
+        broadcastIntent.putExtra("eventDescription", eventDescription);
 
-        sendBroadcast(intent);
-        finish();
+        Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);
+
+        // Update flag based on QR code generation
+        if (qr != null) {
+            // QR code generated successfully
+            this.qrGenerated = true;
+            new FragmentQrcodeMenu1(deviceId+eventName, qr).show(getSupportFragmentManager(), "menu");
+        } else {
+            this.qrGenerated = false;
+            // an error message if QR code generation failed
+            Toast.makeText(AddEventActivity.this, "Error occurred.", Toast.LENGTH_SHORT).show();
+            finish();
+        }
     }
 
     private void requestPermissions() {
