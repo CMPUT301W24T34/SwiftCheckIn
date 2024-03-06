@@ -48,7 +48,6 @@ public class AnnoucementActivity extends AppCompatActivity {
         setContentView(R.layout.attendee_announcement);
         db = FirebaseFirestore.getInstance();
 
-        Toast.makeText(this, "fdsfdsfds", Toast.LENGTH_SHORT).show();
         String eventId = getIntent().getStringExtra("eventID");
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
