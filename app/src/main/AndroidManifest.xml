@@ -17,7 +17,11 @@
         android:theme="@style/Theme.SwiftCheckIn"
         tools:targetApi="31">
 
-
+        <activity
+            android:name=".QRCodeScannerActivity"
+            android:screenOrientation="fullSensor"
+            android:stateNotNeeded="true"
+            android:windowSoftInputMode="stateAlwaysHidden"/>
         <activity
             android:name=".AnnoucementActivity"
             android:exported="false" />
