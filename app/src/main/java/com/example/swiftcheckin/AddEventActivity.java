@@ -91,11 +91,6 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
             sendBroadcast(broadcastIntent);
             finish();
         }
-        else
-        {
-            Toast.makeText(AddEventActivity.this, "Some error occurred.", Toast.LENGTH_SHORT).show();
-        }
-
     }
     private void createTextWatcher(EditText editText)
     {
@@ -163,9 +158,8 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
             this.qrGenerated = true;
             new FragmentQrcodeMenu1(deviceId+eventName, qr).show(getSupportFragmentManager(), "menu");
         } else {
-            // QR code generation failed
             this.qrGenerated = false;
-            // Show an error message if QR code generation failed
+            // an error message if QR code generation failed
             Toast.makeText(AddEventActivity.this, "Error occurred.", Toast.LENGTH_SHORT).show();
             finish();
         }

@@ -190,7 +190,7 @@
         android:layout_width="296dp"
         android:layout_height="24dp"
         android:layout_marginStart="37dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="200dp"
         android:layout_marginEnd="79dp"
         android:layout_marginBottom="14dp"
         android:text="@string/announcement"
@@ -199,7 +199,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/some_Imp_anncouncement"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/clock_icon" />
 
@@ -208,24 +208,35 @@
         android:layout_width="296dp"
         android:layout_height="24dp"
         android:layout_marginStart="36dp"
-        android:layout_marginTop="4dp"
         android:layout_marginEnd="79dp"
         android:text="@string/some_important_announcements"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/announcement_header" />
 
     <ListView
-        android:layout_width="382dp"
-        android:layout_height="395dp"
+        android:layout_width="379dp"
+        android:layout_height="196dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="21dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="20dp"
+        android:text="Sign Up"
+        app:cornerRadius="0dp"
+        android:backgroundTint="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/annoucement_edit_am_pm" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
