@@ -28,7 +28,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
         if (convertView == null) {
-//            convertView = LayoutInflater.from(context).inflate(R.layout.item_event, parent, false);
             view = LayoutInflater.from(getContext()).inflate(R.layout.item_event, parent, false);
         } else {
             view = convertView;
@@ -38,7 +37,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);
-        TextView eventAmPm = view.findViewById(R.id.edit_am_pm);
 
         Event event = events.get(position);
 //        eventPoster.setImageURI(event.);
@@ -46,7 +44,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
         eventEndTime.setText(event.getEndTime());
-//        eventAmPm.setText(event.getAmPM());
 
         return view;
     }
