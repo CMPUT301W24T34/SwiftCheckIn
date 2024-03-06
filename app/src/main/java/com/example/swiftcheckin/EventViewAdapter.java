@@ -39,7 +39,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);
         TextView eventAmPm = view.findViewById(R.id.edit_am_pm);
-        // Set more fields as required
 
         Event event = events.get(position);
 //        eventPoster.setImageURI(event.);
@@ -48,7 +47,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         eventStartTime.setText(event.getStartTime());
         eventEndTime.setText(event.getEndTime());
 //        eventAmPm.setText(event.getAmPM());
-        // Populate more fields as required
 
         return view;
     }
