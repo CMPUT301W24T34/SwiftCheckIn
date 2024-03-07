@@ -31,24 +31,24 @@ public class EventSignUp {
         // How will they be able to access the things tho?
         db = FirebaseFirestore.getInstance();
         Event updated_event = createEvent(eventId);
+        HashMap<String, String> data = new HashMap<>();
+        data.put("attendee", attendeeDeviceId);
 
-        CollectionReference eventAttendee = db.collection("eventsWithAttendees");
+        CollectionReference eventAttendee = db.collection("eventsWithAttendees-test");
         int currentAttendees = updated_event.getCurrentAttendees();
-        DocumentReference eventDoc = eventAttendee.document(updated_event.getDeviceId()+updated_event.getEventTitle());
-        if (updated_event.getMaxAttendees() == -1 || currentAttendees < updated_event.getMaxAttendees()) {
+        DocumentReference eventDoc = eventAttendee.document(eventId);
+//        if (updated_event.getMaxAttendees() == -1 || currentAttendees < updated_event.getMaxAttendees()) {
 
-            eventDoc.set(attendeeDeviceId)
-                    .addOnSuccessListener(aVoid -> {
-                        // On success
-                        System.out.println("Attendee added to event successfully.");
-                        updated_event.incrementCurrentAttendees();
-                    })
-                    .addOnFailureListener(e -> {
-                        // On failure
-                        System.out.println("Error adding attendee to event: " + e.getMessage());
-                    });
-        }
-
+        eventDoc.set(data)
+                .addOnSuccessListener(aVoid -> {
+                    // On success
+                    System.out.println("Attendee added to event successfully.");
+//                        updated_event.incrementCurrentAttendees();
+                })
+                .addOnFailureListener(e -> {
+                    // On failure
+                    System.out.println("Error adding attendee to event: " + e.getMessage());
+                });
         updateEventInFirebase(updated_event);
 
         // Need to update event
@@ -60,7 +60,7 @@ public class EventSignUp {
         final String[] eventStartTime = new String[1];
         final String[] eventStartDate = new String[1];
         final String[] eventPosterURL = new String[1];
-        final String[] eventMaxAttendees = new String[1];
+//        final String[] eventMaxAttendees = new String[1];
         final String[] eventLocation = new String[1];
         final String[] eventEndTime = new String[1];
         final String[] eventEndDate = new String[1];
@@ -81,7 +81,7 @@ public class EventSignUp {
                                 eventStartTime[0] = (String) event.get("eventStartTime");
                                 eventStartDate[0] = (String) event.get("eventStartDate");
                                 eventPosterURL[0] = (String) event.get("eventPosterURL");
-                                eventMaxAttendees[0] = (String) event.get("eventMaxAttendees");
+//                                eventMaxAttendees[0] = (String) event.get("eventMaxAttendees");
                                 eventLocation[0] = (String) event.get("eventLocation");
                                 eventEndTime[0] = (String) event.get("eventEndTime");
                                 eventEndDate[0] = (String) event.get("eventEndDate");
@@ -92,7 +92,7 @@ public class EventSignUp {
                         }
                     }
                 });
-        updated_event = new Event(eventTitle[0], eventDescription[0], eventLocation[0], eventDeviceId[0], eventPosterURL[0], eventMaxAttendees[0], eventStartDate[0], eventEndDate[0], eventStartTime[0], eventEndTime[0]);
+        updated_event = new Event(eventTitle[0], eventDescription[0], eventLocation[0], eventDeviceId[0], eventPosterURL[0], eventStartDate[0], eventEndDate[0], eventStartTime[0], eventEndTime[0]);
         return updated_event;
 
     }
