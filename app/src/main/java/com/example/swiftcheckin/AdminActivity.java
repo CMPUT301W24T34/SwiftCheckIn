@@ -250,7 +250,7 @@ public class AdminActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                    eventList.remove(selectedPosition);
+                                    //eventList.remove(selectedPosition);
                                     eventArrayAdapter.notifyDataSetChanged();
                                     selectedPosition = -1;
 
