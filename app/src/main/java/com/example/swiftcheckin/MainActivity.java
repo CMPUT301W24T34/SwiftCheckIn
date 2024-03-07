@@ -4,10 +4,11 @@ package com.example.swiftcheckin;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,9 +38,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.attendee_myevent);
+        setContentView(R.layout.attendee_otherevent);
 
-        listViewEvents = findViewById(R.id.attendee_my_events_list);
+        listViewEvents = findViewById(R.id.attendee_other_events_list);
         eventList = new ArrayList<>();
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
@@ -54,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        CollectionReference eventCol = db.collection("SignedUpEvents");
+        CollectionReference eventCol = db.collection("events");
 
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -96,13 +97,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         // Other Page
-        TextView myEventPage = findViewById(R.id.other_events);
+        TextView myEventPage = findViewById(R.id.my_events);
         myEventPage.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, OtherEventActivity.class);
+            Intent intent = new Intent(MainActivity.this, MyEventActivity.class);
             startActivity(intent);
         });
 
-        // Switch Mode Button
+//         Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
 
