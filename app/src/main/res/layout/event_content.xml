@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:weightSum="4.55"
+    android:orientation="vertical">
+        <TextView
+            android:id="@+id/organizerPageItem_eventName"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+
+            android:text="EventName"
+            android:background="#e0dfdc"
+            android:textSize="20sp"
+            android:paddingStart="10dp"
+
+            />
+        <ImageView
+            android:id="@+id/organizerPageItem_image"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="3"
+
+            android:src="@drawable/test_rect"
+            android:layout_marginTop="2dp"
+            android:background="#e0dfdc"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.5"
+            android:background="#e0dfdc"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/organizerPageItem_date"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="DD-MMM-YYYY"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
+            <TextView
+                android:id="@+id/organizerPageItem_time"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="TT-TT HRS"
+                android:textSize="20sp"
+                android:textAlignment="center"/>
 
 
-    <TextView
-        android:id="@+id/event_title_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textSize="30sp"
-        android:text="Title"/>
-    <TextView
-        android:id="@+id/event_location_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textSize="30sp"
-        android:text="Location"/>
-<!--    <TextView-->
-<!--        android:id="@+id/event_max_attend_text"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:padding="20dp"-->
-<!--        android:textSize="30sp"-->
-<!--        android:text="Maximum Attendees"/>-->
-    <TextView
-        android:id="@+id/event_description_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textSize="30sp"
-        android:text="Description"/>
-
-    <ImageView
-        android:id="@+id/event_poster_image"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@mipmap/ic_launcher"
-        />
-
+        </LinearLayout>
 </LinearLayout>

@@ -30,21 +30,25 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
             view = convertView;
         }
         Event event = getItem(position);
-        TextView eventTitle = view.findViewById(R.id.event_title_text);
-        TextView eventLocation = view.findViewById(R.id.event_location_text);
-//        TextView maxAttendees = view.findViewById(R.id.event_max_attend_text);
-        TextView description = view.findViewById(R.id.event_description_text);
-        ImageView eventPoster = view.findViewById(R.id.event_poster_image);
+        TextView eventTitle = view.findViewById(R.id.organizerPageItem_eventName);
+        ImageView eventPoster = view.findViewById(R.id.organizerPageItem_image);
+        TextView eventDate = view.findViewById(R.id.organizerPageItem_date);
+        TextView eventTime = view.findViewById(R.id.organizerPageItem_time);
 
+
+        assert event != null;
         eventTitle.setText(event.getEventTitle());
-        eventLocation.setText(event.getLocation());
-//        maxAttendees.setText(event.getMaxAttendees());
-        description.setText(event.getDescription());
-            Glide.with(getContext())
+        Glide.with(getContext())
                     .load(event.getEventImageUrl())
                     .into(eventPoster);
 
         return view;
+    }
+
+    protected String formateDate(String start)
+    {
+        String month;
+        return null;
     }
 
 }
