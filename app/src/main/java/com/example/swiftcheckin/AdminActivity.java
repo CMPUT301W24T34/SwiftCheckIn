@@ -221,8 +221,11 @@ public class AdminActivity extends AppCompatActivity {
     private void deleteEvent(EventArrayAdapter eventArrayAdapter, String deviceId) {
         tab = "Event";
         collectionReference = db.collection("events");
-        // if device Id is "pass" do normal deletion, or else for every event with that device ID delete it
-            String nameToDelete = eventList.get(selectedPosition).getDeviceId();
+        String nameToDelete = "filler";
+
+        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
+            nameToDelete = eventList.get(selectedPosition).getDeviceId();
+        }
         //Citation: For the following code, OpenAI, 2024, ChatGPT, Prompt: How to check if the device Id is not "pass"
             if (!"pass".equals(deviceId)){
                 nameToDelete = deviceId;
