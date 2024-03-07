@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FDFCFC">
+    android:background="#FFFDFD">
 
     <!--TODO: Add view constraints - alignement to all the fields-->
 
@@ -12,6 +12,7 @@
         android:id="@+id/app_name"
         android:layout_width="153dp"
         android:layout_height="28dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="147dp"
         android:text="@string/AppName"
@@ -20,6 +21,7 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/switch_modes"
+        app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -39,7 +41,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
+        android:background="#A12121"
         android:clickable="true"
+        android:contentDescription="TODO"
+        android:focusable="true"
         app:backgroundTint="@color/white"
         app:fabCustomSize="45dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -47,9 +52,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.005"
         app:maxImageSize="24dp"
-        app:srcCompat="@android:drawable/ic_menu_set_as"
-        android:contentDescription="TODO"
-        android:focusable="true" />
+        app:srcCompat="@android:drawable/ic_menu_set_as" />
 
     <ImageView
         android:id="@+id/profile_picture"
@@ -57,17 +60,18 @@
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile_pic"
-  />
+        app:srcCompat="@drawable/profile_pic" />
 
 
     <!--   TODO: Delete on of the posterImageView-->
 
 
     <ImageView
-        android:id="@+id/event_poster1"
+        android:id="@+id/announcement_event_poster1"
         android:layout_width="467dp"
         android:layout_height="131dp"
         android:layout_marginTop="104dp"
@@ -76,7 +80,8 @@
         app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/event_poster" />
+        app:srcCompat="@drawable/event_poster"
+        android:contentDescription="Event Poster" />
 
     <TextView
         android:id="@+id/announcement_event_name"
@@ -91,15 +96,15 @@
         android:textColor="#000000"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/event_poster1"
+        app:layout_constraintBottom_toTopOf="@+id/announcement_event_poster1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/annoucement_edit_event_start_time"
-        android:layout_width="40dp"
-        android:layout_height="19dp"
+        android:id="@+id/annoucement_start_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
@@ -109,7 +114,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/time_dash"
         app:layout_constraintStart_toEndOf="@+id/clock_icon"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
 
     <TextView
         android:id="@+id/time_dash"
@@ -120,23 +125,25 @@
         android:text="@string/dash"
         android:textColor="#000000"
         android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_start_time"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+        app:layout_constraintStart_toEndOf="@+id/annoucement_start_time"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
 
     <TextView
-        android:id="@+id/announcement_edit_event_end_Time"
-        android:layout_width="42dp"
-        android:layout_height="18dp"
+        android:id="@+id/announcement_end_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="94dp"
         android:text="@string/_03_00"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/time_dash"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
 
     <TextView
-        android:id="@+id/annoucement_edit_event_date"
+        android:id="@+id/annoucement_event_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -146,7 +153,7 @@
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/calendar_icon"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
 
     <ImageView
         android:id="@+id/clock_icon"
@@ -155,9 +162,9 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/annoucement_edit_event_start_time"
-        app:layout_constraintStart_toEndOf="@+id/annoucement_edit_event_date"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1"
+        app:layout_constraintEnd_toStartOf="@+id/annoucement_start_time"
+        app:layout_constraintStart_toEndOf="@+id/annoucement_event_date"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
         app:srcCompat="@drawable/clock" />
 
     <ImageView
@@ -168,75 +175,121 @@
         android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:contentDescription="TODO"
-        app:layout_constraintEnd_toStartOf="@+id/annoucement_edit_event_date"
+        app:layout_constraintEnd_toStartOf="@+id/annoucement_event_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
         app:srcCompat="@drawable/calendar" />
 
-    <TextView
-        android:id="@+id/annoucement_edit_am_pm"
-        android:layout_width="25dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/pm"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/announcement_edit_event_end_Time"
-        app:layout_constraintTop_toBottomOf="@+id/event_poster1" />
-
-    <TextView
-        android:id="@+id/announcement_header"
-        android:layout_width="296dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="37dp"
-        android:layout_marginTop="200dp"
-        android:layout_marginEnd="79dp"
-        android:layout_marginBottom="14dp"
-        android:text="@string/announcement"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/some_Imp_anncouncement"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clock_icon" />
-
-    <TextView
-        android:id="@+id/some_Imp_anncouncement"
-        android:layout_width="296dp"
-        android:layout_height="24dp"
-        android:layout_marginStart="36dp"
-        android:layout_marginEnd="79dp"
-        android:text="@string/some_important_announcements"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_header" />
-
     <ListView
-        android:layout_width="379dp"
-        android:layout_height="196dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="21dp"
-        android:layout_marginBottom="16dp"
+        android:layout_width="412dp"
+        android:layout_height="149dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.033"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="20dp"
-        android:text="Sign Up"
-        app:cornerRadius="0dp"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="38dp"
+        android:layout_marginEnd="157dp"
+        android:layout_marginBottom="8dp"
         android:backgroundTint="@color/black"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/annoucement_edit_am_pm" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_description" />
+
+    <TextView
+        android:id="@+id/announcement_description"
+        android:layout_width="301dp"
+        android:layout_height="102dp"
+        android:layout_marginStart="57dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="53dp"
+        android:text="TextView"
+        android:textColor="#020202"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/clock_icon" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="57dp"
+        android:layout_marginEnd="264dp"
+        android:layout_marginBottom="3dp"
+        android:text="Description"
+        android:textColor="#040404"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/announcement_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="23dp"
+        android:text="Location: "
+        android:textColor="#040404"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/announcement_location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/announcement_description" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="326dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="528dp"
+        android:text="Annoncement"
+        android:textAlignment="textStart"
+        android:textColor="#040404"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/announcement_location"
+        android:layout_width="148dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="416dp"
+        android:text="TextView"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.182"
+        app:layout_constraintStart_toEndOf="@+id/textView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="194dp"
+        android:text="Some major annoucements"
+        android:textColor="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
