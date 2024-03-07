@@ -12,7 +12,7 @@
         android:id="@+id/app_name"
         android:layout_width="153dp"
         android:layout_height="28dp"
-        android:layout_marginStart="6dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="147dp"
         android:text="@string/AppName"
@@ -60,6 +60,8 @@
         android:layout_height="45dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="11dp"
+        android:layout_marginEnd="7dp"
+        app:layout_constraintEnd_toStartOf="@+id/app_name"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile_pic" />
@@ -131,10 +133,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="94dp"
         android:text="@string/_03_00"
         android:textAlignment="center"
         android:textColor="#000000"
         android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/time_dash"
         app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
 
@@ -177,11 +181,12 @@
         app:srcCompat="@drawable/calendar" />
 
     <ListView
-        android:layout_width="441dp"
-        android:layout_height="150dp"
+        android:layout_width="412dp"
+        android:layout_height="149dp"
         android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.033"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
@@ -235,12 +240,14 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="55dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="23dp"
         android:text="Location: "
         android:textColor="#040404"
         android:textSize="18dp"
         android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/announcement_location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/announcement_description" />
 
@@ -262,12 +269,12 @@
         android:id="@+id/announcement_location"
         android:layout_width="148dp"
         android:layout_height="22dp"
-        android:layout_marginTop="420dp"
+        android:layout_marginTop="416dp"
         android:text="TextView"
         android:textColor="#000000"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.182"
+        app:layout_constraintStart_toEndOf="@+id/textView"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
