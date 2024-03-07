@@ -52,8 +52,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-//                saveData(deviceId, eventId);
-
+                saveData(deviceId, eventId);
                 eventSignUp.addAttendeeToEvent(eventId, deviceId);
 
             }
