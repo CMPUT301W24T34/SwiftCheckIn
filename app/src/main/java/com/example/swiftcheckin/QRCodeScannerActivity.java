@@ -24,10 +24,22 @@ import com.journeyapps.barcodescanner.CaptureActivity;
 
 import java.util.List;
 
+/**
+ * The QR code scanner activity. This class deals with all the real time check-in functionality for a user where the user can scan the QR code of the event and check-in.
+ * The event signed up data is fetched from the Firestore and the user is checked in if the event is found in their signed up events(from their device).
+ * Resources used for reference:
+ * https://www.geeksforgeeks.org/how-to-read-qr-code-using-zxing-library-in-android/
+ * https://reintech.io/blog/implementing-android-app-qr-code-scanner
+ */
 public class QRCodeScannerActivity extends CaptureActivity {
 
     private static final int PERMISSION_REQUEST_CAMERA = 1;
 
+    /**
+     * Called when the activity is first created.
+     *
+     * @param savedInstanceState The saved instance state.
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +55,10 @@ public class QRCodeScannerActivity extends CaptureActivity {
         }
     }
 
+
+    /**
+     * Initializes the QR code scanner.
+     */
     private void initQRCodeScanner() {
 
         new IntentIntegrator(this).initiateScan();
@@ -57,6 +73,13 @@ public class QRCodeScannerActivity extends CaptureActivity {
 
 
 
+   /**
+     * Handles the result of the QR code scanning process.
+     *
+     * @param requestCode The request code.
+     * @param permissions The permissions requested.
+    *  @param grantResults The results of the permission requests.
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -71,6 +94,14 @@ public class QRCodeScannerActivity extends CaptureActivity {
     }
 
 
+
+    /**
+     * Handles the result of the QR code scanning process.
+     *
+     * @param requestCode The request code.
+     * @param resultCode  The result code.
+     * @param data        The data returned from the activity.
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
@@ -79,8 +110,10 @@ public class QRCodeScannerActivity extends CaptureActivity {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 String scannedEventId = result.getContents();
-                Toast.makeText(this, "Scanned: " + scannedEventId, Toast.LENGTH_LONG).show();
-                checkInAttendee(scannedEventId); // Call checkInAttendee with the scanned ID
+                // This returns the scanned event ID
+                //  Toast.makeText(this, "Scanned: " + scannedEventId, Toast.LENGTH_LONG).show();
+                checkInAttendee(scannedEventId);
+                // Call checkInAttendee with the scanned ID
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
@@ -88,11 +121,21 @@ public class QRCodeScannerActivity extends CaptureActivity {
     }
 
 
+    /**
+     * Retrieves the device ID from the system settings.
+     *
+     * @return The device ID.
+     */
 
     private String retrieveDeviceId() {
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
+    /**
+     * Checks in the attendee for the event with the given ID.
+     *
+     * @param scannedEventId The ID of the event to check in the attendee for.
+     */
     private void checkInAttendee(String scannedEventId) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String deviceId = retrieveDeviceId(); // Retrieve device ID
@@ -106,10 +149,10 @@ public class QRCodeScannerActivity extends CaptureActivity {
                     if (eventIds != null && eventIds.contains(scannedEventId)) {
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
-                        showDialog("Check-in Failed", "The scanned ID doesn't match any registered events for this device.");
+                        showDialog("Check-in Failed", "You did not sign up for this event");
                     }
                 } else {
-                    showDialog("Error", "No events found for this device.");
+                    showDialog("Error", "No events found ");
                 }
             } else {
                 Log.e("FirestoreError", "Error fetching document: ", task.getException());
@@ -118,14 +161,25 @@ public class QRCodeScannerActivity extends CaptureActivity {
         });
     }
 
+    /**
+     * Shows a dialog with the given title and message.
+     *
+     * @param title   The title of the dialog.
+     * @param message The message to be displayed in the dialog.
+     */
     private void showDialog(String title, String message) {
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(QRCodeScannerActivity.this);
             builder.setTitle(title);
             builder.setMessage(message);
-            builder.setPositiveButton("OK", (dialog, id) -> dialog.dismiss());
+            builder.setPositiveButton("OK", (dialog, id) -> {
+                dialog.dismiss();
+                // Close the activity after the dialog is dismissed
+                finish();
+            });
             AlertDialog dialog = builder.create();
             dialog.show();
         });
     }
+
 }
