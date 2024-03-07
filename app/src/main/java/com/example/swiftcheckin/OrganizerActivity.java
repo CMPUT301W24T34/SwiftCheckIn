@@ -112,7 +112,6 @@ public class OrganizerActivity extends AppCompatActivity {
                 //new AddEventFragment(deviceId).show(getSupportFragmentManager(), "Add Event");
                 Intent intent = new Intent(OrganizerActivity.this, AddEventActivity.class);
                 intent.putExtra("deviceId", deviceId);
-                //intent.putExtra("listener", OrganizerActivity.this);
                 startActivity(intent);
             }
         });

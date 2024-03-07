@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FDFCFC">
+
+    <!--TODO: Add view constraints - alignement to all the fields-->
+
+    <TextView
+        android:id="@+id/app_name"
+        android:layout_width="153dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="196dp"
+        android:text="@string/AppName"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/switch_modes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="1dp"
+        android:clickable="true"
+        app:backgroundTint="@color/white"
+        app:fabCustomSize="45dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:maxImageSize="24dp"
+        app:srcCompat="@android:drawable/ic_menu_set_as" />
+
+    <TextView
+        android:id="@+id/footer"
+        android:layout_width="400dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="7dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="2dp"
+        android:background="@drawable/black_rectangular_background"
+        android:gravity="center"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+/>
+
+    <TextView
+        android:id="@+id/other_events"
+        android:layout_width="148dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="56dp"
+        android:background="@drawable/grey_circle_background"
+        android:backgroundTint="#9A9797"
+        android:gravity="center"
+        android:text="@string/other_events"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+        />
+
+    <TextView
+        android:id="@+id/my_events"
+        android:layout_width="148dp"
+        android:layout_height="28dp"
+        android:layout_marginStart="22dp"
+        android:layout_marginTop="7dp"
+        android:gravity="center"
+        android:text="@string/my_events"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/divider"
+         />
+
+
+    <!-- RecyclerView added here -->
+
+    <!-- Adjustments or additional views can be added here -->
+
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="378dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="8dp"
+        android:background="#000000"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.212"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/switch_modes"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:id="@+id/profile_picture"
+        android:layout_width="48dp"
+        android:layout_height="45dp"
+        app:srcCompat="@drawable/profile_pic"
+        tools:layout_editor_absoluteX="7dp"
+        tools:layout_editor_absoluteY="3dp" />
+
+    <ImageView
+        android:id="@+id/camera_button"
+        android:layout_width="64dp"
+        android:layout_height="41dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@drawable/camera_icon" />
+
+    <ListView
+        android:id="@+id/attendee_my_events_list"
+        android:layout_width="419dp"
+        android:layout_height="631dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="96dp"
+        android:cacheColorHint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
