@@ -26,7 +26,7 @@ public class EventSignUp {
     // Store eventIds as documents
     // Store attendee device ids as fields in that document to help with memory.
 
-    public void addAttendeeToEvent(String eventId, Context context){
+    public void addAttendeeToEvent(String eventId, String attendeeDeviceId){
         // Add the attendee to the firestore database.
         // How will they be able to access the things tho?
         Event updated_event = createEvent(eventId);
@@ -36,7 +36,7 @@ public class EventSignUp {
         DocumentReference eventDoc = eventAttendee.document(updated_event.getDeviceId()+updated_event.getEventTitle());
         if (updated_event.getMaxAttendees() == -1 || currentAttendees < updated_event.getMaxAttendees()) {
 
-            eventDoc.set(updated_event)
+            eventDoc.set(attendeeDeviceId)
                     .addOnSuccessListener(aVoid -> {
                         // On success
                         System.out.println("Attendee added to event successfully.");
@@ -46,8 +46,6 @@ public class EventSignUp {
                         // On failure
                         System.out.println("Error adding attendee to event: " + e.getMessage());
                     });
-        } else {
-            Toast.makeText(context, "Event is full.", Toast.LENGTH_SHORT).show();
         }
 
         updateEventInFirebase(updated_event);
