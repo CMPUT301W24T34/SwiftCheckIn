@@ -111,7 +111,28 @@ public class MainActivity extends AppCompatActivity {
         listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
             String eventID = eventList.get(position).getDeviceId() +  eventList.get(position).getEventTitle();
+
+            String eventTitle = eventList.get(position).getEventTitle();
+            String eventLocation = eventList.get(position).getLocation();
+            String eventDescription = eventList.get(position).getDescription();
+            String eventImageUrl = eventList.get(position).getEventImageUrl();
+            String eventStartDate = eventList.get(position).getStartDate();
+            String eventStartTime = eventList.get(position).getStartTime();
+            String eventEndDate = eventList.get(position).getEndDate();
+            String eventEndTime = eventList.get(position).getEndTime();
+
+
             annoucementIntent.putExtra("eventID", eventID);
+            annoucementIntent.putExtra("eventTitle", eventTitle);
+            annoucementIntent.putExtra("eventLocation", eventLocation);
+            annoucementIntent.putExtra("eventDescription", eventDescription);
+            annoucementIntent.putExtra("eventImageUrl", eventImageUrl);
+            annoucementIntent.putExtra("eventStartDate", eventStartDate);
+            annoucementIntent.putExtra("eventStartTime", eventStartTime);
+            annoucementIntent.putExtra("eventEndDate", eventEndDate);
+            annoucementIntent.putExtra("eventEndTime", eventEndTime);
+
+
             startActivity(annoucementIntent);
 
         });

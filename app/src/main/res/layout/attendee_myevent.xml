@@ -130,10 +130,10 @@
 
     <ListView
         android:id="@+id/attendee_my_events_list"
-        android:layout_width="419dp"
-        android:layout_height="631dp"
+        android:layout_width="412dp"
+        android:layout_height="613dp"
         android:layout_marginEnd="4dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginBottom="72dp"
         android:cacheColorHint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
