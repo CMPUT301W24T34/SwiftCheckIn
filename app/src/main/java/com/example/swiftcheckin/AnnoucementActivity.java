@@ -20,6 +20,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,6 +54,17 @@ public class AnnoucementActivity extends AppCompatActivity {
                 saveData(deviceId, eventId);
             }
         });
+
+        ImageView profileButton = findViewById(R.id.profile_picture);
+        profileButton.setOnClickListener(v -> {
+            Intent intent = new Intent(AnnoucementActivity.this, ProfileActivity.class);
+            startActivity(intent);
+        });
+
+        // Switch Mode Button
+        FloatingActionButton fab = findViewById(R.id.switch_modes);
+        fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
+
 
         Intent intent = getIntent();
         String eventID = intent.getStringExtra("eventTitle");
@@ -90,6 +102,9 @@ public class AnnoucementActivity extends AppCompatActivity {
                 .load(eventImageUrl)
                 .into(imageViewEventPoster);
     }
+
+    // Added glide with the help of Chat GPT
+
 
     public void saveData(String deviceId, String eventId) {
         DocumentReference ref = db.collection("SignedUpEvents").document(deviceId);
