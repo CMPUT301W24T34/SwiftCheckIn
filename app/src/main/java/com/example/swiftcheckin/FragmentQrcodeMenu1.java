@@ -4,7 +4,10 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,7 +20,14 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 
 public class FragmentQrcodeMenu1 extends DialogFragment {
 
@@ -58,12 +68,27 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_qrcode_choice_menu1, null);
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
+        ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
 
 
         // layout 1
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
         layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
+        LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
+            @Override
+            public void onClick(View view) {
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                Bitmap bitmap = bitmapDrawable.getBitmap();
+                shareImageAndText(bitmap);
+
+            }
+        });
+
+
+
         saveButton = view.findViewById(R.id.qrCodeSelectionSuccessLayout_saveButton);
 
         newQr.setOnClickListener(new View.OnClickListener() {
@@ -89,6 +114,36 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         return builder.setView(view)
                 .setCancelable(true)
                 .create();
+    }
+
+    private void shareImageAndText(Bitmap bitmap){
+        Uri uri = getImageToShare(bitmap);
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.putExtra(Intent.EXTRA_STREAM,uri);
+        intent.putExtra(Intent.EXTRA_TEXT,"Image Text");
+        intent.putExtra(Intent.EXTRA_SUBJECT,"Image Subject");
+        intent.setType("image/*");
+        startActivity(Intent.createChooser(intent,"Share via"));
+    }
+    private Uri getImageToShare(Bitmap bitmap){
+        File folder = new File(requireContext().getCacheDir(),"images");
+        Uri uri = null;
+        try{
+            folder.mkdirs();
+            File file = new File(folder, "image.jpg");
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            bitmap.compress(Bitmap.CompressFormat.JPEG,90,fileOutputStream);
+            fileOutputStream.flush();
+            fileOutputStream.close();
+
+            uri = FileProvider.getUriForFile(requireContext(), "com.example.swiftcheckin", file);
+
+        } catch (FileNotFoundException e){
+            e.printStackTrace();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return uri;
     }
 
     public void setData(String data)
