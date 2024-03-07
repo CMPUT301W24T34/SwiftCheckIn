@@ -32,14 +32,14 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         } else {
             view = convertView;
         }
-//        ImageView eventPoster = view.findViewById(R.id.event_poster1);
+        ImageView eventPoster = view.findViewById(R.id.event_poster_image);
         TextView eventName = view.findViewById(R.id.event_Title);
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);
 
         Event event = events.get(position);
-//        eventPoster.setImageURI(event.);
+//        eventPoster.setImageURI(event.getEventImageUrl());
         eventName.setText(event.getEventTitle());
         eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
