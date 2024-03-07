@@ -22,6 +22,11 @@ public class ProfileArrayAdapter extends ArrayAdapter<Profile>{
         this.profiles = profiles;
         this.context = context;
     }
+    @Override
+    public int getCount() {
+        return profiles.size();
+    }
+
 
 
     @NonNull
