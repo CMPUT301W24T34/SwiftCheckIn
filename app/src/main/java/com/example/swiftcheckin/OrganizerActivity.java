@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -110,6 +111,17 @@ public class OrganizerActivity extends AppCompatActivity {
         FloatingActionButton backButtonOrg = findViewById(R.id.back_button_org);
 
         addEventButton = findViewById(R.id.add_event_button);
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int selectedPos = position;
+                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
+                Event event = dataList.get(selectedPos);
+                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
+                startActivity(intent);
+            }
+        });
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
