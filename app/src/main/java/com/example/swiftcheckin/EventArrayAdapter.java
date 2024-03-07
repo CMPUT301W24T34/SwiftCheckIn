@@ -59,7 +59,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         eventDateView.setText(dateStr);
         if (event.getStartDate().equals(event.getEndDate()))
         {
-            String timeString = event.getStartTime()+"-"+event.getEndTime();
+            String timeString = event.getStartTime()+" - "+event.getEndTime();
             eventTime.setText(timeString);
         }
         else
