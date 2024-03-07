@@ -2,6 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/admin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <!-- Citation: How to get the buttons not round, StackOverflow, Shihab Uddin, 03/07/2021/ android material button cannot remove round corners, https://stackoverflow.com/questions/63317689/android-material-button-cannot-remove-round-corners -->
