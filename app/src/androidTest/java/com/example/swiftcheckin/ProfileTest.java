@@ -30,5 +30,23 @@ public class ProfileTest {
         onView(withId(R.id.settings_button)).perform(click());
         onView(withId(R.id.settings)).check(matches(isDisplayed()));
     }
+    // Citation: OpenAI, 03-07-2024, ChatGPT, How to clear edittext field
+    // output was ViewActions.clearText()
+    /**
+     * This checks to see if the inputted values in settings get updated on the profile page
+     */
+    @Test
+    public void infoUpdates(){
+        onView(withId(R.id.profile_picture)).perform(click());
+        onView(withId(R.id.profile)).check(matches(isDisplayed()));
+        onView(withId(R.id.settings_button)).perform(click());
+        onView(withId(R.id.settings)).check(matches(isDisplayed()));
+        onView(withId(R.id.name)).perform(ViewActions.clearText(), ViewActions.typeText("John"));
+        onView(withId(R.id.word_name)).perform(click());
+        onView(withId(R.id.save_button)).perform(click());
+        onView(withId(R.id.profile)).check(matches(isDisplayed()));
+        onView(withId(R.id.nameText)).check(matches(withText("John")));
+
+    }
 
 }
