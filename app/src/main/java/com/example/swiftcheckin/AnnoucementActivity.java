@@ -96,6 +96,8 @@ public class AnnoucementActivity extends AppCompatActivity {
         textViewEventStartTime.setText(eventStartTime);
         textViewEventEndTime.setText(eventEndTime);
 
+        // Added glide with the help of Chat GPT
+
         ImageView imageViewEventPoster = findViewById(R.id.announcement_event_poster1);
         String eventImageUrl = intent.getStringExtra("eventImageUrl");
         Glide.with(this)
@@ -103,7 +105,6 @@ public class AnnoucementActivity extends AppCompatActivity {
                 .into(imageViewEventPoster);
     }
 
-    // Added glide with the help of Chat GPT
 
 
     public void saveData(String deviceId, String eventId) {
