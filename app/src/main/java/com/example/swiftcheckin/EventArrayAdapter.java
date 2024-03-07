@@ -13,7 +13,11 @@ import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Locale;
+import java.util.Objects;
 
 public class EventArrayAdapter extends ArrayAdapter<Event> {
     public EventArrayAdapter(Context context, ArrayList<Event> events){
@@ -32,23 +36,36 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         Event event = getItem(position);
         TextView eventTitle = view.findViewById(R.id.organizerPageItem_eventName);
         ImageView eventPoster = view.findViewById(R.id.organizerPageItem_image);
-        TextView eventDate = view.findViewById(R.id.organizerPageItem_date);
+        TextView eventDateView = view.findViewById(R.id.organizerPageItem_date);
         TextView eventTime = view.findViewById(R.id.organizerPageItem_time);
 
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        String dateStr = "";
 
-        assert event != null;
+        try
+        {
+            assert event != null;
+            dateStr = outputFormat.format(Objects.requireNonNull(inputFormat.parse(event.getStartDate())));
+        } catch(ParseException e)
+        {
+            e.printStackTrace();
+        }
+
         eventTitle.setText(event.getEventTitle());
         Glide.with(getContext())
                     .load(event.getEventImageUrl())
                     .into(eventPoster);
-
+        eventDateView.setText(dateStr);
+        if (event.getStartDate().equals(event.getEndDate()))
+        {
+            String timeString = event.getStartTime()+"-"+event.getEndTime();
+            eventTime.setText(timeString);
+        }
+        else
+        {
+            eventTime.setText(event.getStartTime());
+        }
         return view;
     }
-
-    protected String formateDate(String start)
-    {
-        String month;
-        return null;
-    }
-
 }
