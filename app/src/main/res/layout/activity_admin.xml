@@ -84,22 +84,7 @@
         app:layout_constraintHorizontal_bias="0.009"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintWidth_percent="0.50" />
-
-    <Button
-        android:id="@+id/profile_tab_button"
-        android:layout_width="0dp"
-        android:layout_height="80dp"
-        android:text="Profile"
-        app:cornerRadius="0dp"
-        android:textColor="#673AB7"
-        android:backgroundTint="#EEEEEE"
-        android:drawableTop="@drawable/ic_profile"
-        app:layout_constraintStart_toEndOf="@+id/remove_tab_button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/listView"
-        app:layout_constraintWidth_percent="0.50"
-        app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintWidth_percent="1.0" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
