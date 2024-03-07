@@ -16,6 +16,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.HashMap;
 
@@ -31,14 +32,15 @@ public class EventSignUp {
         // How will they be able to access the things tho?
         db = FirebaseFirestore.getInstance();
         Event updated_event = createEvent(eventId);
-        HashMap<String, Object> data = new HashMap<>();
+        HashMap<String, String> data = new HashMap<>();
         data.put(attendeeDeviceId, attendeeDeviceId);
 
-        CollectionReference eventAttendee = db.collection("eventsWithAttendees");
+//        CollectionReference eventAttendee = db.collection("eventsWithAttendees");
         int currentAttendees = updated_event.getCurrentAttendees();
-        DocumentReference eventDoc = eventAttendee.document(eventId);
+        DocumentReference eventDoc = db.collection("eventsWithAttendees").document(eventId);
+        Log.e("eventDoc", "here it is");
 
-        eventDoc.update(data)
+        eventDoc.set(data, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
                     System.out.println("Attendee added to event successfully.");
                 })
