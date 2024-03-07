@@ -60,63 +60,17 @@ public class AnnoucementActivity extends AppCompatActivity {
         });
 
     }
-
-    public void saveData(String deviceId, String eventId) {
-        DocumentReference ref = db.collection("SignedUpEvents").document(deviceId);
-
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    Map<String, Object> data = new HashMap<>();
-
-                    // already has a list
-                    if (document.exists() && document.contains("eventIds")) {
-                        List<String> eventIds = (List<String>) document.get("eventIds");
-                        if (!eventIds.contains(eventId)) {
-                            eventIds.add(eventId);
-                            data.put("eventIds", eventIds);
-                        }
-                        else{ // they've already signed up for this event
-                            data.put("eventIds", eventIds);
-                            Toast.makeText(AnnoucementActivity.this, "You are already signed up for this event", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    // no list yet
-                    else {
-                        List<String> eventIds = new ArrayList<>();
-                        eventIds.add(eventId);
-                        data.put("eventIds", eventIds); // Initialize the data map
-                    }
-
-                    // Set or update the document with the new data
-                    ref.set(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(AnnoucementActivity.this, "Signed up!", Toast.LENGTH_SHORT).show();
-                                    Log.d(TAG, "Event ID added successfully");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.w(TAG, "Error adding event ID", e);
-                                    Toast.makeText(AnnoucementActivity.this, "Could not sign up", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-                else {
-                    Exception exception = task.getException();
-                    if(exception != null) {
-                        Log.e(TAG, "Error retrieving document", exception);
-                        Toast.makeText(AnnoucementActivity.this, "Error retrieving document: " + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-
-            }
-        });
+    private void saveData(String device, String event){
+        HashMap<String, Object> data = new HashMap<>();
+        data.put(event, event);
+        db.collection("SignedUpEvents").document(device)
+                .set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    Log.d(TAG, "Document successfully written!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.w(TAG, "Error writing document", e);
+                });
     }
 
 }
