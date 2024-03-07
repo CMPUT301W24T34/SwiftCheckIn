@@ -1,13 +1,11 @@
 package com.example.swiftcheckin;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,11 +18,9 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-
 import java.util.ArrayList;
 
-
-public class MainActivity extends AppCompatActivity {
+public class OtherEventActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
     private EventViewAdapter eventViewAdapter;
@@ -54,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        CollectionReference eventCol = db.collection("SignedUpEvents");
+        CollectionReference eventCol = db.collection("events");
 
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -91,33 +87,34 @@ public class MainActivity extends AppCompatActivity {
         // Profile Picture Button
         ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+            Intent intent = new Intent(OtherEventActivity.this, ProfileActivity.class);
             startActivity(intent);
         });
 
-        // Other Page
-        TextView myEventPage = findViewById(R.id.other_events);
-        myEventPage.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, OtherEventActivity.class);
-            startActivity(intent);
-        });
 
         // Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
 
+        // Main Event Page
+        TextView myEventPage = findViewById(R.id.my_events);
+        myEventPage.setOnClickListener(v -> {
+            Intent intent = new Intent(OtherEventActivity.this, MainActivity.class);
+            startActivity(intent);
+        });
+
 
         // Camera Button
         ImageView cameraButton = findViewById(R.id.camera_button);
         cameraButton.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, QRCodeScannerActivity.class);
+            Intent intent = new Intent(OtherEventActivity.this, QRCodeScannerActivity.class);
             startActivity(intent);
         });
 
 
         // Event Details
         listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
-            Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
+            Intent annoucementIntent = new Intent(OtherEventActivity.this, AnnoucementActivity.class);
             String eventID = eventList.get(position).getDeviceId() +  eventList.get(position).getEventTitle();
 
             String eventTitle = eventList.get(position).getEventTitle();
