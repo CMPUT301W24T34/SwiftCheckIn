@@ -53,10 +53,19 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         }
 
         eventTitle.setText(event.getEventTitle());
-        Glide.with(getContext())
+
+        if (event.getEventImageUrl() != null)
+        {
+            Glide.with(getContext())
                     .load(event.getEventImageUrl())
                     .into(eventPoster);
-        eventDateView.setText(dateStr);
+            eventDateView.setText(dateStr);
+        }
+        else
+        {
+            eventPoster.setImageResource(R.drawable.test_rect);
+        }
+
         if (event.getStartDate().equals(event.getEndDate()))
         {
             String timeString = event.getStartTime()+" - "+event.getEndTime();
@@ -64,7 +73,8 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         }
         else
         {
-            eventTime.setText(event.getStartTime());
+            String timeString = event.getStartTime() + "  + 1 Day";
+            eventTime.setText(timeString);
         }
         return view;
     }
