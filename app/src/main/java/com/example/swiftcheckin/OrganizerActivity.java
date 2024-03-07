@@ -174,8 +174,6 @@ public class OrganizerActivity extends AppCompatActivity {
                             dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
                         } else {
                             dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime));
-
-
                         }
                     }// Adding event details from FireStore
 

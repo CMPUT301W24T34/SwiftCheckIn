@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ListView;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -21,26 +23,65 @@ public class ViewAttendeesActivity extends AppCompatActivity {
 
     ArrayList<Profile> profileList;
     ListView dataList;
-    private FirebaseFirestore db;
 
     FloatingActionButton back_button;
-    private String eventId;
 
-    TextView eventTitle;
+    TextView bigEventTitle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_attendees);
         back_button = findViewById(R.id.viewAttendeeBackButton);
-        eventTitle = findViewById(R.id.viewAttendeeEventTitle);
-        eventId = getIntent().getStringExtra("eventId");
+        bigEventTitle = findViewById(R.id.viewAttendeeEventTitle);
+        String eventId = getIntent().getStringExtra("eventId");
 
-        Event event = createEvent(eventId);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        Event finalUpdated_event = new Event();
+        db.collection("events")
+                .document(eventId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()){
+                            DocumentSnapshot event = task.getResult();
+                            String eventTitle  = (String) event.getData().get("eventTitle");
+                            Log.e("eventTitle", eventTitle);
+                            finalUpdated_event.setEventTitle(eventTitle);
+                            Log.e("finaleventTitle", finalUpdated_event.getEventTitle());
+                            bigEventTitle.setText(finalUpdated_event.getEventTitle());
 
 
+                            String eventStartTime = (String) event.get("eventStartTime");
+                            finalUpdated_event.setStartTime(eventStartTime);
 
-        eventTitle.setText(event.getDescription());
+                            String eventStartDate = (String) event.get("eventStartDate");
+                            finalUpdated_event.setStartDate(eventStartDate);
+
+                            String eventPosterURL = (String) event.get("eventPosterURL");
+                            finalUpdated_event.setEventImageUrl(eventPosterURL);
+//                                eventMaxAttendees[0] = (String) event.get("eventMaxAttendees");
+
+                            String eventLocation = (String) event.get("eventLocation");
+                            finalUpdated_event.setLocation(eventLocation);
+
+                            String eventEndTime = (String) event.get("eventEndTime");
+                            finalUpdated_event.setEndTime(eventEndTime);
+
+                            String eventEndDate = (String) event.get("eventEndDate");
+                            finalUpdated_event.setEndDate(eventEndDate);
+
+                            String eventDescription = (String) event.get("eventDescription");
+                            finalUpdated_event.setDescription(eventDescription);
+
+                            String eventDeviceId = (String) event.get("deviceId");
+                            finalUpdated_event.setDeviceId(eventDeviceId);
+
+                        }
+                    }
+                });
+        String title = finalUpdated_event.getEventTitle();
 
 
         back_button.setOnClickListener(new View.OnClickListener() {
@@ -52,7 +93,7 @@ public class ViewAttendeesActivity extends AppCompatActivity {
     }
 
     public Event createEvent(String eventId){
-        Event updated_event;
+        Event updated_event = new Event();
         final String[] eventTitle = new String[1];
         final String[] eventStartTime = new String[1];
         final String[] eventStartDate = new String[1];
@@ -64,7 +105,9 @@ public class ViewAttendeesActivity extends AppCompatActivity {
         final String[] eventDescription = new String[1];
         final String[] eventDeviceId = new String[1];
 
-        db = FirebaseFirestore.getInstance();
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference eventRef = db.collection("events").document(eventId);
+        Event finalUpdated_event = updated_event;
         db.collection("events")
                 .document(eventId)
                 .get()
@@ -73,24 +116,39 @@ public class ViewAttendeesActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()){
                             DocumentSnapshot event = task.getResult();
-                            if (event.exists()){
-                                eventTitle[0] = (String) event.get("eventTitle");
-                                eventStartTime[0] = (String) event.get("eventStartTime");
-                                eventStartDate[0] = (String) event.get("eventStartDate");
-                                eventPosterURL[0] = (String) event.get("eventPosterURL");
-//                                eventMaxAttendees[0] = (String) event.get("eventMaxAttendees");
-                                eventLocation[0] = (String) event.get("eventLocation");
-                                eventEndTime[0] = (String) event.get("eventEndTime");
-                                eventEndDate[0] = (String) event.get("eventEndDate");
-                                eventDescription[0] = (String) event.get("eventDescription");
-                                eventDeviceId[0] = (String) event.get("deviceId");
+                                String eventTitle  = (String) event.get("eventTitle");
+                                finalUpdated_event.setEventTitle(eventTitle);
 
-                            }
+                                String eventStartTime = (String) event.get("eventStartTime");
+                                finalUpdated_event.setStartTime(eventStartTime);
+
+                                String eventStartDate = (String) event.get("eventStartDate");
+                                finalUpdated_event.setStartDate(eventStartDate);
+
+                                String eventPosterURL = (String) event.get("eventPosterURL");
+                                finalUpdated_event.setEventImageUrl(eventPosterURL);
+//                                eventMaxAttendees[0] = (String) event.get("eventMaxAttendees");
+
+                                String eventLocation = (String) event.get("eventLocation");
+                                finalUpdated_event.setLocation(eventLocation);
+
+                                String eventEndTime = (String) event.get("eventEndTime");
+                                finalUpdated_event.setEndTime(eventEndTime);
+
+                                String eventEndDate = (String) event.get("eventEndDate");
+                                finalUpdated_event.setEndDate(eventEndDate);
+
+                                String eventDescription = (String) event.get("eventDescription");
+                                finalUpdated_event.setDescription(eventDescription);
+
+                                String eventDeviceId = (String) event.get("deviceId");
+                                finalUpdated_event.setDeviceId(eventDeviceId);
+
                         }
                     }
                 });
-        updated_event = new Event(eventTitle[0], eventDescription[0], eventLocation[0], eventDeviceId[0], eventPosterURL[0], eventStartDate[0], eventEndDate[0], eventStartTime[0], eventEndTime[0]);
-        return updated_event;
+
+        return finalUpdated_event;
 
     }
 
