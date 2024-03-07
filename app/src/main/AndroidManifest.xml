@@ -26,6 +26,7 @@
         <activity
             android:name=".ViewAttendeesActivity"
             android:exported="false" />
+
         <activity
             android:name=".MyEventActivity"
             android:exported="false"/>
