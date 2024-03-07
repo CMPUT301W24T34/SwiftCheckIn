@@ -29,6 +29,7 @@ public class EventSignUp {
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId){
         // Add the attendee to the firestore database.
         // How will they be able to access the things tho?
+        db = FirebaseFirestore.getInstance();
         Event updated_event = createEvent(eventId);
 
         CollectionReference eventAttendee = db.collection("eventsWithAttendees");
