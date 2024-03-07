@@ -10,6 +10,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -39,6 +40,8 @@ public class AdminActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private CollectionReference collectionReference;
     String tab;
+    SearchView searchView;
+
 
 
 
@@ -56,10 +59,39 @@ public class AdminActivity extends AppCompatActivity {
         profileList = new ArrayList<>();
         eventList = new ArrayList<>();
         tab = "Event";
+        searchView = findViewById(R.id.searchView);
         ProfileArrayAdapter profileArrayAdapter = new ProfileArrayAdapter(this, profileList);
         EventArrayAdapter eventArrayAdapter = new EventArrayAdapter(this, eventList);
         //Make the default view the events tab
         displayEventsTab(eventArrayAdapter);
+
+        //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+         public boolean onQueryTextSubmit(String query) {
+             if (tab.equals("Event")) {
+                   // Handle Event search submit
+                   filterEventList(query, eventArrayAdapter);
+               } else if (tab.equals("Profile")) {
+                   // Handle Profile search submit
+                   filterProfileList(query, profileArrayAdapter);
+               }
+               return true;
+           }
+
+           @Override
+           public boolean onQueryTextChange(String newText) {
+               if (tab.equals("Event")) {
+                   // Handle Event search text change
+                   filterEventList(newText, eventArrayAdapter);
+               } else if (tab.equals("Profile")) {
+                    // Handle Profile search text change
+                   filterProfileList(newText, profileArrayAdapter);
+                }
+               return true;
+            }
+        });
+
 
         eventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,7 +250,7 @@ public class AdminActivity extends AppCompatActivity {
                                                 }
                                             });
 
-                                    eventList.remove(selectedPosition);
+                                    //eventList.remove(selectedPosition);
                                     eventArrayAdapter.notifyDataSetChanged();
                                     selectedPosition = -1;
 
@@ -231,6 +263,59 @@ public class AdminActivity extends AppCompatActivity {
 
 
     }
+    /**
+     * This filters through the events using search
+     */
+    private void filterEventList(String query, EventArrayAdapter eventArrayAdapter) {
+        CollectionReference eventCollectionRef = db.collection("events");
+
+        eventCollectionRef.whereEqualTo("eventTitle", query)  // Adjust "eventName" to the actual field you want to search
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            eventList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Event event = document.toObject(Event.class);
+                                eventList.add(event);
+                            }
+                            eventArrayAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+    /**
+     * This filters through the profiles using search
+     */
+    private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter) {
+        CollectionReference profileCollectionRef = db.collection("profiles");
+
+        profileCollectionRef.whereEqualTo("name", query)  // Adjust "profileName" to the actual field you want to search
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            profileList.clear();
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Profile profile = document.toObject(Profile.class);
+                                profileList.add(profile);
+                            }
+                            profileArrayAdapter.notifyDataSetChanged();
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 
 
 }
+
+
+
+

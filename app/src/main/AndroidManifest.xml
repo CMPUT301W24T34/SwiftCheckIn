@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SwiftCheckIn"
         tools:targetApi="31">
-
+        <activity
+            android:name=".MyEventActivity"
+            android:exported="false"/>
         <activity
             android:name=".QRCodeScannerActivity"
             android:screenOrientation="portrait"
