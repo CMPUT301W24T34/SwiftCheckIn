@@ -97,16 +97,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         this.eventId = data;
     }
 
-    public void setQrBitmap(Bitmap bitmap)
-    {
-        this.qrCodeGenerated = bitmap;
-    }
-    protected void createQr(String data)
-    {
-        qrCodeGenerated = QrCodeManager.generateQRCode(data);
-        Log.e("Bitmap", QrCodeManager.convertToBase64String(qrCodeGenerated));
-    }
-
     protected void setFlagInContext()
     {
         listener.setGeneratedFlag(true);
