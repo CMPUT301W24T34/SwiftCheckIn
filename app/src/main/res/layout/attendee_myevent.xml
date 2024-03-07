@@ -62,8 +62,7 @@
         android:layout_height="28dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
-        android:background="@drawable/grey_circle_background"
-        android:backgroundTint="#9A9797"
+
         android:gravity="center"
         android:text="@string/other_events"
         android:textAlignment="center"
@@ -81,6 +80,8 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="7dp"
         android:gravity="center"
+        android:background="@drawable/grey_circle_background"
+        android:backgroundTint="#9A9797"
         android:text="@string/my_events"
         android:textAlignment="center"
         android:textColor="@color/black"
