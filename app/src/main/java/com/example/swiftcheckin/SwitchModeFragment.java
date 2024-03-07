@@ -1,4 +1,5 @@
 package com.example.swiftcheckin;
+// This fragment is for users to switch between the modes
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -13,11 +14,18 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+/**
+ * This deals with the fragment to switch to organizer and admin mode
+ */
 public class SwitchModeFragment extends DialogFragment {
-
-
     @NonNull
     @Override
+    /**
+     * This deals with the fragment to switch to organizer and admin mode
+     * @param savedInstanceState the Bundle
+     * @return
+     * returns the Dialog
+     */
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.switch_fragment, null);
         Button organizer = view.findViewById(R.id.organizer_button);
