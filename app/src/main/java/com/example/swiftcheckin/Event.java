@@ -62,6 +62,7 @@ public class Event {
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.maxAttendees = -1;
     }
 
     public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String maxAttendees, String startDate, String endDate, String startTime, String endTime){
@@ -214,6 +215,10 @@ public class Event {
 
     public int getCurrentAttendees() {
         return currentAttendees;
+    }
+
+    public void incrementCurrentAttendees(){
+        this.currentAttendees++;
     }
 
     public void setCurrentAttendees(int currentAttendees) {

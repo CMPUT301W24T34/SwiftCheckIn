@@ -69,7 +69,7 @@ public class OrganizerActivity extends AppCompatActivity {
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Call the method with arguments in OrganizingActivity
-                if (eventMaxAttendees.isEmpty()) {
+                if (eventMaxAttendees.equals("")) {
                     addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
                 } else {
                     addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
@@ -158,7 +158,7 @@ public class OrganizerActivity extends AppCompatActivity {
                         String endTime = (String) doc.getData().get("eventEndTime");
                         String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
 
-                        if (maxAttendees.isEmpty()) {
+                        if (maxAttendees.equals("")) {
                             dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
                         } else {
                             dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime));
