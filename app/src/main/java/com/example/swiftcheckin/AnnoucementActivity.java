@@ -36,10 +36,9 @@ import java.util.Map;
 
 public class AnnoucementActivity extends AppCompatActivity {
 
-//    private TextView eventName;
+    //    private TextView eventName;
     private Button sign_up;
     private FirebaseFirestore db;
-
 
 
     @Override
@@ -52,7 +51,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
         Button sign_up = findViewById(R.id.sign_up);
-        sign_up.setOnClickListener(new View.OnClickListener(){
+        sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveData(deviceId, eventId);
@@ -60,17 +59,43 @@ public class AnnoucementActivity extends AppCompatActivity {
         });
 
     }
+
     private void saveData(String device, String event){
+        DocumentReference eventRef = db.collection("SignedUpEvents").document(device);
+
+        eventRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    if (document.contains(event)) {
+                        Toast.makeText(this, "You already signed up for this event", Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        addEvent(eventRef, event);
+                    }
+                }
+                else {
+                    addEvent(eventRef, event);
+                }
+            }
+            else {
+                Log.d(TAG, "Failed", task.getException());
+            }
+        });
+    }
+
+    private void addEvent(DocumentReference eventRef, String event) {
         HashMap<String, Object> data = new HashMap<>();
         data.put(event, event);
-        db.collection("SignedUpEvents").document(device)
-                .set(data, SetOptions.merge())
+        eventRef.set(data, SetOptions.merge())
                 .addOnSuccessListener(aVoid -> {
-                    Log.d(TAG, "Document successfully written!");
+                    Log.d(TAG, "Sign up successful");
+                    Toast.makeText(this, "Sign up successful!", Toast.LENGTH_SHORT).show();
                 })
                 .addOnFailureListener(e -> {
-                    Log.w(TAG, "Error writing document", e);
+                    Log.w(TAG, "Sign up failed", e);
                 });
     }
+
 
 }
