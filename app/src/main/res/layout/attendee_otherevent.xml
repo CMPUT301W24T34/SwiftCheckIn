@@ -19,7 +19,7 @@
         android:textAlignment="center"
         android:textSize="20sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/switch_modes2"
+        app:layout_constraintEnd_toStartOf="@+id/switch_modes"
         app:layout_constraintStart_toEndOf="@+id/profile_picture"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -48,9 +48,10 @@
         android:layout_height="28dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
-        android:background="@drawable/grey_circle_background"
         android:gravity="center"
         android:text="@string/other_events"
+        android:background="@drawable/grey_circle_background"
+        android:backgroundTint="#9A9797"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="14sp"
@@ -65,7 +66,6 @@
         android:layout_height="28dp"
         android:layout_marginStart="22dp"
         android:layout_marginTop="7dp"
-        android:backgroundTint="#9A9797"
         android:gravity="center"
         android:text="@string/my_events"
         android:textAlignment="center"
@@ -89,14 +89,8 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_picture"
         tools:ignore="MissingConstraints" />
 
-    <androidx.constraintlayout.helper.widget.Layer
-        android:id="@+id/layer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        tools:ignore="MissingConstraints" />
-
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/switch_modes2"
+        android:id="@+id/switch_modes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
@@ -137,12 +131,15 @@
         app:srcCompat="@drawable/camera_icon" />
 
     <ListView
-        android:layout_width="423dp"
-        android:layout_height="609dp"
-        android:layout_marginBottom="64dp"
+        android:id="@+id/attendee_other_events_list"
+        android:layout_width="409dp"
+        android:layout_height="678dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent" />
 
 
