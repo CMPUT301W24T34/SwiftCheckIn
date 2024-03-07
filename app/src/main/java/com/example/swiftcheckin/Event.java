@@ -47,7 +47,7 @@ public class Event {
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.maxAttendees = -1;
+        this.maxAttendees = -1;   // Meant to act as a representative for no limit.
     }
 
     /**
