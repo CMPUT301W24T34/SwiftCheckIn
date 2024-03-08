@@ -39,7 +39,7 @@ import com.google.firebase.firestore.auth.User;
 import java.io.ByteArrayOutputStream;
 
 /**
- * This deals with the user's profile information
+ * This class deals with the profile view of the user and various functionalities related to it
  */
 public class ProfileActivity extends AppCompatActivity {
     private TextView nameText;
@@ -170,6 +170,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
+
 
 
     @Override
