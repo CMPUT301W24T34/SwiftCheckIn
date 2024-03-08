@@ -154,7 +154,7 @@ public class OrganizerActivity extends AppCompatActivity {
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_organizing);
-    
+
             // Register BroadcastReceiver to listen for the broadcast
             IntentFilter filter = new IntentFilter("com.example.ACTION_EDIT_ACTIVITY");
             registerReceiver(receiver, filter);
@@ -364,7 +364,8 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     /**
-     * Destroys the Broadcast receiver, when the activity is destroyed.
+     * Overriding onDestroy method of the activity.
+     * Modified to destroy broadcast receiver when activity is destroyed.
      */
     @Override
     protected void onDestroy() {
