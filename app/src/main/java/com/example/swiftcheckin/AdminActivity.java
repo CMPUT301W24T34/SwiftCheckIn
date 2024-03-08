@@ -135,6 +135,7 @@ public class AdminActivity extends AppCompatActivity {
 
     /**
      * This displays the events tab
+     *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
 
     private void displayEventsTab(AdminEventArrayAdapter eventArrayAdapter) {
@@ -157,6 +158,7 @@ public class AdminActivity extends AppCompatActivity {
     }
     /**
      * This displays the profiles tab
+     *  @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
      */
     private void displayProfilesTab(ProfileArrayAdapter profileArrayAdapter) {
         tab = "Profile";
@@ -178,6 +180,8 @@ public class AdminActivity extends AppCompatActivity {
     }
     /**
      * This deletes the profile and all associated events
+     *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
+     *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
     private void deleteProfile(ProfileArrayAdapter profileArrayAdapter,AdminEventArrayAdapter eventArrayAdapter){
         //delete not just profile but all events associated with that profile
@@ -219,6 +223,8 @@ public class AdminActivity extends AppCompatActivity {
     }
     /**
      * This deletes multiple events`
+     * @param deviceId the id of the device - String
+     *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
     private void deleteMultiEvent(AdminEventArrayAdapter eventArrayAdapter, String deviceId) {
         tab = "Event";
@@ -270,6 +276,7 @@ public class AdminActivity extends AppCompatActivity {
     }
     /**
      * This deletes the events`
+      * @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
     private void deleteEvent(AdminEventArrayAdapter eventArrayAdapter) {
         tab = "Event";
@@ -319,6 +326,8 @@ public class AdminActivity extends AppCompatActivity {
 
     /**
      * This filters through the events using search
+     *@param query the searched word - String
+      *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
     //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter) {
@@ -344,6 +353,8 @@ public class AdminActivity extends AppCompatActivity {
     }
     /**
      * This filters through the profiles using search
+     * @param query the searched word - String
+     *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
      */
     //Citation: For the following code idea to use the search bar and filter searches, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter) {

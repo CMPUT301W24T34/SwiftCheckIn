@@ -50,7 +50,6 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eventDateView = view.findViewById(R.id.organizerPageItem_date);
         TextView eventTime = view.findViewById(R.id.organizerPageItem_time);
 
-
         eventTitle.setText(event.getEventTitle());
         eventDateView.setText(event.getStartDate());
         if (event.getEventImageUrl() != null)

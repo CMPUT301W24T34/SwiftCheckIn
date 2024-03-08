@@ -137,8 +137,9 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 .create();
     }
 
+
     /**
-     * Shares the image data between the activities.
+     * Shares the image and text data between the activities.
      * @param bitmap: Image of the Qr code.
      */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
@@ -155,7 +156,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     /**
      * Gets the Uri of the Qr image.
      * @param bitmap: Bitmap Qr code
-     * @return
+     * @return uri: returns the uri of the image
+
      */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     private Uri getImageToShare(Bitmap bitmap) {
