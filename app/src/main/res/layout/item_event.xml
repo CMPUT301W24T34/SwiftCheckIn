@@ -6,13 +6,22 @@
     android:layout_height="match_parent"
     android:background="#FDFCFC">
 
+<<<<<<< HEAD
     <!--TODO: Add view constraints - alignement to all the fields-->
 
+=======
+    <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
+    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
     <ImageView
         android:id="@+id/ClockIcon"
         android:layout_width="23dp"
         android:layout_height="26dp"
+<<<<<<< HEAD
         android:layout_marginStart="24dp"
+=======
+        android:layout_marginStart="8dp"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         android:layout_marginTop="2dp"
         app:layout_constraintStart_toEndOf="@+id/edit_event_date"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
@@ -20,6 +29,7 @@
 
     <TextView
         android:id="@+id/edit_event_start_time"
+<<<<<<< HEAD
         android:layout_width="37dp"
         android:layout_height="18dp"
         android:layout_marginStart="4dp"
@@ -29,6 +39,16 @@
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/time_dash"
+=======
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="02:00 AM"
+        android:textAlignment="textStart"
+        android:textColor="#000000"
+        android:textStyle="bold"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         app:layout_constraintStart_toEndOf="@+id/ClockIcon"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
@@ -44,6 +64,22 @@
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
         app:srcCompat="@drawable/calendar" />
 
+<<<<<<< HEAD
+=======
+    <TextView
+        android:id="@+id/edit_event_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="@string/march_22_2023"
+        android:textAlignment="center"
+        android:textColor="#040000"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
     <ImageView
         android:id="@+id/eventPoster2"
         android:layout_width="463dp"
@@ -54,6 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/event_Title"
         app:srcCompat="@drawable/event_poster" />
 
+<<<<<<< HEAD
     <TextView
         android:id="@+id/edit_event_date"
         android:layout_width="wrap_content"
@@ -67,6 +104,8 @@
         app:layout_constraintStart_toEndOf="@+id/calendar_icon"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
+=======
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
     <TextView
         android:id="@+id/event_Title"
@@ -87,17 +126,27 @@
     <TextView
         android:id="@+id/time_dash"
         android:layout_width="4dp"
+<<<<<<< HEAD
         android:layout_height="18dp"
         android:layout_marginStart="2dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="2dp"
         android:text="@string/dash"
+=======
+        android:layout_height="17dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="4dp"
+        android:text="@string/dash"
+        android:textAlignment="center"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         android:textColor="#020000"
         app:layout_constraintEnd_toStartOf="@+id/edit_event_end_Time"
         app:layout_constraintStart_toEndOf="@+id/edit_event_start_time"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 
     <TextView
+<<<<<<< HEAD
         android:id="@+id/edit_am_pm"
         android:layout_width="25dp"
         android:layout_height="18dp"
@@ -121,6 +170,17 @@
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/edit_am_pm"
+=======
+        android:id="@+id/edit_event_end_Time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="4dp"
+        android:text="03:00 PM"
+        android:textAlignment="center"
+        android:textColor="#000000"
+        android:textStyle="bold"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         app:layout_constraintStart_toEndOf="@+id/time_dash"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
 

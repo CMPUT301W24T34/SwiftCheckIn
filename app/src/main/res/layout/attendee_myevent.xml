@@ -6,12 +6,21 @@
     android:layout_height="match_parent"
     android:background="#FDFCFC">
 
+<<<<<<< HEAD
     <!--TODO: Add view constraints - alignement to all the fields-->
+=======
+    <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
+    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
     <TextView
         android:id="@+id/app_name"
         android:layout_width="153dp"
         android:layout_height="28dp"
+<<<<<<< HEAD
+=======
+        android:layout_marginStart="6dp"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         android:layout_marginTop="16dp"
         android:layout_marginEnd="196dp"
         android:text="@string/AppName"
@@ -20,6 +29,10 @@
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
+<<<<<<< HEAD
+=======
+        app:layout_constraintStart_toEndOf="@+id/profile_picture"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         app:layout_constraintTop_toTopOf="parent" />
 
 
@@ -54,7 +67,11 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+<<<<<<< HEAD
 />
+=======
+        />
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
     <TextView
         android:id="@+id/other_events"
@@ -62,8 +79,12 @@
         android:layout_height="28dp"
         android:layout_marginTop="7dp"
         android:layout_marginEnd="56dp"
+<<<<<<< HEAD
         android:background="@drawable/grey_circle_background"
         android:backgroundTint="#9A9797"
+=======
+
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         android:gravity="center"
         android:text="@string/other_events"
         android:textAlignment="center"
@@ -81,6 +102,11 @@
         android:layout_marginStart="22dp"
         android:layout_marginTop="7dp"
         android:gravity="center"
+<<<<<<< HEAD
+=======
+        android:background="@drawable/grey_circle_background"
+        android:backgroundTint="#9A9797"
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
         android:text="@string/my_events"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -88,12 +114,16 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/divider"
+<<<<<<< HEAD
          />
 
 
     <!-- RecyclerView added here -->
 
     <!-- Adjustments or additional views can be added here -->
+=======
+        />
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
 
     <View
@@ -114,9 +144,17 @@
         android:id="@+id/profile_picture"
         android:layout_width="48dp"
         android:layout_height="45dp"
+<<<<<<< HEAD
         app:srcCompat="@drawable/profile_pic"
         tools:layout_editor_absoluteX="7dp"
         tools:layout_editor_absoluteY="3dp" />
+=======
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="3dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/profile_pic" />
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
     <ImageView
         android:id="@+id/camera_button"
@@ -130,6 +168,7 @@
 
     <ListView
         android:id="@+id/attendee_my_events_list"
+<<<<<<< HEAD
         android:layout_width="419dp"
         android:layout_height="631dp"
         android:layout_marginEnd="4dp"
@@ -137,6 +176,18 @@
         android:cacheColorHint="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
+=======
+        android:layout_width="412dp"
+        android:layout_height="613dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="56dp"
+        android:cacheColorHint="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.666"
+        app:layout_constraintStart_toStartOf="parent" />
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

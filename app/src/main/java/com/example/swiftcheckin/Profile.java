@@ -13,7 +13,6 @@ public class Profile {
     private String address;
 
     private String profileImageUrl;
-    private boolean cameraPermission;
     private boolean locationPermission;
 
     public Profile() {
@@ -27,11 +26,10 @@ public class Profile {
      * @param website the website of the user - String
      * @param address the address of the user - String
      * @param profileImageUrl the url of the user's profile image - String
-     * @param cameraPermission if the user wants to allow camera use - Boolean
      * @param locationPermission if the user wants to allow location use - Boolean
      *
      */
-    public Profile(String name, String birthday, String phoneNumber, String email, String website,String profileImageUrl, String address, boolean cameraPermission, boolean locationPermission) {
+    public Profile(String name, String birthday, String phoneNumber, String email, String website,String profileImageUrl, String address, boolean locationPermission) {
         this.name = name;
         this.birthday = birthday;
         this.phoneNumber = phoneNumber;
@@ -39,7 +37,6 @@ public class Profile {
         this.website = website;
         this.address = address;
         this.locationPermission = locationPermission;
-        this.cameraPermission = cameraPermission;
         this.profileImageUrl = profileImageUrl;
 
     }
@@ -108,16 +105,6 @@ public class Profile {
         return address;
     }
     /**
-     * This returns whether the user has enabled camera permission
-     * @return
-     * returns the bool value permission
-     */
-
-
-    public boolean isCameraPermission() {
-        return cameraPermission;
-    }
-    /**
      * This returns whether the user has enabled location permission
      * @return
      * returns the bool value permission
@@ -127,13 +114,6 @@ public class Profile {
     }
     // Citation: OpenAI, 02-26-2024, ChatGPT, Converting String to Boolean
     // ChatGPT gave me this code boolean myBool = Boolean.parseBoolean(userInput);
-    /**
-     * This turns the inputted string to the boolean value
-     * @param cameraPermission - True or False if the permission is enabled - String
-     */
-    public void setCameraPermission(String cameraPermission) {
-        this.cameraPermission = Boolean.parseBoolean(cameraPermission);
-    }
     /**
      * This turns the inputted string to the boolean value
      * @param locationPermission - True or False if the permission is enabled - String

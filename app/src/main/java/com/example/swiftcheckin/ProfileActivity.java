@@ -39,7 +39,7 @@ import com.google.firebase.firestore.auth.User;
 import java.io.ByteArrayOutputStream;
 
 /**
- * This deals with the user's profile information
+ * This class deals with the profile view of the user and various functionalities related to it
  */
 public class ProfileActivity extends AppCompatActivity {
     private TextView nameText;
@@ -61,6 +61,9 @@ public class ProfileActivity extends AppCompatActivity {
         Button editPhotoButton = findViewById(R.id.edit_photo_button);
         editPhotoButton.setOnClickListener(v -> showImagePickerOptions());
         getData();
+
+        Button removeButton = findViewById(R.id.removeButton);
+        removeButton.setOnClickListener(v -> removePhoto());
         settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -167,6 +170,8 @@ public class ProfileActivity extends AppCompatActivity {
         });
         builder.show();
     }
+
+
 
 
     @Override
@@ -309,5 +314,41 @@ public class ProfileActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    /**
+     * This method is used for removing profile image from the storage as well as the app
+     */
+    private void removePhoto() {
+        String userId = getUserId();
+        StorageReference profileImageRef = FirebaseStorage.getInstance()
+                .getReference("profileImages/" + userId + ".jpg");
+        profileImageRef.delete().addOnSuccessListener(aVoid -> {
+            // File deleted successfully
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("profiles").document(userId)
+                    .update("profileImageUrl", "")
+                    .addOnSuccessListener(aVoid1 -> {
+                        // Now as no profile image is there, generate the avatar image.
+                        String profileName = nameText.getText().toString();
+                        if (profileName != null && !profileName.isEmpty()) {
+                            AvatarGenerator.generateAvatar(profileName, new AvatarGenerator.AvatarImageCallback() {
+                                @Override
+                                public void onAvatarLoaded(Bitmap avatar) {
+                                    runOnUiThread(() -> avatarImage.setImageBitmap(avatar));
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("ProfileActivity", "Error removing image URL from Firestore", e);
+                    });
+        }).addOnFailureListener(e -> {
+            Log.e("ProfileActivity", "Error removing image from Storage", e);
+        });
+    }
+
+
+
 
 }

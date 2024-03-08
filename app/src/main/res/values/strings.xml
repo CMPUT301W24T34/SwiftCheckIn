@@ -1,8 +1,15 @@
 <resources>
+<<<<<<< HEAD
     <string name="app_name">SwiftCheckIn</string>
     <string name="organizer_mode">Organizer Mode</string>
     <string name="mode">Mode</string>
     <string name="AppName">SwiftCheckIn</string>
+=======
+    <string name="event_plus">+</string>
+    <string name="AppName">SwiftCheckIn</string>
+    <string name="organizer_mode">Organizer Mode</string>
+    <string name="mode">Mode</string>
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
     <string name="_02_00" />
     <string name="march_22_2023">March 22, 2023</string>
     <string name="_03_00">03:00</string>
@@ -15,4 +22,9 @@
     <string name="announcement">Announcement</string>
     <string name="my_events">My Events</string>
     <string name="other_events">Other Events</string>
+<<<<<<< HEAD
+=======
+    <string name="qr_code_selection_menu1_title">QR Code Selection</string>
+    <string name="event_created_successfully_qr_menu">Event Created Successfully</string>
+>>>>>>> 2dd604ac3be75a4a8f201e70a32d6ea743fe267c
 </resources>
