@@ -22,17 +22,12 @@ public class ProfileArrayAdapter extends ArrayAdapter<Profile>{
         this.profiles = profiles;
         this.context = context;
     }
-    @Override
-    public int getCount() {
-        return profiles.size();
-    }
-
 
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-//        return super.getView(position, convertView, parent);
+
         View view = convertView;
 
         if(view == null){

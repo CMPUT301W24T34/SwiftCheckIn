@@ -24,6 +24,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.List;
+
 /**
  * This is the administration activity
  */
@@ -70,10 +72,10 @@ public class AdminActivity extends AppCompatActivity {
             @Override
          public boolean onQueryTextSubmit(String query) {
              if (tab.equals("Event")) {
-                   // Handle Event search submit
+
                    filterEventList(query, eventArrayAdapter);
                } else if (tab.equals("Profile")) {
-                   // Handle Profile search submit
+
                    filterProfileList(query, profileArrayAdapter);
                }
                return true;
@@ -82,10 +84,10 @@ public class AdminActivity extends AppCompatActivity {
            @Override
            public boolean onQueryTextChange(String newText) {
                if (tab.equals("Event")) {
-                   // Handle Event search text change
+
                    filterEventList(newText, eventArrayAdapter);
                } else if (tab.equals("Profile")) {
-                    // Handle Profile search text change
+
                    filterProfileList(newText, profileArrayAdapter);
                 }
                return true;
@@ -269,6 +271,7 @@ public class AdminActivity extends AppCompatActivity {
     /**
      * This filters through the events using search
      */
+    //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterEventList(String query, EventArrayAdapter eventArrayAdapter) {
         CollectionReference eventCollectionRef = db.collection("events");
 
@@ -293,6 +296,7 @@ public class AdminActivity extends AppCompatActivity {
     /**
      * This filters through the profiles using search
      */
+    //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter) {
         CollectionReference profileCollectionRef = db.collection("profiles");
 
@@ -314,6 +318,8 @@ public class AdminActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
 
 
 
