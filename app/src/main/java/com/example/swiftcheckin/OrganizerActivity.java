@@ -56,10 +56,10 @@ public class OrganizerActivity extends AppCompatActivity {
     Button addEventButton; // Button to add events.
 
 
-    // add JAVADOC
-    // receives signal from edit event activity to save new Event
-
-    // #################################################
+    /**
+     * Receives signal(intent) that is broadcast from AddEventActivity class.
+     * Used for receiving updates of the new event added.
+     */
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {   // Receives intents from AddEventActivity to add events.
@@ -251,8 +251,7 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     /**
-     * ############################################
-     * Destroys the receiver.
+     * Destroys the Broadcast receiver, when the activity is destroyed.
      */
     @Override
     protected void onDestroy() {

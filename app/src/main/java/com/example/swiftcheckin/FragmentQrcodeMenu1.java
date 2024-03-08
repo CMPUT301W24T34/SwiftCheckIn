@@ -29,36 +29,51 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 
 
+/**
+ * DialogFragment to show generated QR and ask for user choice.
+ */
 public class FragmentQrcodeMenu1 extends DialogFragment {
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
 
     private Button selectQr;    // to be implemented
-    private Button newQr;
-    private String eventId;
-    private Button saveButton;
+    private Button newQr;   // Button to generate new QR.
+    private String eventId;     // Stores eventId
+    private Button saveButton;  // Button to save the event.
 
-    private Bitmap qrCodeGenerated;
-    ConstraintLayout layout1;
+    private Bitmap qrCodeGenerated;     // Bitmap images of the generated/selected qr code.
+    ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
-    LinearLayout successLayout;
+    LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
 
-    interface AddActivity
-    {
+    /**
+     * Interface to communicate with the activity to set the flag.
+     */
+    interface AddActivity {
+        /**
+         * sets the flag to its attribute in the activity.
+         * @param flag: flag to indicate if the event has been saved and generated.
+         */
         void setGeneratedFlag(Boolean flag);
     }
+
     AddActivity listener;
 
-    public FragmentQrcodeMenu1(String eventId, Bitmap bitmap)
-    {
+    /**
+     * Constructor of the FragmentQrcodeMenu1 class. Initialises the dialog fragment.
+     * @param eventId: String to get the eventId of the event generated.
+     * @param bitmap: Bitmap image of the unique Qr code generated for the event.
+     */
+    public FragmentQrcodeMenu1(String eventId, Bitmap bitmap) {
         this.eventId = eventId;
         this.qrCodeGenerated = bitmap;
     }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        if(context instanceof AddActivity){  // checks if the passed context is instance of AddActivity
+        if (context instanceof AddActivity) {  // checks if the passed context is instance of AddActivity
             listener = (AddActivity) context;
-        }else{
+        } else {
             throw new RuntimeException(context + " must implement AddActivity"); // error
         }
     }
@@ -88,7 +103,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         });
 
 
-
         saveButton = view.findViewById(R.id.qrCodeSelectionSuccessLayout_saveButton);
 
         newQr.setOnClickListener(new View.OnClickListener() {
@@ -103,43 +117,60 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             }
         });
 
+
+        // Citation: dismiss() -> https://developer.android.com/guide/fragments/dialogs :  dismiss the fragment and its dialog.(text from the website)
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveEvent();
+                dismiss();
+                if (listener != null) {
+                    setFlagInContext();
+                }
             }
         });
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        // Citation: AlertDialog taken from the lab works.
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         return builder.setView(view)
                 .setCancelable(true)
                 .create();
     }
+
+    /**
+     * Shares the image data between the activities.
+     * @param bitmap: Image of the Qr code.
+     */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
-    private void shareImageAndText(Bitmap bitmap){
+    private void shareImageAndText(Bitmap bitmap) {
         Uri uri = getImageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_STREAM,uri);
-        intent.putExtra(Intent.EXTRA_TEXT,"Image Text");
-        intent.putExtra(Intent.EXTRA_SUBJECT,"Image Subject");
+        intent.putExtra(Intent.EXTRA_STREAM, uri);
+        intent.putExtra(Intent.EXTRA_TEXT, "Image Text");
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Image Subject");
         intent.setType("image/*");
-        startActivity(Intent.createChooser(intent,"Share via"));
+        startActivity(Intent.createChooser(intent, "Share via"));
     }
+
+    /**
+     * Gets the Uri of the Qr image.
+     * @param bitmap: Bitmap Qr code
+     * @return
+     */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
-    private Uri getImageToShare(Bitmap bitmap){
-        File folder = new File(requireContext().getCacheDir(),"images");
+    private Uri getImageToShare(Bitmap bitmap) {
+        File folder = new File(requireContext().getCacheDir(), "images");
         Uri uri = null;
-        try{
+        try {
             folder.mkdirs();
             File file = new File(folder, "image.jpg");
             FileOutputStream fileOutputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.JPEG,90,fileOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
             fileOutputStream.flush();
             fileOutputStream.close();
 
             uri = FileProvider.getUriForFile(requireContext(), "com.example.swiftcheckin", file);
 
-        } catch (FileNotFoundException e){
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -147,39 +178,25 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         return uri;
     }
 
-    public void setData(String data)
-    {
-        Log.e("EventID", "The id is "+ data);
+    public void setData(String data) {
+        Log.e("EventID", "The id is " + data);
         this.eventId = data;
     }
 
-    protected void setFlagInContext()
-    {
+    protected void setFlagInContext() {
         listener.setGeneratedFlag(true);
     }
 
-    public void showSuccessScreen(View view)
-    {
-        if(layout1.getVisibility()==View.VISIBLE)
-        {
+    public void showSuccessScreen(View view) {
+        if (layout1.getVisibility() == View.VISIBLE) {
             layout1.setVisibility(View.INVISIBLE);
-        } else if(layout_selection.getVisibility()==View.VISIBLE) {
+        } else if (layout_selection.getVisibility() == View.VISIBLE) {
             layout_selection.setVisibility(View.INVISIBLE);
         }
         ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
-        if(qrCodeGenerated != null){
+        if (qrCodeGenerated != null) {
             qrImage.setImageBitmap(qrCodeGenerated);
         }
         successLayout.setVisibility(View.VISIBLE);
-    }
-
-    private void saveEvent()
-    {
-        AlertDialog dialog = (AlertDialog) getDialog();
-        assert dialog != null;
-        dialog.dismiss();
-        if (getActivity() instanceof AddActivity) {
-            setFlagInContext();
-        }
     }
 }
