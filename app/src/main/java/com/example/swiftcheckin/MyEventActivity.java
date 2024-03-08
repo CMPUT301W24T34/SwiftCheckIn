@@ -113,8 +113,8 @@ public class MyEventActivity extends AppCompatActivity {
     }
 
 
-// OpenAI, 2024, ChatGPT, Took help from ChatGPT on how to fetch list of events the user has
-// signed up for, and using those event ids to fetch their respective event data
+// OpenAI, March 2, 2024, ChatGPT, Took help from ChatGPT on how to fetch list of events the user
+// has signed up for, and using those event ids to fetch their respective event data
 
     /**
      * Fetches the data of events that the user has signed up for from Firestore.

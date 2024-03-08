@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="#FDFCFC">
 
-    <!--TODO: Add view constraints - alignement to all the fields-->
-
+    <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
+    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
     <ImageView
         android:id="@+id/ClockIcon"
         android:layout_width="23dp"
