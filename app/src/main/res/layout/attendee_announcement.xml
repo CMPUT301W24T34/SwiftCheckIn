@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#FFFDFD">
 
-    <!--TODO: Add view constraints - alignement to all the fields-->
+    <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
+    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
 
     <TextView
         android:id="@+id/app_name"
@@ -65,9 +66,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/profile_pic" />
-
-
-    <!--   TODO: Delete on of the posterImageView-->
 
 
     <ImageView
@@ -177,8 +175,8 @@
         android:contentDescription="TODO"
         app:layout_constraintEnd_toStartOf="@+id/annoucement_event_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"/>
-<!--        app:srcCompat="@drawable/calendar" />-->
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
+        app:srcCompat="@drawable/calendar" />
 
     <ListView
         android:layout_width="412dp"

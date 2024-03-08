@@ -6,8 +6,8 @@
     android:layout_height="match_parent"
     android:background="#FDFCFC">
 
-    <!--TODO: Add view constraints - alignement to all the fields-->
-
+    <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
+    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
     <TextView
         android:id="@+id/app_name"
         android:layout_width="153dp"
@@ -103,10 +103,6 @@
         app:layout_constraintVertical_bias="0.005"
         app:maxImageSize="24dp"
         app:srcCompat="@android:drawable/ic_menu_set_as" />
-
-    <!-- RecyclerView added here -->
-
-    <!-- Adjustments or additional views can be added here -->
 
 
     <ImageView
