@@ -49,11 +49,10 @@ public class MainActivity extends AppCompatActivity {
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
 
-        // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
-        setupUI();         // Setup UI elements
-        getData();          // Fetch data from Firestore
+        setupUI();
+        getData();
     }
 
 
