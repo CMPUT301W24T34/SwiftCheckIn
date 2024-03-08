@@ -56,7 +56,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         void setGeneratedFlag(Boolean flag);
     }
 
-    AddActivity listener;
+    AddActivity listener;   // an instance of the AddActivity interface
 
     /**
      * Constructor of the FragmentQrcodeMenu1 class. Initialises the dialog fragment.
@@ -178,15 +178,27 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         return uri;
     }
 
+    /**
+     * Sets the eventId for this particular fragment
+     * @param data
+     */
     public void setData(String data) {
         Log.e("EventID", "The id is " + data);
         this.eventId = data;
     }
 
+    /**
+     * Sets the flag of the calling activity to true.
+     */
     protected void setFlagInContext() {
         listener.setGeneratedFlag(true);
     }
 
+    /**
+     * Makes the success layout with qr code, share option and save button visible
+     * and makes other views invisible.
+     * @param view: Current View of the fragment.
+     */
     public void showSuccessScreen(View view) {
         if (layout1.getVisibility() == View.VISIBLE) {
             layout1.setVisibility(View.INVISIBLE);
