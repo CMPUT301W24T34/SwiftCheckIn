@@ -184,7 +184,8 @@ public class SettingsActivity extends AppCompatActivity {
         }
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
-
+    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if birthday string matches pattern
+    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, birthday);
     private boolean isValid(String birthday){
         if (birthday.equals("")){
             return true;
