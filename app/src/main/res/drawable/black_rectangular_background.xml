@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="#000000"/> <!-- Black background -->
- <!-- Adjust the radius for the circular edges -->
+    <solid android:color="#000000"/>
+    <!-- Citation: Darshan and Subhan Ali. Accessed on March 4, 2024-->
+    <!-- Link: https://stackoverflow.com/questions/44612585/how-to-add-border-to-edittext-in-android -->
 
 </shape>
