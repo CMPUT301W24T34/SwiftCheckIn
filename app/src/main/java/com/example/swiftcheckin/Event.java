@@ -84,6 +84,9 @@ public class Event {
     public String getDeviceId() {
         return deviceId;
     }
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
     /**
      * This returns the maximum number of attendees.
@@ -93,6 +96,11 @@ public class Event {
     public int getMaxAttendees() {
         return maxAttendees;
     }
+    public void setMaxAttendees(int maxAttendees) {
+        this.maxAttendees = maxAttendees;
+    }
+
+
 
     /**
      * Returns the title of the event
@@ -101,6 +109,9 @@ public class Event {
      */
     public String getEventTitle() {
         return eventTitle;
+    }
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 
     /**
@@ -111,6 +122,11 @@ public class Event {
     public String getLocation() {
         return location;
     }
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
 
     /**
      * Returns the event description
@@ -120,81 +136,50 @@ public class Event {
     public String getDescription() {
         return description;
     }
-
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    public void setDescription(String description) {
+        this.description = description;
     }
+
+
 
     public String getEventImageUrl() {
         return eventImageUrl;
     }
-
     public void setEventImageUrl(String eventImageUrl) {
         this.eventImageUrl = eventImageUrl;
     }
-    // setters
 
-    /**
-     * Returns the date
-     * @return
-     * Returns date
-     */
+
     public String getStartDate() {
         return this.startDate;
     }
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+
 
     public String getEndDate()
     {
         return this.endDate;
     }
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+
 
     public String getStartTime() {
         return this.startTime;
+    }
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
     public String getEndTime()
     {
         return this.endTime;
     }
-
-    /**
-     * Returns the title of the event
-     * @return
-     * Returns eventTitle
-     */
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    /**
-     * Returns the event description
-     * @return
-     * Returns description.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setMaxAttendees(int maxAttendees) {
-        this.maxAttendees = maxAttendees;
-    }
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
