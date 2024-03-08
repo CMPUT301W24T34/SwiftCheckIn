@@ -63,7 +63,7 @@ public class AdminActivity extends AppCompatActivity {
         tab = "Event";
         searchView = findViewById(R.id.searchView);
         ProfileArrayAdapter profileArrayAdapter = new ProfileArrayAdapter(this, profileList);
-        EventArrayAdapter eventArrayAdapter = new EventArrayAdapter(this, eventList);
+        AdminEventArrayAdapter eventArrayAdapter = new AdminEventArrayAdapter(this, eventList);
         //Make the default view the events tab
         displayEventsTab(eventArrayAdapter);
 
@@ -122,7 +122,7 @@ public class AdminActivity extends AppCompatActivity {
             public void onClick(View v) {
                 if (selectedPosition != -1) {
                     if (tab == "Event") {
-                        deleteEvent(eventArrayAdapter,"pass");
+                        deleteEvent(eventArrayAdapter);
 
                     } else if (tab == "Profile") {
                         deleteProfile(profileArrayAdapter,eventArrayAdapter);
@@ -137,7 +137,7 @@ public class AdminActivity extends AppCompatActivity {
      * This displays the events tab
      */
 
-    private void displayEventsTab(EventArrayAdapter eventArrayAdapter) {
+    private void displayEventsTab(AdminEventArrayAdapter eventArrayAdapter) {
         tab = "Event";
         collectionReference = db.collection("events");
         dataList.setAdapter(eventArrayAdapter);
@@ -179,7 +179,7 @@ public class AdminActivity extends AppCompatActivity {
     /**
      * This deletes the profile and all associated events
      */
-    private void deleteProfile(ProfileArrayAdapter profileArrayAdapter,EventArrayAdapter eventArrayAdapter){
+    private void deleteProfile(ProfileArrayAdapter profileArrayAdapter,AdminEventArrayAdapter eventArrayAdapter){
         //delete not just profile but all events associated with that profile
         String nameToDelete = profileList.get(selectedPosition).getName();
         collectionReference.whereEqualTo("name", nameToDelete)
@@ -208,7 +208,7 @@ public class AdminActivity extends AppCompatActivity {
 
                                 profileList.remove(selectedPosition);
                                 profileArrayAdapter.notifyDataSetChanged();
-                                deleteEvent( eventArrayAdapter, documentId);
+                                deleteMultiEvent( eventArrayAdapter, documentId);
                                 selectedPosition = -1;
                             }
                         } else {
@@ -218,9 +218,9 @@ public class AdminActivity extends AppCompatActivity {
                 });
     }
     /**
-     * This deletes the events`
+     * This deletes multiple events`
      */
-    private void deleteEvent(EventArrayAdapter eventArrayAdapter, String deviceId) {
+    private void deleteMultiEvent(AdminEventArrayAdapter eventArrayAdapter, String deviceId) {
         tab = "Event";
         collectionReference = db.collection("events");
         String nameToDelete = "filler";
@@ -269,10 +269,59 @@ public class AdminActivity extends AppCompatActivity {
 
     }
     /**
+     * This deletes the events`
+     */
+    private void deleteEvent(AdminEventArrayAdapter eventArrayAdapter) {
+        tab = "Event";
+        collectionReference = db.collection("events");
+        String nameToDelete = "filler";
+
+        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
+            nameToDelete = eventList.get(selectedPosition).getEventTitle();
+        }
+        //Citation: For the following code idea, OpenAI, 2024, ChatGPT, Licensing: Creative Commons, Prompt: How to check if the device Id is not "pass"
+        collectionReference.whereEqualTo("eventTitle", nameToDelete)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                collectionReference.document(documentId)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d(TAG, "Event data has been deleted successfully!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Event data could not be deleted! " + e.toString());
+                                            }
+                                        });
+
+                                //eventList.remove(selectedPosition);
+                                eventArrayAdapter.notifyDataSetChanged();
+                                selectedPosition = -1;
+
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+
+
+    }
+
+    /**
      * This filters through the events using search
      */
     //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
-    private void filterEventList(String query, EventArrayAdapter eventArrayAdapter) {
+    private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter) {
         CollectionReference eventCollectionRef = db.collection("events");
 
         eventCollectionRef.whereEqualTo("eventTitle", query)  // Adjust "eventName" to the actual field you want to search
