@@ -46,7 +46,6 @@ public class MyEventActivityTest {
      */
     @Test
     public void testEventItemClick() {
-        // Assuming there's at least one event item in the list
         onView(withId(R.id.attendee_my_events_list)).perform(click());
     }
 }
