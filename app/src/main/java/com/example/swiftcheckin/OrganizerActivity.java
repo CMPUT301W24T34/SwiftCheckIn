@@ -56,10 +56,63 @@ public class OrganizerActivity extends AppCompatActivity {
     Button addEventButton; // Button to add events.
 
 
-    // add JAVADOC
-    // receives signal from edit event activity to save new Event
+    /*
+        Citation: OpenAI, Date: 5 March, 2024. ChatGPT. Used to transfer data and call a function from one activity(AddEventActivity) to another(OrganizerActivity), without launching OrganizerActivity again.
+        I was struggling with calling a function in OrganizerActivity from the AddEventActivity. The only way I knew was from DialogFragment that was taught in the labs.
+        But, that approach wouldn't work here, because getContext() doesn't work in activities, and getParent() I saw online(some forum) was not working for me.
 
-    // #################################################
+        So I asked ChatGPT. I gave some background information to it like See,
+        organizingActivity launches EditActivity, and EditActivity calls a method of organizingActivity(both extend AppCompatActivity) to a particular function.
+
+        Chatgpt presented me with the following code:
+
+        public class EditActivity extends AppCompatActivity {
+
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                setContentView(R.layout.activity_edit);
+
+                // Send broadcast to OrganizingActivity
+                Intent intent = new Intent("com.example.ACTION_EDIT_ACTIVITY");
+                sendBroadcast(intent);
+            }
+        }
+
+        In OrganizingActivity:
+
+        private BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Perform the desired action when broadcast is received
+            if ("com.example.ACTION_EDIT_ACTIVITY".equals(intent.getAction())) {
+                // Call the method or perform the action in OrganizingActivity
+            }
+        }
+
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            setContentView(R.layout.activity_organizing);
+
+            // Register BroadcastReceiver to listen for the broadcast
+            IntentFilter filter = new IntentFilter("com.example.ACTION_EDIT_ACTIVITY");
+            registerReceiver(receiver, filter);
+        }};
+
+        @Override
+        protected void onDestroy() {
+            super.onDestroy();
+            // Unregister the BroadcastReceiver
+            unregisterReceiver(receiver);
+        }
+
+
+    */
+    /**
+     * Receives signal(intent) that is broadcast from AddEventActivity class.
+     * Used for receiving updates of the new event added.
+     */
     private BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {   // Receives intents from AddEventActivity to add events.
@@ -251,8 +304,8 @@ public class OrganizerActivity extends AppCompatActivity {
     }
 
     /**
-     * ############################################
-     * Destroys the receiver.
+     * Overriding onDestroy method of the activity.
+     * Modified to destroy broadcast receiver when activity is destroyed.
      */
     @Override
     protected void onDestroy() {

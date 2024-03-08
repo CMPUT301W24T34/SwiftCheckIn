@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "38101578863",
+    "project_id": "swiftcheckin-d7940",
+    "storage_bucket": "swiftcheckin-d7940.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:38101578863:android:b8cd1b6c6015883fd2899a",
+        "android_client_info": {
+          "package_name": "com.example.swiftcheckin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBikdCpI6o3pG38FeshYe3S11EiitrgEdk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

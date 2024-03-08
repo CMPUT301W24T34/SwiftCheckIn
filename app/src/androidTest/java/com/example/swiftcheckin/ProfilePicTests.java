@@ -64,6 +64,7 @@ public class ProfilePicTests {
             ActivityScenarioRule<ProfileActivity>(ProfileActivity.class);
 
 
+
     @Before
     public void setUp() {
           device = UiDevice.getInstance(getInstrumentation());
@@ -71,6 +72,10 @@ public class ProfilePicTests {
 
 
 
+    /**
+     * This test checks if the user is able to access the camera
+     * Pre condition is that the user should have a camera on their device
+     */
     @Test
     public void profilePicCameraAccess() throws InterruptedException {
 
@@ -100,7 +105,7 @@ public class ProfilePicTests {
 
 
     /**
-     * This test checks if the user is able to access the gallery and select a photo
+     * This test checks if the user is able to access the gallery and select the pciture folder
      * Pre condition is that the user should have atleast some photo in their gallery to be able to select it.
      */
     @Test
@@ -142,6 +147,10 @@ public class ProfilePicTests {
 
 
 
+    /**
+     * This test checks if the user is able to remove the profile picture and then the avatar is generated
+     * Pre condition is that the user should have a profile picture to remove
+     */
     @Test
     public void testRemoveProfileandAvatarGenerationPostThat() {
         // click remove button

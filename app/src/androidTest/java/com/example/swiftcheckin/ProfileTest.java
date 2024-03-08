@@ -1,5 +1,5 @@
 package com.example.swiftcheckin;
-// This checks to see if the activity switches
+// This checks to see if the activity switches and info updates
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -14,7 +14,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 /**
- * This checks to see if we are able to different activities properly
+ * This checks to see if we are able to switch to different activities properly and update profile info
  */
 public class ProfileTest {
     @Rule

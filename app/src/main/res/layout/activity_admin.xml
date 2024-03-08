@@ -5,8 +5,8 @@
     android:id="@+id/admin"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <!-- Citation: How to get the buttons not round, StackOverflow, Shihab Uddin, 03/07/2021/ android material button cannot remove round corners, https://stackoverflow.com/questions/63317689/android-material-button-cannot-remove-round-corners -->
-    <!-- Citation: How to add Icons, Youtube, Indently,How to create a Pop Up Menu with Icons in Android Studio Tutorial, 2024, https://www.youtube.com/watch?v=2FqJqbNq88A -->
+    <!-- Citation: How to get the buttons not round, StackOverflow,Licensing:License: CC-BY-SA, Shihab Uddin, 03/07/2021/ android material button cannot remove round corners, https://stackoverflow.com/questions/63317689/android-material-button-cannot-remove-round-corners -->
+    <!-- Citation: How to add Icons, Youtube, Licensing: CC BY, Indently,How to create a Pop Up Menu with Icons in Android Studio Tutorial, 2024, https://www.youtube.com/watch?v=2FqJqbNq88A -->
 
     <Button
         android:id="@+id/event_button"

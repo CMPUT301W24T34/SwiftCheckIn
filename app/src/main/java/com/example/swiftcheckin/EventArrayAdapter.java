@@ -19,7 +19,18 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Objects;
 
+
+/**
+ * This is an adapter to bind ListView to ArrayList containing Event class objects.
+ * Extends ArrayAdapter<Event>
+ */
 public class EventArrayAdapter extends ArrayAdapter<Event> {
+
+    /**
+     * Constructor of the EventArrayAdapter
+     * @param context Context(environment/activity) in which the adapter is being created.
+     * @param events  ArrayList containing event objects.
+     */
     public EventArrayAdapter(Context context, ArrayList<Event> events){
         super(context, 0, events);
     }
@@ -39,27 +50,13 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         TextView eventDateView = view.findViewById(R.id.organizerPageItem_date);
         TextView eventTime = view.findViewById(R.id.organizerPageItem_time);
 
-        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
-        String dateStr = "";
-
-        try
-        {
-            assert event != null;
-            dateStr = outputFormat.format(Objects.requireNonNull(inputFormat.parse(event.getStartDate())));
-        } catch(ParseException e)
-        {
-            e.printStackTrace();
-        }
-
         eventTitle.setText(event.getEventTitle());
-
+        eventDateView.setText(event.getStartDate());
         if (event.getEventImageUrl() != null)
         {
             Glide.with(getContext())
                     .load(event.getEventImageUrl())
                     .into(eventPoster);
-            eventDateView.setText(dateStr);
         }
         else
         {
