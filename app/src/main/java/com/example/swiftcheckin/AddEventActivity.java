@@ -99,13 +99,14 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
     }
 
     /**
-     * Sets the parameter to generate a QR Code   ###############
+     * Broadcasts the intent
      * @param flag - Boolean parameter which dictates whether a broadcast should be sent or not.
      */
     public void setGeneratedFlag(Boolean flag)
     {
         this.qrGenerated = flag;
         if(this.qrGenerated) {
+            // Full citation provided in OrganizerActivity
             sendBroadcast(broadcastIntent);
             finish();
         }
