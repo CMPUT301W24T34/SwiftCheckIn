@@ -1,6 +1,5 @@
 package com.example.swiftcheckin;
 
-// This class deals with the announcement activity. Showing the event details, announcements and sign up button
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
@@ -31,17 +30,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * This deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event
+ * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
  */
 public class AnnoucementActivity extends AppCompatActivity {
 
-//    private TextView eventName;
     private Button sign_up;
     private FirebaseFirestore db;
     EventSignUp eventSignUp = new EventSignUp();
 
 
 
+    /**
+     * Initializes the activity and sets up necessary components.
+     *
+     * @param savedInstanceState a Bundle object containing the activity's previously saved state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +126,12 @@ public class AnnoucementActivity extends AppCompatActivity {
      and if (document.exists() && document.contains("eventIds")) to see if there is already a list for this user
     */
 
+    /**
+     * Saves the attendance data for a specific user and event.
+     *
+     * @param deviceId the unique identifier of the device
+     * @param eventId  the unique identifier of the event
+     */
     private void saveData(String deviceId, String eventId) {
         DocumentReference ref = db.collection("SignedUpEvents").document(deviceId);
 
@@ -157,6 +166,13 @@ public class AnnoucementActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Adds data to the Firestore database.
+     *
+     * @param data the data to be added
+     * @param ref  the reference to the Firestore document
+     */
     private void addData(Map<String, Object> data, DocumentReference ref){
         ref.set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {

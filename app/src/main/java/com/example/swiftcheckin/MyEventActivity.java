@@ -24,6 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity displays events that the user has signed up for.
+ */
 public class MyEventActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
@@ -145,7 +148,9 @@ public class MyEventActivity extends AppCompatActivity {
 
 
 
-
+    /**
+     * Fetches the data of events that the user has signed up for from Firestore.
+     */
     private void getData() {
         // Fetch the device ID as before
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -170,6 +175,11 @@ public class MyEventActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches event data from Firestore based on event IDs.
+     *
+     * @param eventIds List of event IDs
+     */
     private void fetchEventsData(List<String> eventIds) {
         CollectionReference eventCol = db.collection("events");
         eventList.clear(); // Clear the old list

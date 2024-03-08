@@ -25,6 +25,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
+
+/**
+ * The main activity of the application responsible for displaying a list of events.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
@@ -53,6 +57,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Fetches event data from Firestore.
+     */
+
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
         CollectionReference eventCol = db.collection("events");
@@ -66,8 +74,6 @@ public class MainActivity extends AppCompatActivity {
 
                 eventList.clear(); // Clear the old list
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                    String eventId = doc.getId();
-
                     eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDescription = (String) doc.getData().get("eventDescription");
                     String eventLocation = (String) doc.getData().get("eventLocation");
@@ -87,7 +93,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Sets up UI elements and listeners.
+     */
     private void setupUI() {
         // Profile Picture Button
         ImageView profileButton = findViewById(R.id.profile_picture);
