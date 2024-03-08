@@ -106,7 +106,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         textViewEventStartTime.setText(eventStartTime);
         textViewEventEndTime.setText(eventEndTime);
 
-        // Added glide with the help of Chat GPT
+        // OpenAI: ChatGPT Marc 4, 2024 - Added glide to save & fetch image from firebase
 
         ImageView imageViewEventPoster = findViewById(R.id.announcement_event_poster1);
         String eventImageUrl = intent.getStringExtra("eventImageUrl");
