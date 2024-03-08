@@ -7,11 +7,15 @@ import android.util.Base64;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.common.BitMatrix;
+import com.journeyapps.barcodescanner.BarcodeEncoder;
 
 import java.io.ByteArrayOutputStream;
 
 public class QrCodeManager {
 
+
+    //Citation: Cambo Tutorial, Youtube. March 7, 2024. Link: https://www.youtube.com/watch?v=n8HdrLYL9DA
+    // Shifted from old code, it was not working in some testing process.
     /**
      * Generates a QR code bitmap for the given data.
      *
@@ -21,22 +25,20 @@ public class QrCodeManager {
     public static Bitmap generateQRCode(String data) {
         try {
             BitMatrix bitMatrix = new MultiFormatWriter().encode(data, BarcodeFormat.QR_CODE, 1500, 1500);
-            int width = bitMatrix.getWidth();
-            int height = bitMatrix.getHeight();
-            Bitmap bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    bitmap.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                }
-            }
+            BarcodeEncoder encoder =  new BarcodeEncoder();
+            Bitmap bitmap = encoder.createBitmap(bitMatrix);
             return bitmap;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
+
+    // Citation: OpenAI. Date: March 6, 2024. ChatGPT.
+    // Gave GPT the older version of code and asked it how can we store a qr in the database.
+    // It produced this function to convert the bitmap to a string, and store in the database when needed. Not tested, as it is not needed in this part.
     /**
      * Converts a bitmap to a Base64-encoded string.
      *
