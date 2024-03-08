@@ -177,8 +177,8 @@
         android:contentDescription="TODO"
         app:layout_constraintEnd_toStartOf="@+id/annoucement_event_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
-        app:srcCompat="@drawable/calendar" />
+        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"/>
+<!--        app:srcCompat="@drawable/calendar" />-->
 
     <ListView
         android:layout_width="412dp"

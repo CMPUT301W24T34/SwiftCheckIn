@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -65,10 +66,16 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventEndTime = intent.getStringExtra("eventEndTime");
             String eventDescription = intent.getStringExtra("eventDescription");
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
+            String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Call the method with arguments in OrganizingActivity
-                addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                if (eventMaxAttendees.isEmpty()) {
+                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                } else {
+                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+
+                }
             }
         }
     };
@@ -104,6 +111,17 @@ public class OrganizerActivity extends AppCompatActivity {
         FloatingActionButton backButtonOrg = findViewById(R.id.back_button_org);
 
         addEventButton = findViewById(R.id.add_event_button);
+
+        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int selectedPos = position;
+                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
+                Event event = dataList.get(selectedPos);
+                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
+                startActivity(intent);
+            }
+        });
 
         addEventButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,8 +168,13 @@ public class OrganizerActivity extends AppCompatActivity {
                         String endDate = (String) doc.getData().get("eventEndDate");
                         String startTime = (String) doc.getData().get("eventStartTime");
                         String endTime = (String) doc.getData().get("eventEndTime");
+                        String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
 
-                        dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
+                        if (maxAttendees == null || maxAttendees.equals("-1")) {
+                            dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime));
+                        } else {
+                            dataList.add(new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime));
+                        }
                     }// Adding event details from FireStore
 
                 }
@@ -178,6 +201,7 @@ public class OrganizerActivity extends AppCompatActivity {
         data.put("eventEndDate", event.getEndDate());
         data.put("eventStartTime", event.getStartTime());
         data.put("eventEndTime", event.getEndTime());
+        data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
         deviceRef
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
