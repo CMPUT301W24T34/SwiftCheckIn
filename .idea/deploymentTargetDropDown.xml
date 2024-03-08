@@ -5,6 +5,12 @@
       <entry key="AnnouncementTest">
         <State />
       </entry>
+      <entry key="EventTest">
+        <State />
+      </entry>
+      <entry key="EventViewAdapterTest">
+        <State />
+      </entry>
       <entry key="app">
         <State />
       </entry>
