@@ -26,6 +26,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 
 
+
+/**
+ * The main activity of the application responsible for displaying a list of events.
+ */
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
@@ -46,13 +50,16 @@ public class MainActivity extends AppCompatActivity {
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
 
-        // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
-        setupUI();         // Setup UI elements
-        getData();          // Fetch data from Firestore
+        setupUI();
+        getData();
     }
 
+
+    /**
+     * Fetches event data from Firestore.
+     */
 
     private void getData(){
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -65,10 +72,8 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                eventList.clear(); // Clear the old list
+                eventList.clear();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-//                    String eventId = doc.getId();
-
                     eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDescription = (String) doc.getData().get("eventDescription");
                     String eventLocation = (String) doc.getData().get("eventLocation");
@@ -82,13 +87,15 @@ public class MainActivity extends AppCompatActivity {
                     eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
                             , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
                 }
-                eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
+                eventViewAdapter.notifyDataSetChanged();
             }
         });
     }
 
 
-
+    /**
+     * Sets up UI elements and listeners.
+     */
     private void setupUI() {
         // Profile Picture Button
         ImageView profileButton = findViewById(R.id.profile_picture);

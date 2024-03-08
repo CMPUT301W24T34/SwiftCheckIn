@@ -30,6 +30,7 @@ import java.io.IOException;
 
 
 public class FragmentQrcodeMenu1 extends DialogFragment {
+    //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
 
     private Button selectQr;    // to be implemented
     private Button newQr;
@@ -77,7 +78,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
-            //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
             @Override
             public void onClick(View view) {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
@@ -115,7 +115,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 .setCancelable(true)
                 .create();
     }
-
+    //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     private void shareImageAndText(Bitmap bitmap){
         Uri uri = getImageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -125,6 +125,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent,"Share via"));
     }
+    //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     private Uri getImageToShare(Bitmap bitmap){
         File folder = new File(requireContext().getCacheDir(),"images");
         Uri uri = null;
@@ -150,16 +151,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     {
         Log.e("EventID", "The id is "+ data);
         this.eventId = data;
-    }
-
-    public void setQrBitmap(Bitmap bitmap)
-    {
-        this.qrCodeGenerated = bitmap;
-    }
-    protected void createQr(String data)
-    {
-        qrCodeGenerated = QrCodeManager.generateQRCode(data);
-        Log.e("Bitmap", QrCodeManager.convertToBase64String(qrCodeGenerated));
     }
 
     protected void setFlagInContext()

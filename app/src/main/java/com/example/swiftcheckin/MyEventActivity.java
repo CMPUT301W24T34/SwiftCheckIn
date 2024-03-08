@@ -24,6 +24,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This activity displays events that the user has signed up for.
+ */
 public class MyEventActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
@@ -42,46 +45,12 @@ public class MyEventActivity extends AppCompatActivity {
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
 
-        // Initialize Firebase
         db = FirebaseFirestore.getInstance();
 
-        setupUI();         // Setup UI elements
-        getData();          // Fetch data from Firestore
+        setupUI();
+        getData();
     }
 
-
-//    private void getData(){
-//        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//        CollectionReference eventCol = db.collection("SignedUpEvents");
-//
-//        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-//                if (error != null) {
-//                    return;
-//                }
-//
-//                eventList.clear(); // Clear the old list
-//                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-////                    String eventId = doc.getId();
-//
-//                    String eventTitle = (String) doc.getData().get("eventTitle");
-//                    String eventDescription = (String) doc.getData().get("eventDescription");
-//                    String eventLocation = (String) doc.getData().get("eventLocation");
-//                    String deviceId = (String) doc.getData().get("deviceId");
-//                    String eventImageUrl = (String) doc.getData().get("eventImageUrl");
-//                    String eventStartDate = (String) doc.getData().get("eventStartDate");
-//                    String eventStartTime = (String) doc.getData().get("eventStartTime");
-//                    String eventEndDate = (String) doc.getData().get("eventEndDate");
-//                    String eventEndTime = (String) doc.getData().get("eventEndTime");
-//
-//                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
-//                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
-//                }
-//                eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
-//            }
-//        });
-//    }
 
     private void setupUI() {
         // Profile Picture Button
@@ -144,15 +113,16 @@ public class MyEventActivity extends AppCompatActivity {
     }
 
 
+// OpenAI, March 2, 2024, ChatGPT, Took help from ChatGPT on how to fetch list of events the user
+// has signed up for, and using those event ids to fetch their respective event data
 
-
+    /**
+     * Fetches the data of events that the user has signed up for from Firestore.
+     */
     private void getData() {
-        // Fetch the device ID as before
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        // Reference to the SignedUpEvents collection
         DocumentReference deviceRef = db.collection("SignedUpEvents").document(deviceId);
-        // Query the SignedUpEvents collection for documents with the current device's ID
         deviceRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
@@ -160,16 +130,18 @@ public class MyEventActivity extends AppCompatActivity {
                 if (document.exists()) {
                     eventIds = (List<String>) document.get("eventIds");
                 }
-
-                // Now fetch event data for each event ID
                 fetchEventsData(eventIds);
             } else {
-                // Handle the error
                 Log.d("getData", "Error getting documents: ", task.getException());
             }
         });
     }
 
+    /**
+     * Fetches event data from Firestore based on event IDs.
+     *
+     * @param eventIds List of event IDs
+     */
     private void fetchEventsData(List<String> eventIds) {
         CollectionReference eventCol = db.collection("events");
         eventList.clear(); // Clear the old list
@@ -180,7 +152,6 @@ public class MyEventActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        Log.d("successfull", "No sucfdsfdsfsdh document");
 
                         String eventTitle = document.getString("eventTitle");
                         String eventDescription = document.getString("eventDescription");
@@ -191,7 +162,6 @@ public class MyEventActivity extends AppCompatActivity {
                         String eventStartTime = document.getString("eventStartTime");
                         String eventEndDate = document.getString("eventEndDate");
                         String eventEndTime = document.getString("eventEndTime");
-                        Log.d("successfull", "No sucfdsfdsfsdh document");
 
 
                         eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId,

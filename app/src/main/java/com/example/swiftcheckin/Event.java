@@ -7,48 +7,38 @@ import android.provider.Settings;
 
 import java.util.Date;
 
+/**
+ * Represents an event that will be accessed and manipulated by other classes.
+ */
 public class Event {
-    /*
-    * What are the properties of an event?
-    * Needs a Date
-    * Needs a Title
-    * Needs an Image
-    * Needs a Location
-    * */
     private String startDate;
     private String endDate;
-
     private String startTime;
     private String endTime;
-
     private String eventTitle;
-    private Uri eventPoster;  // May not need this
-//    private Image poster;
     private String eventImageUrl;
     private String location;
     private String deviceId;
     private String description;
     private int maxAttendees;
 
+    private int currentAttendees;
+
     public Event(){
     }
 
     /**
-     * This creates an event.
-
-     * @param eventTitle - Represents the name of the event
-     * @param location - Represents the event location.
-     * @param description - Brief description of the event
-     * @param deviceId - Unique identifier for the device.
+     * First constructor for event
+     * @param eventTitle - Represents the title of the event.
+     * @param description - Represents the description of the event.
+     * @param location - Represents the location of the event.
+     * @param deviceId - Represents the deviceId where this event was made.
+     * @param eventImageUrl - Represents the url of the image that will act as the image poster.
+     * @param startDate - Represents the starting date of the event.
+     * @param endDate - Represents the ending date of the event.
+     * @param startTime - Represents the time when the event starts.
+     * @param endTime - Represents the time when the event ends.
      */
-//    public Event(String eventTitle, String description, String location, Uri eventPoster, String deviceId){
-//        this.eventTitle = eventTitle;
-//        this.location = location;
-//        this.description = description;
-//        this.deviceId = deviceId;
-//        this.eventPoster = eventPoster;
-//    }
-
     public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String startDate, String endDate, String startTime, String endTime){
 
         this.eventTitle = eventTitle;
@@ -60,16 +50,50 @@ public class Event {
         this.endDate = endDate;
         this.startTime = startTime;
         this.endTime = endTime;
+        this.maxAttendees = -1;   // Meant to act as a representative for no limit.
     }
 
+    /**
+     * Second constructor for event
+     * @param eventTitle - Represents the title of the event.
+     * @param description - Represents the description of the event.
+     * @param location - Represents the location of the event.
+     * @param deviceId - Represents the deviceId where this event was made.
+     * @param eventImageUrl - Represents the url of the image that will act as the image poster.
+     * @param maxAttendees - Represents the maximum number of attendees.
+     * @param startDate - Represents the starting date of the event.
+     * @param endDate - Represents the ending date of the event.
+     * @param startTime - Represents the time when the event starts.
+     * @param endTime - Represents the time when the event ends.
+     */
+    public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String maxAttendees, String startDate, String endDate, String startTime, String endTime){
 
+        this.eventTitle = eventTitle;
+        this.location = location;
+        this.description = description;
+        this.eventImageUrl = eventImageUrl;
+        this.deviceId = deviceId;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.maxAttendees = Integer.parseInt(maxAttendees);
+    }
+
+    /**
+     * Returns the deviceId of the event
+     * @return - deviceId of the event
+     */
     public String getDeviceId() {
         return deviceId;
     }
-
-//    public Uri getEventPoster() {
-//        return eventPoster;
-//    }
+    /**
+     * Sets the deviceId of the event
+     * @param deviceId - deviceId to be set.
+     */
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
 
     /**
      * This returns the maximum number of attendees.
@@ -81,12 +105,30 @@ public class Event {
     }
 
     /**
+     * Sets the maximum number of attendees attribute.
+     * @param maxAttendees - Represents the maximum number of attendees that can attend an event.
+     */
+    public void setMaxAttendees(int maxAttendees) {
+        this.maxAttendees = maxAttendees;
+    }
+
+
+
+    /**
      * Returns the title of the event
      * @return
      * Returns eventTitle
      */
     public String getEventTitle() {
         return eventTitle;
+    }
+
+    /**
+     * Sets the title of an event
+     * @param eventTitle - Sets the event title.
+     */
+    public void setEventTitle(String eventTitle) {
+        this.eventTitle = eventTitle;
     }
 
     /**
@@ -99,6 +141,15 @@ public class Event {
     }
 
     /**
+     * Sets the location of the event
+     * @param location - Represents the location of the event.
+     */
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+
+    /**
      * Returns the event description
      * @return
      * Returns description.
@@ -107,92 +158,108 @@ public class Event {
         return description;
     }
 
-    public void setEventTitle(String eventTitle) {
-        this.eventTitle = eventTitle;
+    /**
+     * Returns the event description
+     * @param description - Represents the event description
+     */
+    public void setDescription(String description) {
+        this.description = description;
     }
 
-    public void setEventPoster(Uri eventPoster) {
-        this.eventPoster = eventPoster;
-    }
-
+    /**
+     * Returns the image URL
+     * @return - Returns the image URL (event poster)
+     */
     public String getEventImageUrl() {
         return eventImageUrl;
     }
 
+    /**
+     * Sets the image URL
+     * @param eventImageUrl - Represents the image URL (event poster)
+     */
     public void setEventImageUrl(String eventImageUrl) {
         this.eventImageUrl = eventImageUrl;
     }
-    // setters
 
     /**
-     * Returns the date
-     * @return
-     * Returns date
+     * Returns the start date of the event
+     * @return - Returns the start date of event.
      */
     public String getStartDate() {
         return this.startDate;
     }
 
+    /**
+     * Sets the Start Date of the event
+     * @param startDate - Represents the starting date of the event.
+     */
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    /**
+     * Returns the End Date of the event
+     * @return - Returns the End Date of the Event
+     */
     public String getEndDate()
     {
         return this.endDate;
     }
+    /**
+     * Sets the Start Date of the event
+     * @param endDate - Represents the ending date of the event.
+     */
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
 
+    /**
+     * Returns the Starting Time of the event
+     * @return - Returns the start time of event.
+     */
     public String getStartTime() {
         return this.startTime;
     }
 
+    /**
+     * Sets the starting time of the event
+     * @param startTime - Represents the starting time of the event.
+     */
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
+    }
+
+    /**
+     * Returns the ending time of the event.
+     * @return - Returns the end time of the event.
+     */
     public String getEndTime()
     {
         return this.endTime;
     }
 
     /**
-     * Returns the title of the event
-     * @return
-     * Returns eventTitle
+     * Sets the end time of the event
+     * @param endTime - Represents the ending time of an event.
      */
-    /**
-     * Returns location of the event
-     * @return
-     * Returns location
-     */
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    /**
-     * Returns the event description
-     * @return
-     * Returns description.
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setMaxAttendees(int maxAttendees) {
-        this.maxAttendees = maxAttendees;
-    }
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(String endDate)
-    {
-        this.endDate = endDate;
-    }
-
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
-    }
-
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
     }
 
+    /**
+     * Returns the current number of attendees
+     * @return - Returns how many attendees there are in an event.
+     */
+    public int getCurrentAttendees() {
+        return currentAttendees;
+    }
+
+    /**
+     * Increments the number of current attendees when someone join (not fully implemented yet.
+     */
+    public void incrementCurrentAttendees(){
+        this.currentAttendees++;
+    }
 }
