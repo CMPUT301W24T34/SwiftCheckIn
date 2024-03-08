@@ -22,6 +22,7 @@ public class AvatarGenerator {
      * Generates and sets an avatar for a given name.
      * @param name The name to generate the avatar for.
      * @param avatarImageCallback A callback to handle the Bitmap once it's loaded.
+     * OpenAI | ChatGPT | Assist in conversion of names to emails as the gravatar is generated with email reference
      */
     public static void generateAvatar(String name, AvatarImageCallback avatarImageCallback) {
         new Thread(() -> {
