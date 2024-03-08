@@ -27,8 +27,6 @@ import org.junit.Test;
  */
 public class OrganizerTest {
 
-    // What tests will I add?
-    // Need to see if I can access the organizer Activity
 
     @Rule
     public ActivityScenarioRule<MainActivity> scenario = new
