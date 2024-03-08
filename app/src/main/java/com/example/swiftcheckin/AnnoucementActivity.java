@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+// Right now there is no way to unsign up for an event
 /**
  * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
  */
@@ -115,7 +116,7 @@ public class AnnoucementActivity extends AppCompatActivity {
     }
 
 
-    // Citation: OpenAI, 03-05-2024, ChatGPT, Saving the data in an attribute as a list
+    // Citation: OpenAI, 03-05-2024, ChatGPT, Saving the data as a list in an attribute called eventIds
     /* Chatgpt suggested to use Map<String, Object> data = new HashMap<>() for the list
     output was also about the oncompletelistener and document snapshots and tasks
     giving this code: ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -124,6 +125,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
      and if (document.exists() && document.contains("eventIds")) to see if there is already a list for this user
+     and List<String> eventIds = (List<String>) document.get("eventIds") to get it
     */
 
     /**
@@ -177,7 +179,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         ref.set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(Void aVoid) {
+                    public void onSuccess(Void unused) {
                         Toast.makeText(AnnoucementActivity.this, "Signed up!", Toast.LENGTH_SHORT).show();
                         Log.d(TAG, "Event ID added successfully");
                     }
@@ -185,7 +187,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.w(TAG, "Error adding event ID", e);
+                        Log.d(TAG, "Error adding event ID", e);
                         Toast.makeText(AnnoucementActivity.this, "Could not sign up", Toast.LENGTH_SHORT).show();
                     }
                 });
