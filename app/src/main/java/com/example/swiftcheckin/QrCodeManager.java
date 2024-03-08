@@ -12,6 +12,8 @@ import java.io.ByteArrayOutputStream;
 
 public class QrCodeManager {
 
+
+
     /**
      * Generates a QR code bitmap for the given data.
      *

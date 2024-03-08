@@ -59,72 +59,12 @@ public class OrganizerActivity extends AppCompatActivity {
     /*
         Citation: OpenAI, Date: 5 March, 2024. ChatGPT. Used to transfer data and call a function from one activity(AddEventActivity) to another(OrganizerActivity), without launching OrganizerActivity again.
         I was struggling with calling a function in OrganizerActivity from the AddEventActivity. The only way I knew was from DialogFragment that was taught in the labs.
-        But, that approach wouldn't work here, because getContext() doesn't work in activities, and getParent() I see online(some forum) was not working for me.
+        But, that approach wouldn't work here, because getContext() doesn't work in activities, and getParent() I saw online(some forum) was not working for me.
 
-        So I asked ChatGPT.
-
-        Prompt:if one activity calls another activity, then how can I get which activity called me?
-
-        Answer:
-
-                To determine which activity has launched the current activity, you can use Intent extras to pass information between activities. When launching the second activity from the first activity, you can include an extra in the Intent to specify the caller activity. Then, in the second activity, you can retrieve this extra to identify the caller.
-
-        Here's how you can do it:
-
-        In the first activity (caller activity), when starting the second activity, include an extra in the Intent:
-        Intent intent = new Intent(FirstActivity.this, SecondActivity.class);
-        intent.putExtra("caller", "FirstActivity");
-        startActivity(intent);
-
-        In the second activity (called activity), retrieve the extra from the Intent to identify the caller:
-        String caller = getIntent().getStringExtra("caller");
-        if (caller != null) {
-            // Perform actions based on the caller activity
-            if (caller.equals("FirstActivity")) {
-                // The FirstActivity called this activity
-            } else if (caller.equals("AnotherActivity")) {
-                // Another activity called this activity
-            }
-        } else {
-            // No caller information found
-        }
-        Replace "FirstActivity" and "AnotherActivity" with the appropriate identifiers for your activities.
-
-        --------
-        Followup:
-
-        public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof AddEventDialogListener){
-            listener = (AddEventDialogListener) context;
-        } else {
-            throw new RuntimeException(context + " must implement AddEventDialogListener");
-            }
-        }
-
-        i want to do something like this, and then call on the listener's method to add a value to a list.
-        But this is with fragment, and I want to implement similar behaviour on an activity, so just passing string in Intent wont work
-
-        See,
+        So I asked ChatGPT. I gave some background information to it like See,
         organizingActivity launches EditActivity, and EditActivity calls a method of organizingActivity(both extend AppCompatActivity) to a particular function.
-        I have to implement this
 
-        Answer:
-
-        If you want to implement communication between EditActivity and OrganizingActivity where EditActivity calls a method of OrganizingActivity to perform a specific action,
-        you can an use a broadcast receivers to achieve communication between EditActivity and OrganizingActivity.
-
-        Here's how you can implement it:
-
-        Define a Custom Action String: Define a custom action string to identify the broadcast in both activities. This action string will be used to send and receive broadcasts.
-
-        Send Broadcast from EditActivity: When you need to call a method in OrganizingActivity, send a broadcast with the custom action string.
-
-        Receive Broadcast in OrganizingActivity: Register a BroadcastReceiver in OrganizingActivity to listen for the broadcast with the custom action string. When the broadcast is received, perform the desired action.
-
-        Here's a basic implementation:
-
-        In EditActivity:
+        Chatgpt presented me with the following code:
 
         public class EditActivity extends AppCompatActivity {
 
