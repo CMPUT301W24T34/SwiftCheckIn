@@ -30,6 +30,7 @@ import java.io.IOException;
 
 
 public class FragmentQrcodeMenu1 extends DialogFragment {
+    //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
 
     private Button selectQr;    // to be implemented
     private Button newQr;
@@ -77,7 +78,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
-            //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
             @Override
             public void onClick(View view) {
                 BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
