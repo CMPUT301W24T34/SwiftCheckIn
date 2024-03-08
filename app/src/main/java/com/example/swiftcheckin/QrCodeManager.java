@@ -12,7 +12,10 @@ import com.journeyapps.barcodescanner.BarcodeEncoder;
 import java.io.ByteArrayOutputStream;
 
 public class QrCodeManager {
-    
+
+
+    //Citation: Cambo Tutorial, Youtube. March 7, 2024. Link: https://www.youtube.com/watch?v=n8HdrLYL9DA
+    // Shifted from old code, it was not working in some testing process.
     /**
      * Generates a QR code bitmap for the given data.
      *
@@ -32,6 +35,10 @@ public class QrCodeManager {
         }
     }
 
+
+    // Citation: OpenAI. Date: March 6, 2024. ChatGPT.
+    // Gave GPT the older version of code and asked it how can we store a qr in the database.
+    // It produced this function to convert the bitmap to a string, and store in the database when needed. Not tested, as it is not needed in this part.
     /**
      * Converts a bitmap to a Base64-encoded string.
      *
