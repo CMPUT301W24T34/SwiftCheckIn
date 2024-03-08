@@ -67,7 +67,7 @@ public class AdminActivity extends AppCompatActivity {
         //Make the default view the events tab
         displayEventsTab(eventArrayAdapter);
 
-        //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+        //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
          public boolean onQueryTextSubmit(String query) {
@@ -188,7 +188,7 @@ public class AdminActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            //Citation: For the following code, OpenAI, 2024, ChatGPT, Prompt: How to delete all items with a certain device ID
+                            //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to delete all items with a certain device ID
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
                                 collectionReference.document(documentId)
@@ -228,7 +228,7 @@ public class AdminActivity extends AppCompatActivity {
         if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
             nameToDelete = eventList.get(selectedPosition).getDeviceId();
         }
-        //Citation: For the following code, OpenAI, 2024, ChatGPT, Prompt: How to check if the device Id is not "pass"
+        //Citation: For the following code idea, OpenAI, 2024, ChatGPT, Licensing: Creative Commons, Prompt: How to check if the device Id is not "pass"
             if (!"pass".equals(deviceId)){
                 nameToDelete = deviceId;
             }
@@ -271,7 +271,7 @@ public class AdminActivity extends AppCompatActivity {
     /**
      * This filters through the events using search
      */
-    //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+    //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterEventList(String query, EventArrayAdapter eventArrayAdapter) {
         CollectionReference eventCollectionRef = db.collection("events");
 
@@ -296,7 +296,7 @@ public class AdminActivity extends AppCompatActivity {
     /**
      * This filters through the profiles using search
      */
-    //Citation: For the following code to use the search bar and filter searches, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+    //Citation: For the following code idea to use the search bar and filter searches, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter) {
         CollectionReference profileCollectionRef = db.collection("profiles");
 
