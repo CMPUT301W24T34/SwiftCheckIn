@@ -115,6 +115,10 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 .setCancelable(true)
                 .create();
     }
+    /**
+     * This shares image and text
+     * @param bitmap the bitmap -Bitmap
+     */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     private void shareImageAndText(Bitmap bitmap){
         Uri uri = getImageToShare(bitmap);
@@ -125,6 +129,10 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         intent.setType("image/*");
         startActivity(Intent.createChooser(intent,"Share via"));
     }
+    /**
+     * This gets the image to share
+     * @param bitmap the bitmap -Bitmap
+     */
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     private Uri getImageToShare(Bitmap bitmap){
         File folder = new File(requireContext().getCacheDir(),"images");
