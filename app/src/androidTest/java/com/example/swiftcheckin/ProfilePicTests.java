@@ -66,7 +66,7 @@ public class ProfilePicTests {
 
     @Before
     public void setUp() {
-        device = UiDevice.getInstance(getInstrumentation());
+          device = UiDevice.getInstance(getInstrumentation());
     }
 
 
