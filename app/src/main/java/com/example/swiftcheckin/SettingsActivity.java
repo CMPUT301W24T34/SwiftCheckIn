@@ -1,5 +1,6 @@
 package com.example.swiftcheckin;
-// This activity deals with the settings the user wants
+// This activity deals with the settings the user wants,
+// still need more user input validation here for example in the phone number field
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
@@ -80,7 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
                 finish();
             }
         });
-        // Citation: How to clear focus, Stack Overflow, License: CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-02-20, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
+        // Citation: How to clear focus, Stack Overflow, License: CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-05-25, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
         findViewById(R.id.settings).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -95,6 +96,9 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This gets the profile data from firestore
+     */
     private void getData() {
         String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         DocumentReference profileRef = db.collection("profiles").document(deviceId);
@@ -142,6 +146,16 @@ public class SettingsActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * This saves the data to firestore
+     * @param name - string of name
+     * @param birthday - string of birthday
+     * @param phoneNumber - string of phone number
+     * @param email - string of email
+     * @param website - string of website
+     * @param address - string of address
+     * @param locationPermission - boolean of whether location permission is on or not
+     */
     private void saveData(String name, String birthday, String phoneNumber, String email, String website, String address, boolean locationPermission) {
         String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         HashMap<String, String> data = new HashMap<>();
@@ -176,6 +190,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     // Citation: How to hide a keyboard, Stack Overflow, License: CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+
+    /**
+     * This hides the built in keyboard
+     * @param activity - the activity
+     */
     private void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View v = activity.getCurrentFocus();
@@ -186,6 +205,13 @@ public class SettingsActivity extends AppCompatActivity {
     }
     // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if birthday string matches pattern
     // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, birthday);
+
+    /**
+     * This checks if the inputted birthday is of valid format
+     * @param birthday - string to check
+     * @return
+     * returns boolean of whether its valid
+     */
     private boolean isValid(String birthday){
         if (birthday.equals("")){
             return true;
