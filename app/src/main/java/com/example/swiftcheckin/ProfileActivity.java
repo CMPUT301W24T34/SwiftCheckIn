@@ -99,9 +99,12 @@ public class ProfileActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * This gets the profile data from firestore
+     */
 
     private void getData() {
-        // Citation: Getting unique device id, Stack Overflow, License: CC-BY-SA, user name Chintan Rathod, "How to get unique device hardware id in Android?", 2013-06-01, https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
+        // Citation: Getting unique device id, Stack Overflow, License: CC-BY-SA, user name Chintan Rathod, "How to get unique device hardware id in Android? [duplicate]", 2013-06-01, https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
         String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
 
         nameText = findViewById(R.id.nameText);
@@ -109,7 +112,7 @@ public class ProfileActivity extends AppCompatActivity {
         email = findViewById(R.id.emailText);
         location = findViewById(R.id.locationText);
         DocumentReference userRef = db.collection("profiles").document(deviceId);
-        // Citation: Collecting a document from firebase, Stack Overflow, License: CC-BY-SA, user name Frank van Puffelen, "How to fix a null object reference on document snapshot, 2022-04-28, https://stackoverflow.com/questions/72042682/how-to-fix-a-null-object-reference-on-document-snapshot
+        // Citation: Collecting a document from firebase, Stack Overflow, License: CC-BY-SA, user name Frank van Puffelen, "How to fix a null object reference on document snapshot", 2022-04-28, https://stackoverflow.com/questions/72042682/how-to-fix-a-null-object-reference-on-document-snapshot
         userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
             public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
