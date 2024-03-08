@@ -56,6 +56,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         void setGeneratedFlag(Boolean flag);
     }
 
+    // interface instance from labs
     AddActivity listener;   // an instance of the AddActivity interface
 
     /**

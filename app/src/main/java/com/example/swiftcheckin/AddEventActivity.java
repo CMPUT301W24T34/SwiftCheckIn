@@ -111,8 +111,69 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         }
     }
 
+
+    // Citation: OpenAI, Date: March 4, 2024. ChatGPT. Used to enforce the date format in the EditText
+    /*
+     I wanted to make the input more user friendly, so I searched a bit on google. After not finding good ways to enforce this format,
+     I asked ChatGPT to show me a way to enforce the format. It asked me to use TextChangedListener on the EditTexts.
+     Prompt: How to enforce a particular format for edittext
+
+     Answer: To enforce a specific format for an EditText in Android, you can use a combination of input type and input filters. Here's how you can enforce a format for an EditText:
+
+            Input Type: Use the android:inputType attribute to specify the type of input allowed. For example, if you want to enforce a numeric format, you can use number or numberDecimal. If you want to enforce an email format, you can use textEmailAddress.
+
+            Input Filters: Use input filters to restrict the characters that can be entered into the EditText. You can create custom input filters to enforce specific formats.
+
+            Here's an example of enforcing a phone number format for an EditText:
+                        <EditText
+                android:id="@+id/editText_phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="Enter phone number"
+                android:inputType="phone"
+                android:digits="0123456789-() " />
+
+            In this example:
+
+            android:inputType="phone" enforces the EditText to accept phone numbers.
+            android:digits="0123456789-() " restricts input to only digits, hyphens, parentheses, and spaces.
+            You can also use a TextWatcher to validate the input format programmatically. Here's an example of how you can use a TextWatcher to enforce a specific format (e.g., date format "dd/MM/yyyy"):
+
+            editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 2 || s.length() == 5) {
+                    s.append("/");
+                    }
+                }
+             });
+
+             This TextWatcher appends a "/" character after the second and fifth characters, effectively enforcing a "dd/MM/yyyy" format. You can adjust this logic according to your specific format requirements.
+
+            Follow-up prompt: What should I write in the XML to enforce input of date
+
+            Answer:
+            Here's an example of how you can enforce a "dd/MM/yyyy" date format for an EditText:
+            <EditText
+            android:id="@+id/editText_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Enter date (dd/MM/yyyy)"
+            android:inputType="date"
+            android:digits="0123456789/" />
+
+
+    */
+
     /**
-     *  ##########
+     *  Enforces the correct format in the EditText.
+     *  Specifically for enforcing the date format: DD/MM/YYYY
      * @param editText
      */
     private void createTextWatcher(EditText editText)
@@ -178,13 +239,13 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         broadcastIntent.putExtra("eventDescription", eventDescription);
         broadcastIntent.putExtra("eventMaxAttendees", eventMaxAttendee);
 
-        Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);  // Generates the QR code.
+        Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);  // generates the QR code.
 
         // Update flag based on QR code generation
         if (qr != null) {
             // QR code generated successfully
             this.qrGenerated = true;
-            // Starts the fragment for the QR code.
+            // starts the fragment for the QR code.
             new FragmentQrcodeMenu1(deviceId+eventName, qr).show(getSupportFragmentManager(), "menu");
         } else {
             this.qrGenerated = false;
