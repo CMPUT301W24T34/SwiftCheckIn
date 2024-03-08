@@ -38,6 +38,7 @@ public class AnnoucementActivity extends AppCompatActivity {
 //    private TextView eventName;
     private Button sign_up;
     private FirebaseFirestore db;
+    EventSignUp eventSignUp = new EventSignUp();
 
 
 
@@ -55,6 +56,8 @@ public class AnnoucementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveData(deviceId, eventId);
+                eventSignUp.addAttendeeToEvent(eventId, deviceId);
+
             }
         });
 
