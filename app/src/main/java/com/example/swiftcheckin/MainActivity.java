@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                eventList.clear(); // Clear the old list
+                eventList.clear();
                 for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
                     eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDescription = (String) doc.getData().get("eventDescription");
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                     eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
                             , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
                 }
-                eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
+                eventViewAdapter.notifyDataSetChanged();
             }
         });
     }

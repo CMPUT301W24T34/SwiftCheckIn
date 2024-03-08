@@ -150,7 +150,6 @@ public class MyEventActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        Log.d("successfull", "No sucfdsfdsfsdh document");
 
                         String eventTitle = document.getString("eventTitle");
                         String eventDescription = document.getString("eventDescription");
@@ -161,7 +160,6 @@ public class MyEventActivity extends AppCompatActivity {
                         String eventStartTime = document.getString("eventStartTime");
                         String eventEndDate = document.getString("eventEndDate");
                         String eventEndTime = document.getString("eventEndTime");
-                        Log.d("successfull", "No sucfdsfdsfsdh document");
 
 
                         eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId,
