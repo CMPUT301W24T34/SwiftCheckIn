@@ -7,6 +7,9 @@ import android.provider.Settings;
 
 import java.util.Date;
 
+/**
+ * Represents an event that will be accessed and manipulated by other classes.
+ */
 public class Event {
     private String startDate;
     private String endDate;
@@ -84,6 +87,10 @@ public class Event {
     public String getDeviceId() {
         return deviceId;
     }
+    /**
+     * Sets the deviceId of the event
+     * @param deviceId - deviceId to be set.
+     */
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;
     }
@@ -96,6 +103,11 @@ public class Event {
     public int getMaxAttendees() {
         return maxAttendees;
     }
+
+    /**
+     * Sets the maximum number of attendees attribute.
+     * @param maxAttendees - Represents the maximum number of attendees that can attend an event.
+     */
     public void setMaxAttendees(int maxAttendees) {
         this.maxAttendees = maxAttendees;
     }
@@ -110,6 +122,11 @@ public class Event {
     public String getEventTitle() {
         return eventTitle;
     }
+
+    /**
+     * Sets the title of an event
+     * @param eventTitle - Sets the event title.
+     */
     public void setEventTitle(String eventTitle) {
         this.eventTitle = eventTitle;
     }
@@ -122,10 +139,14 @@ public class Event {
     public String getLocation() {
         return location;
     }
+
+    /**
+     * Sets the location of the event
+     * @param location - Represents the location of the event.
+     */
     public void setLocation(String location) {
         this.location = location;
     }
-
 
 
     /**
@@ -136,60 +157,108 @@ public class Event {
     public String getDescription() {
         return description;
     }
+
+    /**
+     * Returns the event description
+     * @param description - Represents the event description
+     */
     public void setDescription(String description) {
         this.description = description;
     }
 
-
-
+    /**
+     * Returns the image URL
+     * @return - Returns the image URL (event poster)
+     */
     public String getEventImageUrl() {
         return eventImageUrl;
     }
+
+    /**
+     * Sets the image URL
+     * @param eventImageUrl - Represents the image URL (event poster)
+     */
     public void setEventImageUrl(String eventImageUrl) {
         this.eventImageUrl = eventImageUrl;
     }
 
-
+    /**
+     * Returns the start date of the event
+     * @return - Returns the start date of event.
+     */
     public String getStartDate() {
         return this.startDate;
     }
+
+    /**
+     * Sets the Start Date of the event
+     * @param startDate - Represents the starting date of the event.
+     */
     public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 
-
-
+    /**
+     * Returns the End Date of the event
+     * @return - Returns the End Date of the Event
+     */
     public String getEndDate()
     {
         return this.endDate;
     }
+    /**
+     * Sets the Start Date of the event
+     * @param endDate - Represents the ending date of the event.
+     */
     public void setEndDate(String endDate) {
         this.endDate = endDate;
     }
 
-
-
+    /**
+     * Returns the Starting Time of the event
+     * @return - Returns the start time of event.
+     */
     public String getStartTime() {
         return this.startTime;
     }
+
+    /**
+     * Sets the starting time of the event
+     * @param startTime - Represents the starting time of the event.
+     */
     public void setStartTime(String startTime) {
         this.startTime = startTime;
     }
 
+    /**
+     * Returns the ending time of the event.
+     * @return - Returns the end time of the event.
+     */
     public String getEndTime()
     {
         return this.endTime;
     }
+
+    /**
+     * Sets the end time of the event
+     * @param endTime - Represents the ending time of an event.
+     */
     public void setEndTime(String endTime)
     {
         this.endTime = endTime;
     }
 
-
+    /**
+     * Returns the current number of attendees
+     * @return - Returns how many attendees there are in an event.
+     */
     public int getCurrentAttendees() {
         return currentAttendees;
     }
 
+    /**
+     * Increments the number of current attendees when someone join (not fully implemented yet.
+     */
     public void incrementCurrentAttendees(){
         this.currentAttendees++;
     }
