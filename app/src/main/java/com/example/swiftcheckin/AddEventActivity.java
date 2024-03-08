@@ -241,6 +241,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         broadcastIntent.putExtra("eventMaxAttendees", eventMaxAttendee);
 
         Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);  // generates the QR code.
+        Log.e("Bitmap", QrCodeManager.convertToBase64String(qr));
 
         // Update flag based on QR code generation
         if (qr != null) {
