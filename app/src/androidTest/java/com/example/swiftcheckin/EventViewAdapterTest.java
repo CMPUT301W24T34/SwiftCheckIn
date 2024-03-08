@@ -28,6 +28,9 @@ public class EventViewAdapterTest {
         context = ApplicationProvider.getApplicationContext();
     }
 
+    /**
+     * Test for verifying the correct display of event details in the adapter's view.
+     */
     @Test
     public void testGetView() {
         List<Event> events = new ArrayList<>();
@@ -55,6 +58,9 @@ public class EventViewAdapterTest {
         assertEquals("12:00", eventEndTime.getText().toString());
     }
 
+    /**
+     * Test for verifying the correct count of events in the adapter.
+     */
     @Test
     public void testGetCount() {
         List<Event> events = new ArrayList<>();
@@ -66,6 +72,9 @@ public class EventViewAdapterTest {
         assertEquals(2, adapter.getCount());
     }
 
+    /**
+     * Test for verifying the correct retrieval of an event item from the adapter.
+     */
     @Test
     public void testGetItem() {
         List<Event> events = new ArrayList<>();
@@ -78,7 +87,9 @@ public class EventViewAdapterTest {
         assertEquals(events.get(1), adapter.getItem(1));
     }
 
-
+    /**
+     * Test for verifying the correct retrieval of the item ID from the adapter.
+     */
     @Test
     public void testGetItemId() {
         List<Event> events = new ArrayList<>();
