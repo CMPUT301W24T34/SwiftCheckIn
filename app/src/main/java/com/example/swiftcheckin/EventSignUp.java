@@ -65,7 +65,7 @@ public class EventSignUp {
                 .addOnFailureListener(e -> {
                     System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
                 });
-        updateEventInFirebase(updated_event);  // Updates this event in Firebase, meant to help with limiting attendees.
+//        updateEventInFirebase(updated_event);  // Updates this event in Firebase, meant to help with limiting attendees.
         // Has not been achieved yet.
     }
 
@@ -156,40 +156,40 @@ public class EventSignUp {
      * implemented yet.
      * @param event - Represents the event that will be updated.
      */
-    public void updateEventInFirebase(Event event){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        CollectionReference eventsRef = db.collection("events");
-        DocumentReference oneEvent = eventsRef.document(event.getDeviceId() + event.getEventTitle());  // Event Id
-
-        // Hashmap method we learned in labs.
-        HashMap<String, String> data = new HashMap<>();
-        data.put("eventTitle", event.getEventTitle());
-        data.put("eventLocation", event.getLocation());
-        data.put("deviceId", event.getDeviceId());
-        data.put("eventDescription", event.getDescription());
-        data.put("eventPosterURL", event.getEventImageUrl());
-        data.put("eventStartDate", event.getStartDate());
-        data.put("eventEndDate", event.getEndDate());
-        data.put("eventStartTime", event.getStartTime());
-        data.put("eventEndTime", event.getEndTime());
-        data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));  // Converts the integer value into a string.
-        // How to convert integer to string in Java:
-        // JavaTpoint. "Java int to String." Accessed 03-06-2024.
-        // URL: https://www.javatpoint.com/java-int-to-string#:~:text=We%20can%20convert%20int%20to,method%2C%20string%20concatenation%20operator%20etc.
-        // Sets the data in the event.
-        oneEvent
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {  // If updating event is successful
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "Event updated Successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener(){  // If updating the events is not successful.
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Event could not be updated.");
-                    }
-                });
-    }
+//    public void updateEventInFirebase(Event event){
+//        FirebaseFirestore db = FirebaseFirestore.getInstance();
+//        CollectionReference eventsRef = db.collection("events");
+//        DocumentReference oneEvent = eventsRef.document(event.getDeviceId() + event.getEventTitle());  // Event Id
+//
+//        // Hashmap method we learned in labs.
+//        HashMap<String, String> data = new HashMap<>();
+//        data.put("eventTitle", event.getEventTitle());
+//        data.put("eventLocation", event.getLocation());
+//        data.put("deviceId", event.getDeviceId());
+//        data.put("eventDescription", event.getDescription());
+//        data.put("eventPosterURL", event.getEventImageUrl());
+//        data.put("eventStartDate", event.getStartDate());
+//        data.put("eventEndDate", event.getEndDate());
+//        data.put("eventStartTime", event.getStartTime());
+//        data.put("eventEndTime", event.getEndTime());
+//        data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));  // Converts the integer value into a string.
+//        // How to convert integer to string in Java:
+//        // JavaTpoint. "Java int to String." Accessed 03-06-2024.
+//        // URL: https://www.javatpoint.com/java-int-to-string#:~:text=We%20can%20convert%20int%20to,method%2C%20string%20concatenation%20operator%20etc.
+//        // Sets the data in the event.
+//        oneEvent
+//                .set(data)
+//                .addOnSuccessListener(new OnSuccessListener<Void>() {  // If updating event is successful
+//                    @Override
+//                    public void onSuccess(Void unused) {
+//                        Log.d(TAG, "Event updated Successfully");
+//                    }
+//                })
+//                .addOnFailureListener(new OnFailureListener(){  // If updating the events is not successful.
+//                    @Override
+//                    public void onFailure(@NonNull Exception e) {
+//                        Log.d(TAG, "Event could not be updated.");
+//                    }
+//                });
+//    }
 }

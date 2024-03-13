@@ -43,7 +43,15 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
         String dateStr = "";
 
-        event.getStartDate();
+        try
+        {
+            assert event != null;
+            dateStr = outputFormat.format(Objects.requireNonNull(inputFormat.parse(event.getStartDate())));
+        } catch(ParseException e)
+        {
+            e.printStackTrace();
+        }
+
         eventTitle.setText(event.getEventTitle());
 
         if (event.getEventImageUrl() != null)
