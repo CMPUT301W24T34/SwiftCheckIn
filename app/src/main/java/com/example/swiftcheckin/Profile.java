@@ -14,7 +14,9 @@ public class Profile {
 
     private String profileImageUrl;
     private boolean locationPermission;
-
+    /**
+     * This creates a profile
+     */
     public Profile() {
     }
     /**
@@ -48,26 +50,29 @@ public class Profile {
     public String getName() {
         return name;
     }
-    /**
-     * This returns the user's birthday
-     * @return
-     * returns the birthday
-     */
-
 
     /**
      * This returns the user's profile image url
      * @return
+     * returns profile image url
      */
     public String getProfileImageUrl() {
 
         return profileImageUrl;
     }
 
+    /**
+     * This sets the users profile image url
+     * @param profileImageUrl - String of profile image url
+     */
     public void setProfileImageUrl(String profileImageUrl) {
         this.profileImageUrl = profileImageUrl;
     }
-
+    /**
+     * This returns the user's birthday
+     * @return
+     * returns the birthday
+     */
 
     public String getBirthday() {
         return birthday;
