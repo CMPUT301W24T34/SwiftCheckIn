@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;

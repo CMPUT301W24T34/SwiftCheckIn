@@ -9,6 +9,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 
+import com.example.swiftcheckin.attendee.MainActivity;
+
 import org.junit.Rule;
 import org.junit.Test;
 

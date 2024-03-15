@@ -1,19 +1,19 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.swiftcheckin.Event;
+import com.example.swiftcheckin.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
