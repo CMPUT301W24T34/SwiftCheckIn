@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.example.swiftcheckin.organizer.OrganizerActivity;
+
 /**
  * This deals with the fragment to switch to organizer and admin mode
  */

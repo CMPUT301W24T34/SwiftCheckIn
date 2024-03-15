@@ -1,6 +1,4 @@
-package com.example.swiftcheckin;
-
-import static java.security.AccessController.getContext;
+package com.example.swiftcheckin.organizer;
 
 import android.Manifest;
 import android.content.Context;
@@ -8,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.content.Intent;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -21,13 +18,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
+import com.example.swiftcheckin.R;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
