@@ -9,10 +9,14 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+<<<<<<< HEAD:app/src/main/java/com/example/swiftcheckin/organizer/ViewAttendeesActivity.java
 import com.example.swiftcheckin.Profile;
 import com.example.swiftcheckin.ProfileArrayAdapter;
 import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.Event;
+=======
+import com.example.swiftcheckin.admin.ProfileArrayAdapter;
+>>>>>>> 58b68cadbaed11e745ce58875c8f7bebd55a5ed7:app/src/main/java/com/example/swiftcheckin/ViewAttendeesActivity.java
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;

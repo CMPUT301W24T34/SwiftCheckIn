@@ -61,7 +61,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".AdminActivity"
+            android:name=".admin.AdminActivity"
             android:exported="true"></activity>
         <activity
             android:name=".PromotionQR"

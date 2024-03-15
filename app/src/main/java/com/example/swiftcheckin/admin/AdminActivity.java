@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.admin;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,6 +13,8 @@ import android.widget.ListView;
 import android.widget.SearchView;
 
 import com.example.swiftcheckin.organizer.Event;
+import com.example.swiftcheckin.Profile;
+import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
