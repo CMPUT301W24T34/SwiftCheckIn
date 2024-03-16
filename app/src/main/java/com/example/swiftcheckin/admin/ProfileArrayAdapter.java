@@ -9,7 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.swiftcheckin.Profile;
+import com.example.swiftcheckin.attendee.Profile;
 import com.example.swiftcheckin.R;
 
 import java.util.ArrayList;

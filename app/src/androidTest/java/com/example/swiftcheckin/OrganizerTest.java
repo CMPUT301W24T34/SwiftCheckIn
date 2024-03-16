@@ -13,11 +13,10 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import static org.hamcrest.CoreMatchers.anything;
 
-import android.widget.ListView;
-
-import androidx.test.espresso.ViewAssertion;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+
+import com.example.swiftcheckin.attendee.MainActivity;
 
 import org.junit.Rule;
 import org.junit.Test;
