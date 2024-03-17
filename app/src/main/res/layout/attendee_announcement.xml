@@ -9,285 +9,328 @@
     <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
     <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
 
+
     <TextView
-        android:id="@+id/app_name"
-        android:layout_width="153dp"
-        android:layout_height="28dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="147dp"
-        android:text="@string/AppName"
-        android:textAlignment="center"
+        android:id="@+id/textView12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="120dp"
+        android:text="Some major annoucements"
         android:textColor="#000000"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/switch_modes"
-        app:layout_constraintStart_toEndOf="@+id/profile_picture"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-    <View
-        android:id="@+id/divider"
-        android:layout_width="378dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="7dp"
-        android:background="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.484"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_picture" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/switch_modes"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
-        android:background="#A12121"
-        android:clickable="true"
-        android:contentDescription="TODO"
-        android:focusable="true"
-        app:backgroundTint="@color/white"
-        app:fabCustomSize="45dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.005"
-        app:maxImageSize="24dp"
-        app:srcCompat="@android:drawable/ic_menu_set_as" />
-
-    <ImageView
-        android:id="@+id/profile_picture"
-        android:layout_width="48dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="11dp"
-        android:layout_marginEnd="7dp"
-        app:layout_constraintEnd_toStartOf="@+id/app_name"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/profile_pic" />
-
-
-    <ImageView
-        android:id="@+id/announcement_event_poster1"
-        android:layout_width="467dp"
-        android:layout_height="131dp"
-        android:layout_marginTop="104dp"
-        android:layout_marginEnd="1dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/event_poster"
-        android:contentDescription="Event Poster" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
 
     <TextView
-        android:id="@+id/announcement_event_name"
-        android:layout_width="322dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginBottom="8dp"
-        android:background="#EDE6E6"
-        android:text="Event Name"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/announcement_event_poster1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <TextView
-        android:id="@+id/annoucement_start_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:text="02:00"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/time_dash"
-        app:layout_constraintStart_toEndOf="@+id/clock_icon"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
-
-    <TextView
-        android:id="@+id/time_dash"
-        android:layout_width="4dp"
-        android:layout_height="18dp"
-        android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/dash"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/annoucement_start_time"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
-
-    <TextView
-        android:id="@+id/announcement_end_Time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="94dp"
-        android:text="@string/_03_00"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/time_dash"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
-
-    <TextView
-        android:id="@+id/annoucement_event_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/march_22_2023"
-        android:textAlignment="center"
-        android:textColor="#000000"
-        android:textStyle="bold"
-        app:layout_constraintStart_toEndOf="@+id/calendar_icon"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1" />
-
-    <ImageView
-        android:id="@+id/clock_icon"
-        android:layout_width="23dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/annoucement_start_time"
-        app:layout_constraintStart_toEndOf="@+id/annoucement_event_date"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
-        app:srcCompat="@drawable/clock" />
-
-    <ImageView
-        android:id="@+id/calendar_icon"
-        android:layout_width="21dp"
-        android:layout_height="26dp"
-        android:layout_marginStart="56dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginEnd="8dp"
-        android:contentDescription="TODO"
-        app:layout_constraintEnd_toStartOf="@+id/annoucement_event_date"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_event_poster1"
-        app:srcCompat="@drawable/calendar" />
-
-    <ListView
-        android:layout_width="412dp"
-        android:layout_height="149dp"
-        android:layout_marginBottom="4dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.033"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/sign_up"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="157dp"
-        android:layout_marginTop="38dp"
-        android:layout_marginEnd="157dp"
-        android:layout_marginBottom="8dp"
-        android:backgroundTint="@color/black"
-        android:text="Sign Up"
-        android:textColor="#FFFFFF"
-        app:cornerRadius="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_description" />
-
-    <TextView
-        android:id="@+id/announcement_description"
-        android:layout_width="301dp"
-        android:layout_height="102dp"
-        android:layout_marginStart="57dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="53dp"
-        android:text="TextView"
-        android:textColor="#020202"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/clock_icon" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="57dp"
-        android:layout_marginEnd="264dp"
-        android:layout_marginBottom="3dp"
-        android:text="Description"
-        android:textColor="#040404"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/announcement_description"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="23dp"
-        android:text="Location: "
-        android:textColor="#040404"
-        android:textSize="18dp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/announcement_location"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/announcement_description" />
-
-    <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/textView11"
         android:layout_width="326dp"
         android:layout_height="25dp"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="528dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="86dp"
         android:text="Annoncement"
         android:textAlignment="textStart"
         android:textColor="#040404"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
 
     <TextView
-        android:id="@+id/announcement_location"
-        android:layout_width="148dp"
-        android:layout_height="22dp"
-        android:layout_marginTop="416dp"
-        android:text="TextView"
-        android:textColor="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.182"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="194dp"
-        android:text="Some major annoucements"
-        android:textColor="#000000"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="18dp"
+        android:text="Description"
+        android:textColor="#040404"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout5" />
+
+    <Button
+        android:id="@+id/sign_up"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="157dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="157dp"
+        android:backgroundTint="@color/black"
+        android:text="Sign Up"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="0dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout7" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout4"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:layout_marginTop="184dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/announcement_event_poster1">
+
+        <TextView
+            android:id="@+id/announcement_end_Time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="3dp"
+            android:text="03:00 PM"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/time_dash"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/time_dash"
+            android:layout_width="4dp"
+            android:layout_height="17dp"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginEnd="4dp"
+            android:text="@string/dash"
+            android:textAlignment="center"
+            android:textColor="#020000"
+            app:layout_constraintEnd_toStartOf="@+id/announcement_end_Time"
+            app:layout_constraintStart_toEndOf="@+id/annoucement_start_time"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/annoucement_start_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:text="02:00 AM"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/ClockIcon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/ClockIcon"
+            android:layout_width="23dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/annoucement_start_time"
+            app:layout_constraintStart_toEndOf="@+id/annoucement_event_date"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/clock" />
+
+        <TextView
+            android:id="@+id/annoucement_event_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:layout_marginTop="3dp"
+            android:text="@string/march_22_2023"
+            android:textAlignment="center"
+            android:textColor="#040000"
+            android:textStyle="bold"
+            app:layout_constraintStart_toEndOf="@+id/calendar_icon"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/calendar_icon"
+            android:layout_width="21dp"
+            android:layout_height="26dp"
+            android:layout_marginStart="50dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toStartOf="@+id/annoucement_event_date"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/calendar" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <ImageView
+        android:id="@+id/announcement_event_poster1"
+        android:layout_width="match_parent"
+        android:layout_height="129dp"
+        android:layout_marginTop="4dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout2"
+        app:srcCompat="@drawable/event_poster" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/profile_picture"
+            android:layout_width="48dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/profile_pic" />
+
+        <!-- Assuming there is another view like a switch to the right -->
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="268dp"
+            android:layout_height="32dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="11dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/AppName"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/switch_modes"
+            app:layout_constraintStart_toEndOf="@+id/profile_picture" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/switch_modes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:clickable="true"
+            app:backgroundTint="@color/white"
+            app:fabCustomSize="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:maxImageSize="24dp"
+            app:srcCompat="@android:drawable/ic_menu_set_as" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="72dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/announcement_event_name"
+            android:layout_width="323dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="44dp"
+            android:layout_marginBottom="4dp"
+            android:background="#E6E0E0"
+            android:text="Event Name"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnknownIdInLayout" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="7dp"
+            android:text="Location: "
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/announcement_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:text="India"
+            android:textColor="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="21dp"
+            android:layout_height="23dp"
+            android:layout_marginStart="50dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/location_icon" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout7"
+        android:layout_width="407dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout4">
+
+        <TextView
+            android:id="@+id/announcement_description"
+            android:layout_width="303dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="50dp"
+            android:text="TextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="212dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <ListView
+            android:layout_width="407dp"
+            android:layout_height="210dp"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
