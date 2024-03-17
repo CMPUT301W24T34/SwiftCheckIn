@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.swiftcheckin.Event;
+import com.example.swiftcheckin.organizer.Event;
+
 import com.example.swiftcheckin.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;

@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.organizer;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;

@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.organizer;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.organizer.Event;
 import com.example.swiftcheckin.admin.ProfileArrayAdapter;
 import com.example.swiftcheckin.attendee.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;

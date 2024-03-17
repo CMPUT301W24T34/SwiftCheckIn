@@ -12,7 +12,9 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
 
-import com.example.swiftcheckin.Event;
+
+import com.example.swiftcheckin.organizer.Event;
+
 import com.example.swiftcheckin.attendee.Profile;
 import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnCompleteListener;
