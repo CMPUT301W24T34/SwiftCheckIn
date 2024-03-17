@@ -12,7 +12,7 @@
 
     <TextView
         android:id="@+id/footer"
-        android:layout_width="400dp"
+        android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="2dp"
@@ -55,7 +55,7 @@
 
     <ListView
         android:id="@+id/attendee_my_events_list"
-        android:layout_width="412dp"
+        android:layout_width="match_parent"
         android:layout_height="681dp"
         android:cacheColorHint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
@@ -65,7 +65,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout"
-        android:layout_width="408dp"
+        android:layout_width="match_parent"
         android:layout_height="65dp"
         android:orientation="horizontal"
         android:paddingTop="8dp"
@@ -118,7 +118,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout"
-        android:layout_width="407dp"
+        android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginTop="1dp"
         app:layout_constraintEnd_toEndOf="parent"
