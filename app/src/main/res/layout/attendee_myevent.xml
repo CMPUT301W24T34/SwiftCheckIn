@@ -57,7 +57,10 @@
         android:id="@+id/attendee_my_events_list"
         android:layout_width="match_parent"
         android:layout_height="681dp"
+        android:layout_marginTop="-1dp"
         android:cacheColorHint="#000000"
+
+        android:divider="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
