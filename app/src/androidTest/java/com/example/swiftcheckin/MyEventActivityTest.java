@@ -11,6 +11,8 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import com.example.swiftcheckin.attendee.MyEventActivity;
+
 /**
  * This class contains simple UI tests for MyEventActivity.
  */

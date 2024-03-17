@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 // This fragment is for users to switch between the modes
 
 import android.app.AlertDialog;
@@ -14,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 import com.example.swiftcheckin.organizer.OrganizerActivity;
+
+import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.admin.AdminActivity;
 /**
  * This deals with the fragment to switch to organizer and admin mode

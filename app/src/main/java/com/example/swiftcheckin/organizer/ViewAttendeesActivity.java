@@ -9,10 +9,10 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.swiftcheckin.Profile;
 import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.Event;
 import com.example.swiftcheckin.admin.ProfileArrayAdapter;
+import com.example.swiftcheckin.attendee.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
