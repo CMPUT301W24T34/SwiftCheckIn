@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.Image;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,8 +37,10 @@ public class AdminActivity extends AppCompatActivity {
     Button deleteButton;
     Button eventButton;
     Button profileButton;
+    Button imageButton;
     ArrayList<Profile> profileList;
     ArrayList<Event> eventList;
+    ArrayList<Event> imageList;
     private int selectedPosition = -1;
 
     final String TAG = "Sample";
@@ -58,14 +61,17 @@ public class AdminActivity extends AppCompatActivity {
         deleteButton = findViewById(R.id.remove_tab_button);
         eventButton = findViewById(R.id.event_button);
         profileButton = findViewById(R.id.profile_button);
+        imageButton = findViewById(R.id.images_button);
         dataList = findViewById(R.id.listView);
         db = FirebaseFirestore.getInstance();
         profileList = new ArrayList<>();
         eventList = new ArrayList<>();
+        imageList = new ArrayList<>();
         tab = "Event";
         searchView = findViewById(R.id.searchView);
         ProfileArrayAdapter profileArrayAdapter = new ProfileArrayAdapter(this, profileList);
         AdminEventArrayAdapter eventArrayAdapter = new AdminEventArrayAdapter(this, eventList);
+        ImageArrayAdapter imageArrayAdapter = new ImageArrayAdapter(this, imageList);
         //Make the default view the events tab
         displayEventsTab(eventArrayAdapter);
 
@@ -112,6 +118,12 @@ public class AdminActivity extends AppCompatActivity {
             }
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {displayImagesTab(imageArrayAdapter);
+            }
+        });
+
 
         dataList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -126,8 +138,11 @@ public class AdminActivity extends AppCompatActivity {
                     if (tab == "Event") {
                         deleteEvent(eventArrayAdapter);
 
-                    } else if (tab == "Profile") {
+                    } if (tab == "Profile") {
                         deleteProfile(profileArrayAdapter,eventArrayAdapter);
+                    }
+                    if (tab == "Image") {
+                        deleteImage(imageArrayAdapter);
                     }
 
                 }
@@ -180,6 +195,27 @@ public class AdminActivity extends AppCompatActivity {
         });
 
     }
+
+    private void displayImagesTab(ImageArrayAdapter imageArrayAdapter) {
+        tab = "Image";
+        collectionReference = db.collection("events");
+        dataList.setAdapter(imageArrayAdapter);
+        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
+                                @Nullable FirebaseFirestoreException error) {
+                imageList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
+                    Event image = doc.toObject(Event.class);
+                    imageList.add(image);
+                }
+                imageArrayAdapter.notifyDataSetChanged();
+            }
+        });
+
+    }
+
+
     /**
      * This deletes the profile and all associated events
      *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
@@ -324,6 +360,52 @@ public class AdminActivity extends AppCompatActivity {
                 });
 
 
+    }
+    /**
+     * This deletes the events`
+     * @param imageArrayAdapter the image array adapter - AdminEventArrayAdapter
+     */
+    private void deleteImage(ImageArrayAdapter imageArrayAdapter) {
+        tab = "Image";
+        collectionReference = db.collection("events");
+        String nameToUpdate = "filler";
+        String defaultPosterUrl = "drawable/event_poster"; // Replace with your default poster image URL
+
+        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
+            nameToUpdate = eventList.get(selectedPosition).getEventTitle();
+        }
+
+        collectionReference.whereEqualTo("eventTitle", nameToUpdate)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                collectionReference.document(documentId)
+                                        .update("eventPosterURL", defaultPosterUrl)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d(TAG, "Event poster URL has been updated successfully!");
+                                                // Notify adapter of the change
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Failed to update event poster URL: " + e.toString());
+                                            }
+                                        });
+                                imageArrayAdapter.notifyDataSetChanged();
+                                selectedPosition = -1;
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
     }
 
     /**
