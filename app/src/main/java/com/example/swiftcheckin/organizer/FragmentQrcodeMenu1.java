@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.organizer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -22,6 +22,8 @@ import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
+
+import com.example.swiftcheckin.R;
 
 import java.io.File;
 import java.io.FileNotFoundException;

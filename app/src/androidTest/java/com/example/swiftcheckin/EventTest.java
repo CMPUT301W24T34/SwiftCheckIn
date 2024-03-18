@@ -4,6 +4,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
+import com.example.swiftcheckin.organizer.Event;
+
 public class EventTest {
 
     /**

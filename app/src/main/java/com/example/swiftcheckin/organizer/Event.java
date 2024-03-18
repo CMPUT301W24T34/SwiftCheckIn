@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.organizer;
 
 import android.location.Location;
 import android.media.Image;

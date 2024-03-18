@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.organizer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
+import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.organizer.Event;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,6 +51,19 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         ImageView eventPoster = view.findViewById(R.id.organizerPageItem_image);
         TextView eventDateView = view.findViewById(R.id.organizerPageItem_date);
         TextView eventTime = view.findViewById(R.id.organizerPageItem_time);
+
+        SimpleDateFormat inputFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        SimpleDateFormat outputFormat = new SimpleDateFormat("MMMM dd, yyyy", Locale.US);
+        String dateStr = "";
+
+        try
+        {
+            assert event != null;
+            dateStr = outputFormat.format(Objects.requireNonNull(inputFormat.parse(event.getStartDate())));
+        } catch(ParseException e)
+        {
+            e.printStackTrace();
+        }
 
         eventTitle.setText(event.getEventTitle());
         eventDateView.setText(event.getStartDate());

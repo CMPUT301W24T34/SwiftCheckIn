@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 // This activity deals with the settings the user wants,
 // still need more user input validation here for example in the phone number field
 import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
@@ -8,9 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.View;
@@ -18,8 +16,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -27,7 +25,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.auth.User;
 
 import java.util.HashMap;
 import java.util.regex.Pattern;

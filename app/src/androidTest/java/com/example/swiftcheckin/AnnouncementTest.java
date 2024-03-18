@@ -3,6 +3,8 @@ package com.example.swiftcheckin;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import com.example.swiftcheckin.attendee.Announcement;
+
 /**
  * Tests for the Announcement class.
  */

@@ -1,4 +1,4 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 // This represents a user's profile
 /**
  * This represents a user's profile, includes their contact and personal information

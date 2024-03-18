@@ -1,15 +1,16 @@
-package com.example.swiftcheckin;
+package com.example.swiftcheckin.attendee;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.example.swiftcheckin.organizer.Event;
+
+import com.example.swiftcheckin.R;
 
 import java.util.List;
 
