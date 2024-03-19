@@ -14,8 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.bumptech.glide.Glide;
-import com.example.swiftcheckin.Event;
 import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.organizer.Event;
 
 import java.util.ArrayList;
 
@@ -34,7 +34,7 @@ public class ImageArrayAdapter extends ArrayAdapter<Event> {
             view = convertView;
         }
         Event event = getItem(position);
-        //cite the below code for chat gpt
+        //Citation: For the following code to upload an image into an array adapter, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to add an image into the array adapter
         ImageView eventImage = view.findViewById(R.id.imageView);
 
         if (event != null && event.getEventImageUrl() != null && !event.getEventImageUrl().isEmpty()) {
@@ -42,7 +42,7 @@ public class ImageArrayAdapter extends ArrayAdapter<Event> {
                     .load(event.getEventImageUrl())
                     .into(eventImage);
         } else {
-            // Set default image resource if image URL is empty
+            //Citation: For the following code line for a default image, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make a default image in case no image is provided
             eventImage.setImageResource(R.drawable.event_poster);
         }
         return view;

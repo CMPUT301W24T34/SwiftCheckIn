@@ -11,7 +11,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/event_poster" /> <!-- Cite Chat GPT -->
+        app:srcCompat="@drawable/event_poster" /> <!-- //Citation: For the following code line for a default image, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to set a default image to the event poster -->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

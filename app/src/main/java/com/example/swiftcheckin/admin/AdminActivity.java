@@ -197,6 +197,10 @@ public class AdminActivity extends AppCompatActivity {
         });
 
     }
+    /**
+     * This displays the images tab
+     *  @param imageArrayAdapter the image array adapter - ImageArrayAdapter
+     */
 
     private void displayImagesTab(ImageArrayAdapter imageArrayAdapter) {
         tab = "Image";
@@ -315,7 +319,7 @@ public class AdminActivity extends AppCompatActivity {
 
     }
     /**
-     * This deletes the events`
+     * This deletes the events
       * @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      */
     private void deleteEvent(AdminEventArrayAdapter eventArrayAdapter) {
@@ -364,8 +368,8 @@ public class AdminActivity extends AppCompatActivity {
 
     }
     /**
-     * This deletes the events`
-     * @param imageArrayAdapter the image array adapter - AdminEventArrayAdapter
+     * This deletes the images
+     * @param imageArrayAdapter the image array adapter - ImageArrayAdapter
      */
     private void deleteImage(ImageArrayAdapter imageArrayAdapter) {
         tab = "Image";
@@ -419,7 +423,9 @@ public class AdminActivity extends AppCompatActivity {
     private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter) {
         CollectionReference eventCollectionRef = db.collection("events");
 
-        eventCollectionRef.whereEqualTo("eventTitle", query)  // Adjust "eventName" to the actual field you want to search
+        eventCollectionRef.whereGreaterThanOrEqualTo("eventTitle", query)
+                //Citation: For the following code line filter searches that are not exact, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to filter not necessarily using an exact word
+                .whereLessThanOrEqualTo("eventTitle", query + "\uf8ff")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -437,6 +443,7 @@ public class AdminActivity extends AppCompatActivity {
                     }
                 });
     }
+
     /**
      * This filters through the profiles using search
      * @param query the searched word - String
@@ -446,7 +453,9 @@ public class AdminActivity extends AppCompatActivity {
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter) {
         CollectionReference profileCollectionRef = db.collection("profiles");
 
-        profileCollectionRef.whereEqualTo("name", query)  // Adjust "profileName" to the actual field you want to search
+        profileCollectionRef.whereGreaterThanOrEqualTo("name", query)
+                //Citation: For the following code line filter searches that are not exact, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to filter not necessarily using an exact word
+                .whereLessThanOrEqualTo("name", query + "\uf8ff")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -464,7 +473,6 @@ public class AdminActivity extends AppCompatActivity {
                     }
                 });
     }
-
 
 
 
