@@ -161,7 +161,9 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      * @return uri: returns the uri of the image
 
      */
+    //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
+    //Both above citations were used
     private Uri getImageToShare(Bitmap bitmap) {
         File folder = new File(requireContext().getCacheDir(), "images");
         Uri uri = null;
