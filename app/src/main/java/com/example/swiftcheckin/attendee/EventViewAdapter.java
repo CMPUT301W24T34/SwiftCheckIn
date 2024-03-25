@@ -60,12 +60,6 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);
 
         Event event = events.get(position);
-//        eventPoster.setImageURI(event.getEventImageUrl());
-
-
-        eventName.setText(event.getEventTitle());
-
-
 
         if (event.getEventImageUrl() != null)
         {
@@ -78,9 +72,7 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
             eventPoster.setImageResource(R.drawable.event_poster);
         }
 
-
-
-//        eventName.setText(event.getEventTitle());
+        eventName.setText(event.getEventTitle());
         eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
         eventEndTime.setText(event.getEndTime());
