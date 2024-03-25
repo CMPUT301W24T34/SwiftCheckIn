@@ -1,7 +1,6 @@
 package com.example.swiftcheckin.attendee;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +52,7 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         } else {
             view = convertView;
         }
-        ImageView eventPoster = view.findViewById(R.id.eventPoster2);
+        ImageView eventPoster = view.findViewById(R.id.event_Poster);
         TextView eventName = view.findViewById(R.id.event_Title);
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);

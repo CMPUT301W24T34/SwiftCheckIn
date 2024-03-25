@@ -15,7 +15,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="2dp"
         app:layout_constraintStart_toEndOf="@+id/edit_event_date"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster"
         app:srcCompat="@drawable/clock" />
 
     <TextView
@@ -29,7 +29,7 @@
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/ClockIcon"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster" />
 
 
     <ImageView
@@ -40,7 +40,7 @@
         android:layout_marginEnd="10dp"
         app:layout_constraintEnd_toStartOf="@+id/edit_event_date"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2"
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster"
         app:srcCompat="@drawable/calendar" />
 
     <TextView
@@ -54,10 +54,10 @@
         android:textColor="#040000"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/calendar_icon"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster" />
 
     <ImageView
-        android:id="@+id/eventPoster2"
+        android:id="@+id/event_Poster"
         android:layout_width="463dp"
         android:layout_height="129dp"
         android:layout_marginTop="6dp"
@@ -95,7 +95,7 @@
         android:textColor="#020000"
         app:layout_constraintEnd_toStartOf="@+id/edit_event_end_Time"
         app:layout_constraintStart_toEndOf="@+id/edit_event_start_time"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster" />
 
     <TextView
         android:id="@+id/edit_event_end_Time"
@@ -108,6 +108,6 @@
         android:textColor="#000000"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/time_dash"
-        app:layout_constraintTop_toBottomOf="@+id/eventPoster2" />
+        app:layout_constraintTop_toBottomOf="@+id/event_Poster" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
