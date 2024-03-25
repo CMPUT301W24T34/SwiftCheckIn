@@ -1,6 +1,7 @@
 package com.example.swiftcheckin.attendee;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.swiftcheckin.organizer.Event;
 
 import com.example.swiftcheckin.R;
@@ -51,7 +53,7 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         } else {
             view = convertView;
         }
-        ImageView eventPoster = view.findViewById(R.id.organizerPageItem_image);
+        ImageView eventPoster = view.findViewById(R.id.eventPoster2);
         TextView eventName = view.findViewById(R.id.event_Title);
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
@@ -59,7 +61,26 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
 
         Event event = events.get(position);
 //        eventPoster.setImageURI(event.getEventImageUrl());
+
+
         eventName.setText(event.getEventTitle());
+
+
+
+        if (event.getEventImageUrl() != null)
+        {
+            Glide.with(getContext())
+                    .load(event.getEventImageUrl())
+                    .into(eventPoster);
+        }
+        else
+        {
+            eventPoster.setImageResource(R.drawable.event_poster);
+        }
+
+
+
+//        eventName.setText(event.getEventTitle());
         eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
         eventEndTime.setText(event.getEndTime());
