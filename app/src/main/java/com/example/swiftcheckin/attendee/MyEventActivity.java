@@ -155,7 +155,7 @@ public class MyEventActivity extends AppCompatActivity {
                         String eventDescription = document.getString("eventDescription");
                         String eventLocation = document.getString("eventLocation");
                         String deviceId = document.getString("deviceId");
-                        String eventImageUrl = document.getString("eventImageUrl");
+                        String eventImageUrl = document.getString("eventPosterURL");
                         String eventStartDate = document.getString("eventStartDate");
                         String eventStartTime = document.getString("eventStartTime");
                         String eventEndDate = document.getString("eventEndDate");

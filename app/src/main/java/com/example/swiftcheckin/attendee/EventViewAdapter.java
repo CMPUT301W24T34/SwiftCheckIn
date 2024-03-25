@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.swiftcheckin.organizer.Event;
 
 import com.example.swiftcheckin.R;
@@ -51,14 +52,25 @@ public class EventViewAdapter extends ArrayAdapter<Event> {
         } else {
             view = convertView;
         }
-        ImageView eventPoster = view.findViewById(R.id.organizerPageItem_image);
+        ImageView eventPoster = view.findViewById(R.id.eventPoster2);
         TextView eventName = view.findViewById(R.id.event_Title);
         TextView eventDate = view.findViewById(R.id.edit_event_date);
         TextView eventStartTime = view.findViewById(R.id.edit_event_start_time);
         TextView eventEndTime = view.findViewById(R.id.edit_event_end_Time);
 
         Event event = events.get(position);
-//        eventPoster.setImageURI(event.getEventImageUrl());
+
+        if (event.getEventImageUrl() != null)
+        {
+            Glide.with(getContext())
+                    .load(event.getEventImageUrl())
+                    .into(eventPoster);
+        }
+        else
+        {
+            eventPoster.setImageResource(R.drawable.event_poster);
+        }
+
         eventName.setText(event.getEventTitle());
         eventDate.setText(event.getStartDate());
         eventStartTime.setText(event.getStartTime());
