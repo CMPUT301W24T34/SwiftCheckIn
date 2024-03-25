@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                     String eventDescription = (String) doc.getData().get("eventDescription");
                     String eventLocation = (String) doc.getData().get("eventLocation");
                     String deviceId = (String) doc.getData().get("deviceId");
-                    String eventImageUrl = (String) doc.getData().get("eventImageUrl");
+                    String eventImageUrl = (String) doc.getData().get("eventPosterURL");
                     String eventStartDate = (String) doc.getData().get("eventStartDate");
                     String eventStartTime = (String) doc.getData().get("eventStartTime");
                     String eventEndDate = (String) doc.getData().get("eventEndDate");
