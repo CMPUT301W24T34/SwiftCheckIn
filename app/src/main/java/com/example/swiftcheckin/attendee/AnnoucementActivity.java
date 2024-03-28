@@ -9,13 +9,17 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.swiftcheckin.organizer.Event;
+import com.example.swiftcheckin.organizer.EventArrayAdapter;
 import com.example.swiftcheckin.organizer.EventSignUp;
 
 import com.example.swiftcheckin.R;
@@ -24,9 +28,14 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +49,9 @@ public class AnnoucementActivity extends AppCompatActivity {
 
     private Button sign_up;
     private FirebaseFirestore db;
+    private ArrayList<Announcement> dataList;   // Represents the list that will store all the events.
+    private ListView announcementList;  // List view in activity_organizer.
+    private AnnouncementArrayAdapter announceAdapter; // Adapter meant to keep track of changes in the number of events.
     EventSignUp eventSignUp = new EventSignUp();
 
 
@@ -54,9 +66,15 @@ public class AnnoucementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attendee_announcement);
         db = FirebaseFirestore.getInstance();
+        announcementList = findViewById(R.id.announcementList);
+        dataList = new ArrayList<>();
+        announceAdapter = new AnnouncementArrayAdapter(this, dataList);
+        announcementList.setAdapter(announceAdapter);
+
 
         String eventId = getIntent().getStringExtra("eventID");
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        getData(eventId);
 
         Button sign_up = findViewById(R.id.sign_up);
         sign_up.setOnClickListener(new View.OnClickListener(){
@@ -80,7 +98,7 @@ public class AnnoucementActivity extends AppCompatActivity {
 
 
         Intent intent = getIntent();
-        String eventID = intent.getStringExtra("eventTitle");
+        String eventID = intent.getStringExtra("eventID");
         String eventTitle = intent.getStringExtra("eventTitle");
         String eventLocation = intent.getStringExtra("eventLocation");
         String eventDescription = intent.getStringExtra("eventDescription");
@@ -195,5 +213,30 @@ public class AnnoucementActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    // Need something to get data related to announcements, portraying data will be here.
+    private void getData(String eventId){
+        CollectionReference announceCol = db.collection("Announcements");
+
+        announceCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                dataList.clear();
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
+
+                    String announcementTitleFrame = doc.getId();
+                    if (announcementTitleFrame.contains(eventId)){
+                        String announcementTitle= (String) doc.getData().get("announcementTitle");
+                        String announcementDes = (String) doc.getData().get("announcementDes");
+
+                        dataList.add(new Announcement(announcementTitle, announcementDes));
+                    }
+                }
+                announceAdapter.notifyDataSetChanged();
+            }
+        });
+    }
+
 
 }

@@ -38,7 +38,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="16dp"
         android:backgroundTint="@color/black"
-        android:text="Send Notifications"
+        android:text="Send Announcement"
         android:textSize="20sp"
         app:cornerRadius="0sp"
         app:layout_constraintStart_toStartOf="parent"

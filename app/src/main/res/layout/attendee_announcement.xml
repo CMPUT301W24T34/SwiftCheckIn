@@ -298,6 +298,7 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <ListView
+            android:id="@+id/announcementList"
             android:layout_width="407dp"
             android:layout_height="210dp"
             android:layout_marginStart="1dp"
@@ -321,7 +322,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
-            android:text="Some major annoucements"
+            android:text="Some major announcements"
             android:textColor="#000000"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView11" />
@@ -332,7 +333,7 @@
             android:layout_height="25dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="1dp"
-            android:text="Annoncement"
+            android:text="Announcements"
             android:textAlignment="textStart"
             android:textColor="#040404"
             android:textSize="20sp"

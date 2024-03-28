@@ -46,7 +46,9 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         sendNotifs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "To be continued", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getContext(), AddAnnouncementActivity.class);
+                intent.putExtra("eventId", eventId);
+                startActivity(intent);
             }
         });
         return builder
