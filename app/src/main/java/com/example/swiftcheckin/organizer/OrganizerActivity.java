@@ -119,15 +119,19 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventDescription = intent.getStringExtra("eventDescription");
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
             String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
+            String qrCodeID = intent.getStringExtra("qrCodeID");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Meant to add the events.
+                assert eventMaxAttendees != null;
+                Event event;
                 if (eventMaxAttendees.isEmpty()) {
-                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                    event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 } else {
-                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
-
+                    event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 }
+                event.setQrID(qrCodeID);
+                addEvent(event);
             }
         }
     };
@@ -268,7 +272,7 @@ public class OrganizerActivity extends AppCompatActivity {
     private void saveData(Event event){;
         // Ensure we have 3 columns in firestore for simple reference.
         // This is to ensure admin will be able to delete any events much more conveniently.
-        DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
+        DocumentReference deviceRef = db.collection("events").document(deviceId +"@"+event.getEventTitle());
         // Document Id, AKA eventId = deviceId + eventTitle
 
         // Hashmap method learned in labs.
@@ -283,6 +287,7 @@ public class OrganizerActivity extends AppCompatActivity {
         data.put("eventStartTime", event.getStartTime());
         data.put("eventEndTime", event.getEndTime());
         data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
+        data.put("qrID", event.getQrID());
         // Sets the data to Firebase.
         deviceRef
                 .set(data)

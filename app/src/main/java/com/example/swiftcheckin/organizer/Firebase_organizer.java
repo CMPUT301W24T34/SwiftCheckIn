@@ -28,6 +28,7 @@ public class Firebase_organizer {
         data.put("QrID", qrcode.getQrID());
         data.put("eventID", qrcode.getEventID());
         data.put("ImageBase64String", QrCodeManager.convertToBase64String(qrcode.getImage()));
+        data.put("isPromo", qrcode.getIsPromo().toString());
         deviceRef
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
