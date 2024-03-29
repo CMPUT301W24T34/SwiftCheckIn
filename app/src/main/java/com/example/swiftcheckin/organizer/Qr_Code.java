@@ -8,6 +8,12 @@ public class Qr_Code {
     private String QrID;
     private Boolean isPromo;
 
+    public Qr_Code(String QrId, Bitmap img)
+    {
+        this.image = img;
+        this.QrID = QrId;
+    }
+
     public String getEventID()
     {
         return this.eventID;

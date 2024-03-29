@@ -29,7 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.UUID;
 
 /**
  * DialogFragment to show generated QR and ask for user choice.
@@ -42,7 +42,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private String eventId;     // Stores eventId
     private Button saveButton;  // Button to save the event.
 
-    private Bitmap qrCodeGenerated;     // Bitmap images of the generated/selected qr code.
+    private Qr_Code qrCodeGenerated;     // Qr_Code object
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
@@ -63,12 +63,9 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     /**
      * Constructor of the FragmentQrcodeMenu1 class. Initialises the dialog fragment.
-     * @param eventId: String to get the eventId of the event generated.
-     * @param bitmap: Bitmap image of the unique Qr code generated for the event.
      */
-    public FragmentQrcodeMenu1(String eventId, Bitmap bitmap) {
+    public FragmentQrcodeMenu1(String eventId) {
         this.eventId = eventId;
-        this.qrCodeGenerated = bitmap;
     }
 
     @Override
@@ -94,6 +91,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
         layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
+
+
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -112,6 +111,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             @Override
             public void onClick(View v) {
                 try {
+                    qrCodeGenerated = createQr();
                     showSuccessScreen(view);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -139,6 +139,24 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 .create();
     }
 
+    /**
+     * Generates a new Qr_Code object with a new Unique ID of length 16, and attaches a bitmap to the object.
+     * @return qrcode - Qr_Code object
+     */
+    private Qr_Code createQr()
+    {
+        int length_qr_id = 16;
+        // random qr id
+        String uuid = UUID.randomUUID().toString();
+        uuid = uuid.replace("-", "");
+        uuid = uuid.substring(0, length_qr_id);
+
+        Bitmap qrcode_bitmap = QrCodeManager.generateQRCode(uuid);
+        Qr_Code qrcode = new Qr_Code(uuid, qrcode_bitmap);
+        qrcode.setEventID(this.eventId);
+
+        return qrcode;
+    }
 
     /**
      * Shares the image and text data between the activities.
@@ -214,7 +232,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         }
         ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
         if (qrCodeGenerated != null) {
-            qrImage.setImageBitmap(qrCodeGenerated);
+            qrImage.setImageBitmap(qrCodeGenerated.getImage());
         }
         successLayout.setVisibility(View.VISIBLE);
     }
