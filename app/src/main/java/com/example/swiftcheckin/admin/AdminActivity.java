@@ -38,6 +38,8 @@ import java.util.List;
  * This is the administration activity
  */
 public class AdminActivity extends AppCompatActivity {
+    private FirestoreAdmin firebaseHelper;
+
     ListView dataList;
     Button deleteButton;
     Button eventButton;
@@ -55,10 +57,6 @@ public class AdminActivity extends AppCompatActivity {
     SearchView searchView;
 
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +67,7 @@ public class AdminActivity extends AppCompatActivity {
         imageButton = findViewById(R.id.images_button);
         dataList = findViewById(R.id.listView);
         db = FirebaseFirestore.getInstance();
+        firebaseHelper = new FirestoreAdmin();
         profileList = new ArrayList<>();
         eventList = new ArrayList<>();
         imageList = new ArrayList<>();
@@ -163,21 +162,7 @@ public class AdminActivity extends AppCompatActivity {
         tab = "Event";
         collectionReference = db.collection("events");
         dataList.setAdapter(eventArrayAdapter);
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                @Nullable FirebaseFirestoreException error) {
-                eventList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    Event event = doc.toObject(Event.class);
-                    eventList.add(event);
-                }
-                eventArrayAdapter.notifyDataSetChanged();
-                profileArrayAdapter.notifyDataSetChanged();
-                imageArrayAdapter.notifyDataSetChanged();
-            }
-        });
-
+        firebaseHelper.queryEvents(eventList, eventArrayAdapter, imageArrayAdapter, profileArrayAdapter);
     }
     /**
      * This displays the profiles tab
@@ -190,21 +175,7 @@ public class AdminActivity extends AppCompatActivity {
         tab = "Profile";
         collectionReference = db.collection("profiles");
         dataList.setAdapter(profileArrayAdapter);
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                @Nullable FirebaseFirestoreException error) {
-                profileList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    Profile profile = doc.toObject(Profile.class);
-                    profileList.add(profile);
-                }
-                profileArrayAdapter.notifyDataSetChanged();
-                eventArrayAdapter.notifyDataSetChanged();
-                imageArrayAdapter.notifyDataSetChanged();
-            }
-        });
-
+        firebaseHelper.queryProfiles(profileList,profileArrayAdapter,eventArrayAdapter,  imageArrayAdapter);
     }
     /**
      * This displays the images tab
@@ -217,23 +188,7 @@ public class AdminActivity extends AppCompatActivity {
         tab = "Image";
         collectionReference = db.collection("events");
         dataList.setAdapter(imageArrayAdapter);
-
-        collectionReference.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots,
-                                @Nullable FirebaseFirestoreException error) {
-                imageList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
-                    Event event = doc.toObject(Event.class);
-                    // Set the event's image URL to be the eventPosterURL from Firebase
-                    event.setEventImageUrl(doc.getString("eventPosterURL"));
-                    imageList.add(event);
-                }
-                imageArrayAdapter.notifyDataSetChanged();
-                eventArrayAdapter.notifyDataSetChanged();
-                profileArrayAdapter.notifyDataSetChanged();
-            }
-        });
+        firebaseHelper.queryImages(imageList,  imageArrayAdapter,eventArrayAdapter, profileArrayAdapter);
     }
 
 
@@ -246,100 +201,10 @@ public class AdminActivity extends AppCompatActivity {
     private void deleteProfile(ProfileArrayAdapter profileArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter){
         //delete not just profile but all events associated with that profile
         String nameToDelete = profileList.get(selectedPosition).getName();
-        collectionReference.whereEqualTo("name", nameToDelete)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to delete all items with a certain device ID
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String documentId = document.getId();
-                                collectionReference.document(documentId)
-                                        .delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d(TAG, "Data has been deleted successfully!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Data could not be deleted!" + e.toString());
-                                            }
-                                        });
-
-                                profileList.remove(selectedPosition);
-                                profileArrayAdapter.notifyDataSetChanged();
-                                eventArrayAdapter.notifyDataSetChanged();
-                                imageArrayAdapter.notifyDataSetChanged();
-                                deleteMultiEvent( eventArrayAdapter, documentId,imageArrayAdapter,profileArrayAdapter);
-                                selectedPosition = -1;
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
-    /**
-     * This deletes multiple events`
-     * @param deviceId the id of the device - String
-     *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
-     *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
-     *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
-     */
-    private void deleteMultiEvent(AdminEventArrayAdapter eventArrayAdapter, String deviceId,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
-        tab = "Event";
-        collectionReference = db.collection("events");
-        String nameToDelete = "filler";
-
-        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
-            nameToDelete = eventList.get(selectedPosition).getDeviceId();
+        firebaseHelper.deleteFirebaseProfile( eventList, nameToDelete, profileList,  selectedPosition, profileArrayAdapter,eventArrayAdapter, imageArrayAdapter);
+        selectedPosition = -1;
         }
-        //Citation: For the following code idea, OpenAI, 2024, ChatGPT, Licensing: Creative Commons, Prompt: How to check if the device Id is not "pass"
-            if (!"pass".equals(deviceId)){
-                nameToDelete = deviceId;
-            }
-            collectionReference.whereEqualTo("deviceId", nameToDelete)
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    String documentId = document.getId();
-                                    collectionReference.document(documentId)
-                                            .delete()
-                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    Log.d(TAG, "Event data has been deleted successfully!");
-                                                }
-                                            })
-                                            .addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-                                                    Log.d(TAG, "Event data could not be deleted! " + e.toString());
-                                                }
-                                            });
 
-                                    //eventList.remove(selectedPosition);
-                                    eventArrayAdapter.notifyDataSetChanged();
-                                    imageArrayAdapter.notifyDataSetChanged();
-                                    profileArrayAdapter.notifyDataSetChanged();
-                                    selectedPosition = -1;
-
-                                }
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-
-
-    }
     /**
      * This deletes the events
      *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
@@ -348,49 +213,8 @@ public class AdminActivity extends AppCompatActivity {
      */
     private void deleteEvent(AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         tab = "Event";
-        collectionReference = db.collection("events");
-        String nameToDelete = "filler";
-
-        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
-            nameToDelete = eventList.get(selectedPosition).getEventTitle();
-        }
-        //Citation: For the following code idea, OpenAI, 2024, ChatGPT, Licensing: Creative Commons, Prompt: How to check if the device Id is not "pass"
-        collectionReference.whereEqualTo("eventTitle", nameToDelete)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String documentId = document.getId();
-                                collectionReference.document(documentId)
-                                        .delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d(TAG, "Event data has been deleted successfully!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Event data could not be deleted! " + e.toString());
-                                            }
-                                        });
-
-                                //eventList.remove(selectedPosition);
-                                eventArrayAdapter.notifyDataSetChanged();
-                                imageArrayAdapter.notifyDataSetChanged();
-                                profileArrayAdapter.notifyDataSetChanged();
-                                selectedPosition = -1;
-
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-
+        firebaseHelper.deleteFirebaseEvent(eventList, selectedPosition,  eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
+        selectedPosition = -1;
 
     }
     /**
@@ -401,48 +225,9 @@ public class AdminActivity extends AppCompatActivity {
      */
     private void deleteImage(ImageArrayAdapter imageArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         tab = "Image";
-        collectionReference = db.collection("events");
-        String nameToUpdate = "filler";
-
-        if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
-            nameToUpdate = eventList.get(selectedPosition).getEventTitle();
+        firebaseHelper.deleteFirebaseImage(eventList, selectedPosition, imageArrayAdapter, eventArrayAdapter,profileArrayAdapter);
+        selectedPosition = -1;
         }
-
-        collectionReference.whereEqualTo("eventTitle", nameToUpdate)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String documentId = document.getId();
-                                //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to set something to null in firebase
-                                collectionReference.document(documentId)
-                                        .update("eventPosterURL", null)
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d(TAG, "Event poster URL has been set to null successfully!");
-                                                // Notify adapter of the change
-                                                imageArrayAdapter.notifyDataSetChanged();
-                                                profileArrayAdapter.notifyDataSetChanged();
-                                                eventArrayAdapter.notifyDataSetChanged();
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Failed to set event poster URL to null: " + e.toString());
-                                            }
-                                        });
-                                selectedPosition = -1;
-                            }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
-                        }
-                    }
-                });
-    }
 
     /**
      * This filters through the events using search
@@ -451,54 +236,14 @@ public class AdminActivity extends AppCompatActivity {
      *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
      *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
      */
-    //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayEventsTab(eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
             return; // Exit the method early
         }
+        firebaseHelper.filterFirebaseEvents(eventList,query, eventArrayAdapter, imageArrayAdapter,profileArrayAdapter);
 
-        CollectionReference profileCollectionRef = db.collection("events");
-
-        //Citation: For the following code line for lowercase, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to convert to lowercase
-        String queryLowerCase = query.toLowerCase();
-        List<Event> matchingEvents = new ArrayList<>();
-
-        for (Event event : eventList) {
-            if (event != null && event.getEventTitle() != null) {
-                if (event.getEventTitle().toLowerCase().contains(queryLowerCase)) {
-                    matchingEvents.add(event);
-                }
-            }
         }
-
-        eventList.clear();
-        eventArrayAdapter.notifyDataSetChanged();
-
-        // Query the profiles from Firestore based on the matching profiles
-        for (Event matchingEvent : matchingEvents) {
-            profileCollectionRef.whereEqualTo("eventTitle", matchingEvent.getEventTitle())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Event event = document.toObject(Event.class);
-                                    if (!eventList.contains(event)) {
-                                        eventList.add(event);
-                                    }
-                                }
-                                eventArrayAdapter.notifyDataSetChanged();
-                                imageArrayAdapter.notifyDataSetChanged();
-                                profileArrayAdapter.notifyDataSetChanged();
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-        }
-    }
     /**
      * This filters through the events using search
      *@param query the searched word - String
@@ -506,55 +251,15 @@ public class AdminActivity extends AppCompatActivity {
      *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
      *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
      */
-    //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+
     private void filterImageList(String query, ImageArrayAdapter imageArrayAdapter, AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayImagesTab(imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
             return; // Exit the method early
         }
+        firebaseHelper.filterFirebaseImageList( imageList, query,  imageArrayAdapter,  eventArrayAdapter, profileArrayAdapter);
 
-        CollectionReference profileCollectionRef = db.collection("events");
-
-        ///Citation: For the following code line for lowercase, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to convert to lowercase
-        String queryLowerCase = query.toLowerCase();
-
-        List<Event> matchingImages = new ArrayList<>();
-
-        for (Event event : imageList) {
-            if (event != null && event.getEventTitle() != null) {
-                if (event.getEventTitle().toLowerCase().contains(queryLowerCase)) {
-                    matchingImages.add(event);
-                }
-            }
         }
-
-        imageList.clear();
-        imageArrayAdapter.notifyDataSetChanged();
-
-        for (Event matchingEvent : matchingImages) {
-            profileCollectionRef.whereEqualTo("eventTitle", matchingEvent.getEventTitle())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Event event = document.toObject(Event.class);
-                                    // Add the profile if not already in the list
-                                    if (!imageList.contains(event)) {
-                                        imageList.add(event);
-                                    }
-                                }
-                                imageArrayAdapter.notifyDataSetChanged();
-                                eventArrayAdapter.notifyDataSetChanged();
-                                profileArrayAdapter.notifyDataSetChanged();
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-        }
-    }
 
 
 
@@ -567,55 +272,15 @@ public class AdminActivity extends AppCompatActivity {
      *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
      *   @param profileArrayAdapter the profile array adapter - ProfileArrayAdapter
      */
-    //Citation: For the following code idea to use the search bar and filter searches, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
+
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayProfilesTab(profileArrayAdapter, eventArrayAdapter, imageArrayAdapter);
             return; // Exit the method early
         }
+        firebaseHelper.filterProfileList(profileList,query,  profileArrayAdapter,  eventArrayAdapter,  imageArrayAdapter);
 
-        CollectionReference profileCollectionRef = db.collection("profiles");
-
-        //Citation: For the following code line for lowercase, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to convert to lowercase
-        String queryLowerCase = query.toLowerCase();
-
-        List<Profile> matchingProfiles = new ArrayList<>();
-
-        for (Profile profile : profileList) {
-            if (profile != null && profile.getName() != null) {
-                if (profile.getName().toLowerCase().contains(queryLowerCase)) {
-                    matchingProfiles.add(profile);
-                }
-            }
         }
-
-        profileList.clear();
-        profileArrayAdapter.notifyDataSetChanged();
-
-        for (Profile matchingProfile : matchingProfiles) {
-            profileCollectionRef.whereEqualTo("name", matchingProfile.getName())
-                    .get()
-                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
-                                    Profile profile = document.toObject(Profile.class);
-                                    if (!profileList.contains(profile)) {
-                                        profileList.add(profile);
-                                    }
-                                }
-                                // Notify adapter after querying all matching profiles
-                                profileArrayAdapter.notifyDataSetChanged();
-                                imageArrayAdapter.notifyDataSetChanged();
-                                eventArrayAdapter.notifyDataSetChanged();
-                            } else {
-                                Log.d(TAG, "Error getting documents: ", task.getException());
-                            }
-                        }
-                    });
-        }
-    }
 
 
 
