@@ -12,6 +12,7 @@ public class Qr_Code {
     {
         this.image = img;
         this.QrID = QrId;
+        this.isPromo = false;
     }
 
     public String getEventID()
@@ -42,5 +43,15 @@ public class Qr_Code {
     public void setImage(Bitmap img)
     {
         this.image = img;
+    }
+
+    public void setIsPromo(Boolean flag)
+    {
+        this.isPromo = flag;
+    }
+
+    public Boolean getIsPromo()
+    {
+        return this.isPromo;
     }
 }

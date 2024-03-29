@@ -112,6 +112,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             public void onClick(View v) {
                 try {
                     qrCodeGenerated = createQr();
+
                     showSuccessScreen(view);
                 } catch (Exception e) {
                     e.printStackTrace();
