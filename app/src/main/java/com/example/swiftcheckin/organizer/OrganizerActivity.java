@@ -184,10 +184,15 @@ public class OrganizerActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int selectedPos = position;
-                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
+                // Start the Dialog fragment with all the options. Add the buttons to send notifications and view who signed up.
+
+//                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
                 Event event = dataList.get(selectedPos);
-                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
-                startActivity(intent);
+                String eventId = event.getDeviceId() + event.getEventTitle();
+                SwitchOrgDetailsFragment dialogFragment = SwitchOrgDetailsFragment.newInstance(eventId);
+                dialogFragment.show(getSupportFragmentManager(), "eventId");
+//                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
+//                startActivity(intent);
             }
         });
 
