@@ -323,11 +323,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
             else {
                 // Permission denied
-                if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION) &&
-                        !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_COARSE_LOCATION)) {
-                    // Tell user to go to settings
-                    settingsDialog();
-                }
+                settingsDialog();
 
             }
         }
