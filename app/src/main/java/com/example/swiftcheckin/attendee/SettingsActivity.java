@@ -6,6 +6,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -15,8 +16,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 
+
+import android.Manifest;
 import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -42,6 +46,7 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText websiteEditText;
     private EditText addressEditText;
     private CheckBox locationCheckBox;
+    private static final int LOCATION_PERMISSION = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,16 @@ public class SettingsActivity extends AppCompatActivity {
         Button saveButton = findViewById(R.id.save_button);
         db = FirebaseFirestore.getInstance();
         getData();
+        // Citation
+        locationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    getLocationPermission();
+                }
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -218,6 +233,11 @@ public class SettingsActivity extends AppCompatActivity {
             return Pattern.matches(pattern, birthday);
         }
 
+    }
+    private void getLocationPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                LOCATION_PERMISSION);
     }
 
 }
