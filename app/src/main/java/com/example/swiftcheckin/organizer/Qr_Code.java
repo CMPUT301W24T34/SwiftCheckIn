@@ -54,4 +54,9 @@ public class Qr_Code {
     {
         return this.isPromo;
     }
+
+    public void setEventToNull()
+    {
+        this.eventID = null;
+    }
 }
