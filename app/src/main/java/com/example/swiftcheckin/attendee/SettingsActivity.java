@@ -225,6 +225,11 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Saves profile data to firebase
+     * @param deviceId id of users device
+     * @param data data to be updated
+     */
     private void saveToFirebase(String deviceId, HashMap<String, String> data) {
         db.collection("profiles").document(deviceId)
                 .set(data)
@@ -245,6 +250,11 @@ public class SettingsActivity extends AppCompatActivity {
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to obtain location of user
     // output was to use a location manager and listener, gave me the onLocationChanged, onProviderDisabled, onProviderEnabled, onStatusChanged methods
     // also gave the checking of permissions
+
+    /**
+     * Gets the latitude and longitude coordinates of the users device
+     * @param deviceId
+     */
     private void getLocation(String deviceId) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -325,6 +335,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to transfer user to settings
     // output is this function below, creating the dialog, and setting the buttons
+
+    /**
+     * If a user denies location permission, they are prompted to go to settings to enable it
+     */
     private void settingsDialog() {
         locationCheckBox.setChecked(false);
         AlertDialog.Builder popup = new AlertDialog.Builder(this);
@@ -359,6 +373,12 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog dialog = popup.create();
         dialog.show();
     }
+
+    /**
+     * update the firebase collection with the location data
+     * @param deviceId - deviceid of users phone
+     * @param data - the data to be updated to firebase
+     */
 
     private void updateLocationInfo(String deviceId, HashMap<String, Object> data){
         db.collection("profiles").document(deviceId)
