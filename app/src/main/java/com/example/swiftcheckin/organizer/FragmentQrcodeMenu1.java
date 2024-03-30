@@ -29,7 +29,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * DialogFragment to show generated QR and ask for user choice.
@@ -42,7 +43,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private String eventId;     // Stores eventId
     private Button saveButton;  // Button to save the event.
 
-    private Bitmap qrCodeGenerated;     // Bitmap images of the generated/selected qr code.
+    private Firebase_organizer db_organizer;
+    private Qr_Code qrCodeGenerated;     // Qr_Code object
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
@@ -55,7 +57,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
          * sets the flag to its attribute in the activity.
          * @param flag: flag to indicate if the event has been saved and generated.
          */
-        void setGeneratedFlag(Boolean flag);
+        void setGeneratedFlag(Boolean flag, String qrCodeID);
     }
 
     // interface instance from labs
@@ -63,12 +65,9 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     /**
      * Constructor of the FragmentQrcodeMenu1 class. Initialises the dialog fragment.
-     * @param eventId: String to get the eventId of the event generated.
-     * @param bitmap: Bitmap image of the unique Qr code generated for the event.
      */
-    public FragmentQrcodeMenu1(String eventId, Bitmap bitmap) {
+    public FragmentQrcodeMenu1(String eventId) {
         this.eventId = eventId;
-        this.qrCodeGenerated = bitmap;
     }
 
     @Override
@@ -87,13 +86,16 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_qrcode_choice_menu1, null);
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
-        ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
+        db_organizer = new Firebase_organizer(requireContext());    // citation: auto-suggested by android studio
 
+        ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
 
         // layout 1
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
         layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
+
+
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,11 +109,11 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
 
         saveButton = view.findViewById(R.id.qrCodeSelectionSuccessLayout_saveButton);
-
         newQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
+                    qrCodeGenerated = createQr();
                     showSuccessScreen(view);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -119,14 +121,12 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 }
             }
         });
-
-
         // Citation: dismiss() -> https://developer.android.com/guide/fragments/dialogs :  dismiss the fragment and its dialog.(text from the website)
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dismiss();
-                if (listener != null) {
+                if (listener != null) { // saving qrcode
                     setFlagInContext();
                 }
             }
@@ -139,6 +139,25 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 .create();
     }
 
+    /**
+     * Generates a new Qr_Code object with a new Unique ID of length 16, and attaches a bitmap to the object.
+     * @return qrcode - Qr_Code object
+     */
+    private Qr_Code createQr()
+    {
+        // citation-needed
+        int length_qr_id = 32;
+        // random qr id
+        String uuid = UUID.randomUUID().toString();
+        uuid = uuid.replace("-", "");
+        uuid = uuid.substring(0, length_qr_id);
+
+        Bitmap qrcode_bitmap = QrCodeManager.generateQRCode(uuid);
+        Qr_Code qrcode = new Qr_Code(uuid, qrcode_bitmap);
+        qrcode.setEventID(this.eventId);
+
+        return qrcode;
+    }
 
     /**
      * Shares the image and text data between the activities.
@@ -164,7 +183,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     //Citation: The following code for sharing a QR code, 2024, Youtube, "Send Image To Other Apps in Android Studio (Updated) || Android 11 onwards", Android Tutorials, https://www.youtube.com/watch?v=eSi28xqGjbE
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
     //Both above citations were used
-    private Uri getImageToShare(Bitmap bitmap) {
+    private Uri getImageToShare(@NonNull Bitmap bitmap) {
         File folder = new File(requireContext().getCacheDir(), "images");
         Uri uri = null;
         try {
@@ -198,7 +217,14 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      * Sets the flag of the calling activity to true.
      */
     protected void setFlagInContext() {
-        listener.setGeneratedFlag(true);
+        db_organizer.addQrCode(qrCodeGenerated);
+        if(qrCodeGenerated.getImage() != null)
+        {listener.setGeneratedFlag(true, qrCodeGenerated.getQrID());}
+        else
+        {
+            Toast.makeText(getContext(), "Error occurred in saving the event", Toast.LENGTH_LONG).show();
+            Log.e("Event Error", "Error saving current event: "+eventId);
+        }
     }
 
     /**
@@ -214,7 +240,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         }
         ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
         if (qrCodeGenerated != null) {
-            qrImage.setImageBitmap(qrCodeGenerated);
+            qrImage.setImageBitmap(qrCodeGenerated.getImage());
         }
         successLayout.setVisibility(View.VISIBLE);
     }

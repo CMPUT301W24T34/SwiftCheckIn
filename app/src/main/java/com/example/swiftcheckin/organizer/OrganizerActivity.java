@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,7 +49,13 @@ public class OrganizerActivity extends AppCompatActivity {
     private String deviceId;  // Represents the current device Id
     private FirebaseFirestore db;  // Represents an instance of the Firestore database
 
-    Button addEventButton; // Button to add events.
+    private Firebase_organizer dbOrganizer;
+
+    LinearLayout addEventButton; // Button to add events.
+
+    interface QrImageCallback {
+        void onQrImageReceived(Bitmap bitmap);
+    }
 
 
     /*
@@ -119,15 +127,19 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventDescription = intent.getStringExtra("eventDescription");
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
             String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
+            String qrCodeID = intent.getStringExtra("qrCodeID");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Meant to add the events.
+                assert eventMaxAttendees != null;
+                Event event;
                 if (eventMaxAttendees.isEmpty()) {
-                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+                    event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 } else {
-                    addEvent(new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
-
+                    event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 }
+                event.setQrID(qrCodeID);
+                addEvent(event);
             }
         }
     };
@@ -157,6 +169,7 @@ public class OrganizerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_organizer);
 
         db = FirebaseFirestore.getInstance();  // Instance of the Firestore database.
+        dbOrganizer = new Firebase_organizer(getApplicationContext());
 
         // Id of the device that will go to the organizer mode.
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -180,19 +193,33 @@ public class OrganizerActivity extends AppCompatActivity {
 
         // In order to view who signed up to the event.
         // Check ins have not been implemented yet.
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        eventList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 int selectedPos = position;
                 // Start the Dialog fragment with all the options. Add the buttons to send notifications and view who signed up.
 
 //                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
                 Event event = dataList.get(selectedPos);
-                String eventId = event.getDeviceId() + event.getEventTitle();
-                SwitchOrgDetailsFragment dialogFragment = SwitchOrgDetailsFragment.newInstance(eventId);
-                dialogFragment.show(getSupportFragmentManager(), "eventId");
+
+                String eventId = event.getDeviceId()+event.getEventTitle();
+
+                getAssociatedQrImage(eventId, new QrImageCallback() {
+                    @Override
+                    public void onQrImageReceived(Bitmap bitmap) {
+                        if (bitmap != null) {
+                            SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId, bitmap);
+                            dialogFragment.show(getSupportFragmentManager(), "eventId");
+                        } else {
+                            Log.e("Error dialog qr", "Image not generated and failed to open dialogbox");
+                        }
+                    }
+                });
+
 //                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
 //                startActivity(intent);
+
+                return true;
             }
         });
 
@@ -266,40 +293,23 @@ public class OrganizerActivity extends AppCompatActivity {
      * @param event - Represents the event that is to be saved.
      */
     private void saveData(Event event){;
-        // Ensure we have 3 columns in firestore for simple reference.
-        // This is to ensure admin will be able to delete any events much more conveniently.
-        DocumentReference deviceRef = db.collection("events").document(deviceId + event.getEventTitle());
-        // Document Id, AKA eventId = deviceId + eventTitle
+        dbOrganizer.saveEvent(event);
+    }
 
-        // Hashmap method learned in labs.
-        HashMap<String, String> data = new HashMap<>();
-        data.put("eventTitle", event.getEventTitle());
-        data.put("eventLocation", event.getLocation());
-        data.put("deviceId", event.getDeviceId());
-        data.put("eventDescription", event.getDescription());
-        data.put("eventPosterURL", event.getEventImageUrl());
-        data.put("eventStartDate", event.getStartDate());
-        data.put("eventEndDate", event.getEndDate());
-        data.put("eventStartTime", event.getStartTime());
-        data.put("eventEndTime", event.getEndTime());
-        data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
-        // Sets the data to Firebase.
-        deviceRef
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {   // In the event, the event is added.
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "Event Added Successfully");
-                        Toast.makeText(OrganizerActivity.this, "Event Added Successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener(){ // In the event, the event fails to be added to Firebase.
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Event could not be added.");
-                        Toast.makeText(OrganizerActivity.this, "Event could not be added.", Toast.LENGTH_SHORT).show();
-                    }
-                });
+    private Bitmap getAssociatedQrImage(String eventId, QrImageCallback callback)
+    {
+        dbOrganizer.getAssociatedCodeID(eventId, new Firebase_organizer.QrIDCallback() {
+            @Override
+            public void onQrIDReceived(String qrID) {
+                if (qrID != null) {
+                   Bitmap bitmap = QrCodeManager.generateQRCode(qrID);
+                    callback.onQrImageReceived(bitmap);
+                } else {
+                    callback.onQrImageReceived(null);
+                }
+            }
+        });
+        return null;
     }
 
     /**

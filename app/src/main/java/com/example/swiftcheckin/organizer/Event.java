@@ -20,6 +20,7 @@ public class Event {
     private String location;
     private String deviceId;
     private String description;
+    private String qrID;
     private int maxAttendees;
 
     private int currentAttendees;
@@ -68,6 +69,7 @@ public class Event {
      */
     public Event(String eventTitle, String description, String location, String deviceId, String eventImageUrl, String maxAttendees, String startDate, String endDate, String startTime, String endTime){
 
+        // we will not add qr id here in constructor but instead add it later using setter function
         this.eventTitle = eventTitle;
         this.location = location;
         this.description = description;
@@ -261,5 +263,23 @@ public class Event {
      */
     public void incrementCurrentAttendees(){
         this.currentAttendees++;
+    }
+
+    /**
+     * Sets the associated QR id.
+     * @param qrID - String representing the qr id.
+     */
+    public void setQrID(String qrID)
+    {
+        this.qrID = qrID;
+    }
+
+    /**
+     * Returns the qr id of the associated qr code.
+     * @return - Returns qr id(String).
+     */
+    public String getQrID()
+    {
+        return this.qrID;
     }
 }
