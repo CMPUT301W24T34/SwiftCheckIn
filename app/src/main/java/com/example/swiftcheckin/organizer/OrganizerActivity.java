@@ -202,7 +202,7 @@ public class OrganizerActivity extends AppCompatActivity {
 //                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
                 Event event = dataList.get(selectedPos);
 
-                String eventId = event.getDeviceId()+"@"+event.getEventTitle();
+                String eventId = event.getDeviceId()+event.getEventTitle();
 
                 getAssociatedQrImage(eventId, new QrImageCallback() {
                     @Override

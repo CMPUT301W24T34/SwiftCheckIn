@@ -58,7 +58,7 @@ public class Firebase_organizer {
     {
         // Ensure we have 3 columns in firestore for simple reference.
         // This is to ensure admin will be able to delete any events much more conveniently.
-        DocumentReference deviceRef = db.collection("events").document(deviceId +"@"+event.getEventTitle());
+        DocumentReference deviceRef = db.collection("events").document(deviceId+event.getEventTitle());
         // Document Id, AKA eventId = deviceId + eventTitle
 
         // Hashmap method learned in labs.
