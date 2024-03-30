@@ -3,6 +3,7 @@ package com.example.swiftcheckin.attendee;
 import static android.content.ContentValues.TAG;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -74,19 +75,34 @@ public class AnnoucementActivity extends AppCompatActivity {
 
         String eventId = getIntent().getStringExtra("eventID");
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        getData(eventId);
         String eventMaxAttendees = getIntent().getStringExtra("eventMaxAttendees");
         String eventCurrentAttendees = getIntent().getStringExtra("eventCurrentAttendees");
-        getData(eventId);
 
         Button sign_up = findViewById(R.id.sign_up);
-        sign_up.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                saveData(deviceId, eventId);
-                eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+        // Add a condition here, if current attendees != maxAttendees
+        // If it is, grey out the button and make it unclickable
+        if (eventMaxAttendees.equals(eventCurrentAttendees)) {
+            sign_up.setBackgroundColor(Color.LTGRAY);
+        }
+            sign_up.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+                        saveData(deviceId, eventId);
+                        eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
-            }
-        });
+
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                        sign_up.setBackgroundColor(Color.LTGRAY);
+                    }
+
+                }
+            });
+
 
         ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(v -> {
@@ -108,6 +124,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         String eventStartDate = intent.getStringExtra("eventStartDate");
         String eventStartTime = intent.getStringExtra("eventStartTime");
         String eventEndTime = intent.getStringExtra("eventEndTime");
+
 
 //        TextView textViewEventID = findViewById(R.id.ann);
         TextView textViewEventTitle = findViewById(R.id.announcement_event_name);
