@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +20,8 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.swiftcheckin.R;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +33,8 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     String eventId;
     Bitmap bitmap_qr;
 
+    String eventTitle;
+
 //    public static SwitchOrgDetailsFragment newInstance(String extraData) {
 //        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
 //        Bundle args = new Bundle();
@@ -38,10 +43,11 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
 //        return fragment;
 //    }
 
-    public SwitchOrgDetailsFragment(String eventId, Bitmap bitmap)
+    public SwitchOrgDetailsFragment(String eventId, Bitmap bitmap, String eventTitle)
     {
         this.eventId = eventId;
         this.bitmap_qr = bitmap;
+        this.eventTitle = eventTitle;
     }
     @NonNull
     @Override
@@ -50,6 +56,9 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         Button viewSignedUp = view.findViewById(R.id.view_sign_up_attendees_button);
         Button sendNotifs = view.findViewById(R.id.send_notifications_button);
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+
+        TextView title = view.findViewById(R.id.eventExtras);
+        title.setText(this.eventTitle);
 
         ImageView qrImageView = view.findViewById(R.id.organizer_switch_details_fragment_qrImage);
         qrImageView.setImageBitmap(bitmap_qr);
@@ -68,6 +77,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), ViewAttendeesActivity.class);
                 intent.putExtra("eventId", eventId);
+                dismiss();
                 startActivity(intent);
             }
         });
@@ -77,6 +87,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddAnnouncementActivity.class);
                 intent.putExtra("eventId", eventId);
+                dismiss();
                 startActivity(intent);
             }
         });

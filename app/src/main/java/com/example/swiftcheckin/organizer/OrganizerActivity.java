@@ -210,7 +210,7 @@ public class OrganizerActivity extends AppCompatActivity {
                     @Override
                     public void onQrImageReceived(Bitmap bitmap) {
                         if (bitmap != null) {
-                            SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId, bitmap);
+                            SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId, bitmap, event.getEventTitle());
                             dialogFragment.show(getSupportFragmentManager(), "eventId");
                         } else {
                             Log.e("Error dialog qr", "Image not generated and failed to open dialogbox");

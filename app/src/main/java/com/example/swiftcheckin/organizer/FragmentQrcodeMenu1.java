@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -49,6 +50,12 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
+
+    // citation: TechViewHub, Youtube. Adding the sound effect in Android | TechViewHub | Android Studio. March 29, 2024.
+    // Link: https://www.youtube.com/watch?v=iMAJRHcC2dQ
+    MediaPlayer mediaPlayer;    // used to play a sound effect
+
+
 
     /**
      * Interface to communicate with the activity to set the flag.
@@ -101,6 +108,9 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
 
 
+        mediaPlayer = MediaPlayer.create(getContext(), R.raw.swoosh);
+
+
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,6 +144,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             public void onClick(View v) {
                 dismiss();
                 if (listener != null) { // saving qrcode
+                    mediaPlayer.start();
                     setFlagInContext();
                 }
             }
