@@ -17,7 +17,7 @@
             android:layout_height="wrap_content"
             android:text="Event Name"
             android:background="#e0dfdc"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             android:textAlignment="center"
 

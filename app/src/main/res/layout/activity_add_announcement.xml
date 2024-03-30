@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".organizer.AddAnnouncementActivity">
+
+
+    <TextView
+        android:id="@+id/addAnnouncementTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Add Announcement"
+        android:fontFamily="casual"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/addAnnouncmentBorder"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="12dp"
+        android:background="#000000"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addAnnouncementTitle" />
+
+    <EditText
+        android:id="@+id/announcementEditHeading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="144dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/rounded_edit_text"
+        android:hint="    Announcement Heading"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/addAnnouncmentBorder" />
+
+    <EditText
+        android:id="@+id/announcementEditDes"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+
+        android:background="@drawable/less_round_edit_text"
+
+        android:gravity="top|start"
+        android:hint="    Announcement Description"
+        android:inputType="textMultiLine"
+        android:minLines="5"
+        android:padding="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.3"
+
+        app:layout_constraintTop_toBottomOf="@id/announcementEditHeading"
+        app:layout_constraintVertical_bias="0.341"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp">
+
+        <Button
+            android:id="@+id/addAnnouncementCancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="30dp"
+            android:layout_marginEnd="5dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:text="Cancel" />
+
+        <Button
+            android:id="@+id/addAnnouncementSaveButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="30dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/black"
+            android:text="Add" />
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
