@@ -3,7 +3,6 @@ package com.example.swiftcheckin.organizer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -29,7 +28,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -45,6 +43,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     private Firebase_organizer db_organizer;
     private Qr_Code qrCodeGenerated;     // Qr_Code object
+    private Qr_Code promoQrCode;
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
@@ -55,9 +54,12 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     interface AddActivity {
         /**
          * sets the flag to its attribute in the activity.
-         * @param flag: flag to indicate if the event has been saved and generated.
+         *
+         * @param flag : flag to indicate if the event has been saved and generated.
+         * @param qrCodeID - ID of checkin qr code
+         * @param promotionalQrID - ID of promotional qr code
          */
-        void setGeneratedFlag(Boolean flag, String qrCodeID);
+        void setGeneratedFlag(Boolean flag, String qrCodeID, String promotionalQrID);
     }
 
     // interface instance from labs
@@ -114,6 +116,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             public void onClick(View v) {
                 try {
                     qrCodeGenerated = createQr();
+                    promoQrCode = createQr();
+                    promoQrCode.setIsPromo(true);       // setting the promotional qr
                     showSuccessScreen(view);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -218,8 +222,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      */
     protected void setFlagInContext() {
         db_organizer.addQrCode(qrCodeGenerated);
-        if(qrCodeGenerated.getImage() != null)
-        {listener.setGeneratedFlag(true, qrCodeGenerated.getQrID());}
+        if(qrCodeGenerated.getImage() != null && promoQrCode != null)
+        {listener.setGeneratedFlag(true, qrCodeGenerated.getQrID(), promoQrCode.getQrID());}
         else
         {
             Toast.makeText(getContext(), "Error occurred in saving the event", Toast.LENGTH_LONG).show();

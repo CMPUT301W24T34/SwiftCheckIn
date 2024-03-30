@@ -21,6 +21,7 @@ public class Event {
     private String deviceId;
     private String description;
     private String qrID;
+    private String qrPromoId;
     private int maxAttendees;
 
     private int currentAttendees;
@@ -281,5 +282,23 @@ public class Event {
     public String getQrID()
     {
         return this.qrID;
+    }
+
+    /**
+     * Sets the associated promotional QR id.
+     * @param qrID - String representing the qr id.
+     */
+    public void setQrPromoID(String qrID)
+    {
+        this.qrPromoId = qrID;
+    }
+
+    /**
+     * Returns the promotional qr id of the associated qr code.
+     * @return - Returns qr id(String).
+     */
+    public String getQrPromoID()
+    {
+        return this.qrPromoId;
     }
 }
