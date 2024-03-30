@@ -264,7 +264,6 @@ public class SettingsActivity extends AppCompatActivity {
                 double latitude = location.getLatitude();
                 double longitude = location.getLongitude();
                 Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
-                Toast.makeText(SettingsActivity.this, "Location data received", Toast.LENGTH_SHORT).show();
                 // Citation: OpenAI, 03-29-2024, ChatGPT, How to ensure that the updates don't keep coming
                 // output was locationManager.removeUpdates(this);
                 // Remove updates after first one
