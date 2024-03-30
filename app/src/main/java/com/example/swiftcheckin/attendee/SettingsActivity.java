@@ -78,7 +78,8 @@ public class SettingsActivity extends AppCompatActivity {
         db = FirebaseFirestore.getInstance();
         deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         getData();
-        // Citation?
+        // Citation: OpenAI, 03-29-2024, ChatGPT, How to set a listener for the location checkbox
+        // output was below, the onCheckedChangeListener and onCheckedChanged Method
         locationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -241,7 +242,9 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
-    // Citation?
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to obtain location of user
+    // output was to use a location manager and listener, gave me the onLocationChanged, onProviderDisabled, onProviderEnabled, onStatusChanged methods
+    // also gave the checking of permissions
     private void getLocation(String deviceId) {
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
@@ -252,6 +255,8 @@ public class SettingsActivity extends AppCompatActivity {
                 double longitude = location.getLongitude();
                 Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
                 Toast.makeText(SettingsActivity.this, "Location data received", Toast.LENGTH_SHORT).show();
+                // Citation: OpenAI, 03-29-2024, ChatGPT, How to ensure that the updates don't keep coming
+                // output was locationManager.removeUpdates(this);
                 // Remove updates after first one
                 locationManager.removeUpdates(this);
                 // Save location data to Firebase
@@ -292,14 +297,14 @@ public class SettingsActivity extends AppCompatActivity {
                 0, 0, locationListener);
     }
 
-    // Citation?
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to ask user for location permission
+    // output is getLocationPermission and onRequestPermissionsResult functions below
     private void getLocationPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                 LOCATION_PERMISSION);
     }
 
-    // Citation?
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -318,14 +323,15 @@ public class SettingsActivity extends AppCompatActivity {
             }
         }
     }
-    // Citation?
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to transfer user to settings
+    // output is this function below, creating the dialog, and setting the buttons
     private void settingsDialog() {
         locationCheckBox.setChecked(false);
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Permission Required");
-        builder.setMessage("Location permission is required for this feature. Please enable it in the app settings.");
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Permission Required");
+        popup.setMessage("Location permission is required for this feature. Please enable it in the app settings.");
 
-        builder.setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+        popup.setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Open app settings
@@ -336,7 +342,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+        popup.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 // Update firebase
@@ -350,7 +356,7 @@ public class SettingsActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        AlertDialog dialog = builder.create();
+        AlertDialog dialog = popup.create();
         dialog.show();
     }
 
