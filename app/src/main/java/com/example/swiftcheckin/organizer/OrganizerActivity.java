@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,7 +48,7 @@ public class OrganizerActivity extends AppCompatActivity {
     private String deviceId;  // Represents the current device Id
     private FirebaseFirestore db;  // Represents an instance of the Firestore database
 
-    Button addEventButton; // Button to add events.
+    LinearLayout addEventButton; // Button to add events.
 
 
     /*
@@ -184,19 +185,22 @@ public class OrganizerActivity extends AppCompatActivity {
 
         // In order to view who signed up to the event.
         // Check ins have not been implemented yet.
-        eventList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        eventList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 int selectedPos = position;
                 // Start the Dialog fragment with all the options. Add the buttons to send notifications and view who signed up.
 
 //                Intent intent = new Intent(OrganizerActivity.this, ViewAttendeesActivity.class);
                 Event event = dataList.get(selectedPos);
-                String eventId = event.getDeviceId() + event.getEventTitle();
-                SwitchOrgDetailsFragment dialogFragment = SwitchOrgDetailsFragment.newInstance(eventId);
+                
+                String eventId = event.getDeviceId()+"@"+event.getEventTitle();
+                SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId);
                 dialogFragment.show(getSupportFragmentManager(), "eventId");
 //                intent.putExtra("eventId", event.getDeviceId() + event.getEventTitle());
 //                startActivity(intent);
+
+                return true;
             }
         });
 

@@ -3,6 +3,7 @@ package com.example.swiftcheckin.organizer;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,12 +18,19 @@ import com.example.swiftcheckin.R;
 
 public class SwitchOrgDetailsFragment extends DialogFragment {
 
-    public static SwitchOrgDetailsFragment newInstance(String extraData) {
-        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
-        Bundle args = new Bundle();
-        args.putString("eventId", extraData);
-        fragment.setArguments(args);
-        return fragment;
+    String eventId;
+    Bitmap bitmap_qr;
+//    public static SwitchOrgDetailsFragment newInstance(String extraData) {
+//        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
+//        Bundle args = new Bundle();
+//        args.putString("eventId", extraData);
+//        fragment.setArguments(args);
+//        return fragment;
+//    }
+
+    public SwitchOrgDetailsFragment(String eventId)
+    {
+        this.eventId = eventId;
     }
     @NonNull
     @Override

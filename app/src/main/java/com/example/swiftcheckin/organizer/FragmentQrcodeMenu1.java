@@ -216,7 +216,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      */
     protected void setFlagInContext() {
         db_organizer.addQrCode(qrCodeGenerated);
-        Log.e("QrImage Check", String.valueOf(qrCodeGenerated.getImage() != null));
         if(qrCodeGenerated.getImage() != null)
         {listener.setGeneratedFlag(true, qrCodeGenerated.getQrID());}
         else
