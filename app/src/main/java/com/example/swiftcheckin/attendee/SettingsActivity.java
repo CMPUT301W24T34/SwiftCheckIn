@@ -5,17 +5,33 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.provider.Settings.Secure;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+
+
+import android.Manifest;
+import android.widget.Toast;
 
 import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -42,6 +58,10 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText websiteEditText;
     private EditText addressEditText;
     private CheckBox locationCheckBox;
+    private static final int LOCATION_PERMISSION = 1001;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
+    private String deviceId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +76,19 @@ public class SettingsActivity extends AppCompatActivity {
         locationCheckBox = findViewById(R.id.locationCheckbox);
         Button saveButton = findViewById(R.id.save_button);
         db = FirebaseFirestore.getInstance();
+        deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         getData();
+        // Citation: OpenAI, 03-29-2024, ChatGPT, How to set a listener for the location checkbox
+        // output was below, the onCheckedChangeListener and onCheckedChanged Method
+        locationCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    getLocationPermission();
+                }
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,12 +124,29 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    private void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View v = activity.getCurrentFocus();
+        if (v == null) {
+            v = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+    }
+
+    private boolean isValid(String birthday) {
+        if (birthday.equals("")) {
+            return true;
+        } else {
+            String pattern = "\\d{2}/\\d{2}/\\d{4}";
+            return Pattern.matches(pattern, birthday);
+        }
+    }
+
 
     /**
      * This gets the profile data from firestore
      */
     private void getData() {
-        String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         DocumentReference profileRef = db.collection("profiles").document(deviceId);
 
         profileRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
@@ -154,7 +203,6 @@ public class SettingsActivity extends AppCompatActivity {
      * @param locationPermission - boolean of whether location permission is on or not
      */
     private void saveData(String name, String birthday, String phoneNumber, String email, String website, String address, boolean locationPermission) {
-        String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         HashMap<String, String> data = new HashMap<>();
         data.put("name", name);
         data.put("birthday", birthday);
@@ -163,13 +211,26 @@ public class SettingsActivity extends AppCompatActivity {
         data.put("website", website);
         data.put("address", address);
 
-        if (locationPermission){
+        if (locationPermission) {
             data.put("locationPermission", "True");
-        }
-        else{
-            data.put("locationPermission", "False");
-        }
+            saveToFirebase(deviceId, data);
+            getLocation(deviceId);
 
+        }
+        else {
+            data.put("locationPermission", "False");
+            data.put("latitude", "Unknown");
+            data.put("longitude", "Unknown");
+            saveToFirebase(deviceId, data);
+        }
+    }
+
+    /**
+     * Saves profile data to firebase
+     * @param deviceId id of users device
+     * @param data data to be updated
+     */
+    private void saveToFirebase(String deviceId, HashMap<String, String> data) {
         db.collection("profiles").document(deviceId)
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -186,38 +247,150 @@ public class SettingsActivity extends AppCompatActivity {
                 });
     }
 
-    // Citation: How to hide a keyboard, Stack Overflow, License: CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to obtain location of user
+    // output was to use a location manager and listener, gave me the onLocationChanged, onProviderDisabled, onProviderEnabled, onStatusChanged methods
+    // also gave the checking of permissions
 
     /**
-     * This hides the built in keyboard
-     * @param activity - the activity
+     * Gets the latitude and longitude coordinates of the users device
+     * @param deviceId
      */
-    private void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View v = activity.getCurrentFocus();
-        if (v == null) {
-            v = new View(activity);
+    private void getLocation(String deviceId) {
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+        locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                double latitude = location.getLatitude();
+                double longitude = location.getLongitude();
+                Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
+                // Citation: OpenAI, 03-29-2024, ChatGPT, How to ensure that the updates don't keep coming
+                // output was locationManager.removeUpdates(this);
+                // Remove updates after first one
+                locationManager.removeUpdates(this);
+                // Save location data to Firebase
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("latitude", String.valueOf(latitude));
+                data.put("longitude", String.valueOf(longitude));
+                updateLocationInfo(deviceId, data);
+            }
+
+            @Override
+            public void onProviderDisabled(@NonNull String provider) {
+                Log.d("Location", "Provider disabled: " + provider);
+            }
+
+            @Override
+            public void onProviderEnabled(@NonNull String provider) {
+                Log.d("Location", "Provider enabled: " + provider);
+            }
+
+            @Override
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+                Log.d("Location", "Provider status changed: " + provider);
+            }
+        };
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                        != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
+                            Manifest.permission.ACCESS_COARSE_LOCATION},
+                    LOCATION_PERMISSION);
+            return;
         }
-        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                0, 0, locationListener);
     }
-    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if birthday string matches pattern
-    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, birthday);
+
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to ask user for location permission
+    // output is getLocationPermission and onRequestPermissionsResult functions below
+    private void getLocationPermission() {
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                LOCATION_PERMISSION);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            }
+            else {
+                // Permission denied
+                settingsDialog();
+
+            }
+        }
+    }
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to transfer user to settings
+    // output is this function below, creating the dialog, and setting the buttons
 
     /**
-     * This checks if the inputted birthday is of valid format
-     * @param birthday - string to check
-     * @return
-     * returns boolean of whether its valid
+     * If a user denies location permission, they are prompted to go to settings to enable it
      */
-    private boolean isValid(String birthday){
-        if (birthday.equals("")){
-            return true;
-        }
-        else {
-            String pattern = "\\d{2}/\\d{2}/\\d{4}";
-            return Pattern.matches(pattern, birthday);
-        }
+    private void settingsDialog() {
+        locationCheckBox.setChecked(false);
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Permission Required");
+        popup.setMessage("Location permission is required for this feature. Please enable it in the app settings.");
 
+        popup.setPositiveButton("Go to Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Open app settings
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                Uri uri = Uri.fromParts("package", getPackageName(), null);
+                intent.setData(uri);
+                startActivity(intent);
+            }
+        });
+
+        popup.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Update firebase
+
+                HashMap<String, Object> data = new HashMap<>();
+                data.put("locationPermission", "False");
+                data.put("latitude", "Unknown");
+                data.put("longitude", "Unknown");
+                updateLocationInfo(deviceId, data);
+
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = popup.create();
+        dialog.show();
     }
+
+    /**
+     * update the firebase collection with the location data
+     * @param deviceId - deviceid of users phone
+     * @param data - the data to be updated to firebase
+     */
+
+    private void updateLocationInfo(String deviceId, HashMap<String, Object> data){
+        db.collection("profiles").document(deviceId)
+                .update(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Location data has been added successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener(){
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Location data could not be added");
+                    }
+                });
+    }
+
 
 }
