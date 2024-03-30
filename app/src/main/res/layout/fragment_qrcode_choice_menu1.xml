@@ -7,7 +7,7 @@
         android:id="@+id/qrCodeCreationMenu_Layout1"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="invisible">
+        android:visibility="visible">
 
         <TextView
             android:id="@+id/fragmentQrCodeMenu1Title"
@@ -83,7 +83,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:visibility="visible"
+        android:visibility="invisible"
         android:gravity="center"
         android:weightSum="10">
 

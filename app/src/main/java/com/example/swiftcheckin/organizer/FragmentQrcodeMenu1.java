@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -85,7 +86,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_qrcode_choice_menu1, null);
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
-        db_organizer = new Firebase_organizer();
+        db_organizer = new Firebase_organizer(requireContext());    // citation: auto-suggested by android studio
 
         ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
 
@@ -144,6 +145,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      */
     private Qr_Code createQr()
     {
+        // citation-needed
         int length_qr_id = 32;
         // random qr id
         String uuid = UUID.randomUUID().toString();
