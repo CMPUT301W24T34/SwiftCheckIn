@@ -27,17 +27,21 @@ public class EventSignUp {
      * @param eventId - The Id of the event the attendee wants to sign up for.
      * @param attendeeDeviceId - The id of the attendee who wants to signs up
      */
-    public void addAttendeeToEvent(String eventId, String attendeeDeviceId){
+    // Instead of the eventId, why don't I pass an event entirely?
+    public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees){
+        int maxAttendees = Integer.parseInt(eventMaxAttendees);
+        int currentAttendees = Integer.parseInt(eventCurrentAttendees);
         // Add the attendee to the firestore database.
         db = FirebaseFirestore.getInstance();
-        Event updated_event = createEvent(eventId);
-        // Hashmap methods from labs
-        HashMap<String, String> data = new HashMap<>();
-        data.put(attendeeDeviceId, attendeeDeviceId);
+//        // Hashmap methods from labs
 
-        int currentAttendees = updated_event.getCurrentAttendees();  // Current Attendees, in the future to help limit the number of attendees that can join.
-        DocumentReference eventDoc = db.collection("eventsWithAttendees").document(eventId);
-        // Citation: OpenAI, 03-07-2024,  ChatGPT, updating data in documents without resetting the entire document.
+        if (currentAttendees < maxAttendees) {
+            HashMap<String, String> data = new HashMap<>();
+            data.put(attendeeDeviceId, attendeeDeviceId);
+
+//        int currentAttendees = updated_event.getCurrentAttendees();  // Current Attendees, in the future to help limit the number of attendees that can join.
+            DocumentReference eventDoc = db.collection("eventsWithAttendees").document(eventId);
+            // Citation: OpenAI, 03-07-2024,  ChatGPT, updating data in documents without resetting the entire document.
         /*
         I wanted to know how to update fields without overwriting previous data and I tried using .update(), but that did not work
         I asked ChatGPT how to update and it provided this code,
@@ -50,15 +54,34 @@ public class EventSignUp {
                 });
          Where SetOptions.merge() helped me avoid overwriting any information.
          */
-        eventDoc.set(data, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> {
-                    System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
-                })
-                .addOnFailureListener(e -> {
-                    System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
-                });
+            eventDoc.set(data, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> {
+                        System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
+                    })
+                    .addOnFailureListener(e -> {
+                        System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
+                    });
 //        updateEventInFirebase(updated_event);  // Updates this event in Firebase, meant to help with limiting attendees.
-        // Has not been achieved yet.
+            // Has not been achieved yet.
+
+            currentAttendees += 1;
+
+            eventCurrentAttendees = Integer.toString(currentAttendees);
+
+            DocumentReference updateEventDoc = db.collection("events").document(eventId);
+            HashMap<String, String> data2 = new HashMap<>();
+            data2.put("eventCurrentAttendees", eventCurrentAttendees);
+            updateEventDoc.set(data2, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> {
+                System.out.println("Event updated successfully");  // Checks if attendee is added here
+            })
+                    .addOnFailureListener(e -> {
+                        System.out.println("Error updating event: " + e.getMessage());  // In case attendee is not added.
+                    });
+
+
+        }
+
     }
 
     /**

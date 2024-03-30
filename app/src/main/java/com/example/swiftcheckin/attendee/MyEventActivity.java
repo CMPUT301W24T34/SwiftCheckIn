@@ -92,6 +92,8 @@ public class MyEventActivity extends AppCompatActivity {
             String eventStartTime = eventList.get(position).getStartTime();
             String eventEndDate = eventList.get(position).getEndDate();
             String eventEndTime = eventList.get(position).getEndTime();
+            String eventMaxAttendees = Integer.toString(eventList.get(position).getMaxAttendees());
+            String eventCurrentAttendees = Integer.toString(eventList.get(position).getCurrentAttendees());
 
 
             annoucementIntent.putExtra("eventID", eventID);
@@ -103,6 +105,8 @@ public class MyEventActivity extends AppCompatActivity {
             annoucementIntent.putExtra("eventStartTime", eventStartTime);
             annoucementIntent.putExtra("eventEndDate", eventEndDate);
             annoucementIntent.putExtra("eventEndTime", eventEndTime);
+            annoucementIntent.putExtra("eventMaxAttendees", eventMaxAttendees);
+            annoucementIntent.putExtra("eventCurrentAttendees", eventCurrentAttendees);
 
 
             startActivity(annoucementIntent);
@@ -160,10 +164,26 @@ public class MyEventActivity extends AppCompatActivity {
                         String eventStartTime = document.getString("eventStartTime");
                         String eventEndDate = document.getString("eventEndDate");
                         String eventEndTime = document.getString("eventEndTime");
+                        String eventMaxAttendees = document.getString("eventMaxAttendees");
+                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
 
 
-                        eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime));
+
+                        Event event;
+
+                        if (eventMaxAttendees.equals("-1")) {
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+
+                        } else {
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                        }
+
+                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+
+
+                        eventList.add(event);
 
                         eventViewAdapter.notifyDataSetChanged(); // Notify the adapter to render new data
                     } else {

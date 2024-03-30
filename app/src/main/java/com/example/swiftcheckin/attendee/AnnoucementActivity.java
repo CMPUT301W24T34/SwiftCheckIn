@@ -74,6 +74,8 @@ public class AnnoucementActivity extends AppCompatActivity {
 
         String eventId = getIntent().getStringExtra("eventID");
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        String eventMaxAttendees = getIntent().getStringExtra("eventMaxAttendees");
+        String eventCurrentAttendees = getIntent().getStringExtra("eventCurrentAttendees");
         getData(eventId);
 
         Button sign_up = findViewById(R.id.sign_up);
@@ -81,7 +83,7 @@ public class AnnoucementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveData(deviceId, eventId);
-                eventSignUp.addAttendeeToEvent(eventId, deviceId);
+                eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
             }
         });

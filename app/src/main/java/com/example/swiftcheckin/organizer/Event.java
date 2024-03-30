@@ -23,7 +23,7 @@ public class Event {
     private String qrID;
     private int maxAttendees;
 
-    private int currentAttendees;
+    private int currentAttendees = 0;
 
     public Event(){
     }
@@ -261,8 +261,8 @@ public class Event {
     /**
      * Increments the number of current attendees when someone join (not fully implemented yet.
      */
-    public void incrementCurrentAttendees(){
-        this.currentAttendees++;
+    public void setCurrentAttendees(int currentAttendees) {
+        this.currentAttendees = currentAttendees;
     }
 
     /**
