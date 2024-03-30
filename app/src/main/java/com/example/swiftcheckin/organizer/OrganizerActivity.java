@@ -128,6 +128,7 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
             String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
             String qrCodeID = intent.getStringExtra("qrCodeID");
+            String qrPromoCodeID = intent.getStringExtra("promoQrID");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Meant to add the events.
@@ -138,6 +139,7 @@ public class OrganizerActivity extends AppCompatActivity {
                 } else {
                     event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 }
+                event.setQrPromoID(qrPromoCodeID);
                 event.setQrID(qrCodeID);
                 addEvent(event);
             }

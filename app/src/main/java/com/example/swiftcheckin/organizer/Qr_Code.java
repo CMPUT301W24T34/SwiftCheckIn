@@ -105,7 +105,7 @@ public class Qr_Code {
      * Sets the device Id of the generating device
      * @param deviceID -String containing the device ID
      */
-    private void setDeviceID(String deviceID)
+    public void setDeviceID(String deviceID)
     {
         this.deviceID = deviceID;
     }
@@ -114,7 +114,7 @@ public class Qr_Code {
      * Returns the device ID of the generating device
      * @return String that represents the device id
      */
-    private String getDeviceID()
+    public String getDeviceID()
     {
         return this.deviceID;
     }

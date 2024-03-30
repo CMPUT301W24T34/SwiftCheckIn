@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,6 +42,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private String eventId;     // Stores eventId
     private Button saveButton;  // Button to save the event.
 
+    private String deviceId;
     private Firebase_organizer db_organizer;
     private Qr_Code qrCodeGenerated;     // Qr_Code object
     private Qr_Code promoQrCode;
@@ -89,6 +91,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
         db_organizer = new Firebase_organizer(requireContext());    // citation: auto-suggested by android studio
+        deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
 
@@ -149,7 +152,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      */
     private Qr_Code createQr()
     {
-        // citation-needed
+        // OpenAI, March 29 2024. ChatGPT. Asked chatgpt on how to create a random alphanumeric string to be used as an id.
         int length_qr_id = 32;
         // random qr id
         String uuid = UUID.randomUUID().toString();
@@ -159,6 +162,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         Bitmap qrcode_bitmap = QrCodeManager.generateQRCode(uuid);
         Qr_Code qrcode = new Qr_Code(uuid, qrcode_bitmap);
         qrcode.setEventID(this.eventId);
+        qrcode.setDeviceID(deviceId);
 
         return qrcode;
     }
@@ -222,6 +226,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      */
     protected void setFlagInContext() {
         db_organizer.addQrCode(qrCodeGenerated);
+        db_organizer.addQrCode(promoQrCode);
+
         if(qrCodeGenerated.getImage() != null && promoQrCode != null)
         {listener.setGeneratedFlag(true, qrCodeGenerated.getQrID(), promoQrCode.getQrID());}
         else
@@ -243,8 +249,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             layout_selection.setVisibility(View.INVISIBLE);
         }
         ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
-        if (qrCodeGenerated != null) {
-            qrImage.setImageBitmap(qrCodeGenerated.getImage());
+        if (promoQrCode != null) {
+            qrImage.setImageBitmap(promoQrCode.getImage());
         }
         successLayout.setVisibility(View.VISIBLE);
     }
