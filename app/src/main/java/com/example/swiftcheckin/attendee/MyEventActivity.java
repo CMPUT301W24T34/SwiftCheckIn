@@ -180,8 +180,11 @@ public class MyEventActivity extends AppCompatActivity {
                                     eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                         }
 
-                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
-
+                        if (eventCurrentAttendees != null) {
+                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                        } else {
+                            event.setCurrentAttendees(0);
+                        }
 
                         eventList.add(event);
 

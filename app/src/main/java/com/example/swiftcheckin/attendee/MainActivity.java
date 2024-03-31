@@ -98,8 +98,11 @@ public class MainActivity extends AppCompatActivity {
                                 eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                     }
 
-                    assert eventCurrentAttendees != null;
-                    event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                    if (eventCurrentAttendees != null) {
+                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                    } else {
+                        event.setCurrentAttendees(0);
+                    }
 
 
                     eventList.add(event);
