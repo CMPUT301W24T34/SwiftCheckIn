@@ -74,6 +74,7 @@ public class Firebase_organizer {
         data.put("eventStartTime", event.getStartTime());
         data.put("eventEndTime", event.getEndTime());
         data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
+        data.put("eventCurrentAttendees", Integer.toString(event.getCurrentAttendees()));
         data.put("qrID", event.getQrID());
         data.put("qrPromoID", event.getQrPromoID());
         // Sets the data to Firebase.
