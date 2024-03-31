@@ -56,6 +56,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_sign_up_attendees_button"
         app:layout_constraintBottom_toTopOf="@+id/switch_details_fragment_QRlayout"/>
+    <Button
+        android:id="@+id/view_map_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+
+        android:backgroundTint="@color/black"
+        android:text="View Map"
+
+        android:textSize="20sp"
+        app:cornerRadius="0sp"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/send_notifications_button" />
 
     <LinearLayout
         android:id="@+id/switch_details_fragment_QRlayout"
@@ -69,7 +87,7 @@
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:weightSum="2"
-        app:layout_constraintTop_toBottomOf="@+id/send_notifications_button">
+        app:layout_constraintTop_toBottomOf="@+id/view_map_button">
 
         <ImageView
             android:id="@+id/organizer_switch_details_fragment_qrImage"
