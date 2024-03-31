@@ -128,6 +128,7 @@ public class OrganizerActivity extends AppCompatActivity {
             String eventPosterURL = intent.getStringExtra("eventPosterURL");
             String eventMaxAttendees = intent.getStringExtra("eventMaxAttendees");
             String qrCodeID = intent.getStringExtra("qrCodeID");
+            String qrPromoCodeID = intent.getStringExtra("promoQrID");
 
             if ("com.example.ADD_EVENT".equals(intent.getAction())) {
                 // Meant to add the events.
@@ -138,6 +139,7 @@ public class OrganizerActivity extends AppCompatActivity {
                 } else {
                     event = new Event(eventName, eventDescription, eventAddress, deviceId, eventPosterURL, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                 }
+                event.setQrPromoID(qrPromoCodeID);
                 event.setQrID(qrCodeID);
                 addEvent(event);
             }
@@ -208,7 +210,7 @@ public class OrganizerActivity extends AppCompatActivity {
                     @Override
                     public void onQrImageReceived(Bitmap bitmap) {
                         if (bitmap != null) {
-                            SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId, bitmap);
+                            SwitchOrgDetailsFragment dialogFragment = new SwitchOrgDetailsFragment(eventId, bitmap, event.getEventTitle());
                             dialogFragment.show(getSupportFragmentManager(), "eventId");
                         } else {
                             Log.e("Error dialog qr", "Image not generated and failed to open dialogbox");

@@ -1,6 +1,7 @@
 package com.example.swiftcheckin.organizer;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +15,7 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -29,6 +31,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Calendar;
 
 /**
  * Activity meant to help create events for attendees to join. Starts from the organizer activity and
@@ -72,39 +75,32 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         editEventPoster.setOnClickListener(v -> showImagePickerOptions());
 
         // Cancels the creation of the event.
-        cancelButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        initCancelButton(cancelButton);
 
         // Saves the event.
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                editAddEvent();
-            }
-        });
+        initSaveButton(saveButton);
 
-        // textWatcher to enforce proper Date format in start and end date
+        // DatePicker dialog
         EditText startDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
         EditText endDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
 
-        createTextWatcher(startDateEditText);
-        createTextWatcher(endDateEditText);
+        initDatePickerClick(startDateEditText);
+        initDatePickerClick(endDateEditText);
+
+
     }
 
     /**
      * Broadcasts the intent
      * @param flag - Boolean parameter which dictates whether a broadcast should be sent or not.
      */
-    public void setGeneratedFlag(Boolean flag, String qrcodeID)
+    public void setGeneratedFlag(Boolean flag, String qrcodeID, String promotionalQrID)
     {
         this.qrGenerated = flag;
         if(this.qrGenerated) {
             // Full citation provided in OrganizerActivity
             broadcastIntent.putExtra("qrCodeID", qrcodeID);
+            broadcastIntent.putExtra("promoQrID", promotionalQrID);
             sendBroadcast(broadcastIntent);
             finish();
         }
@@ -170,28 +166,52 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
     */
 
-    /**
-     *  Enforces the correct format in the EditText.
-     *  Specifically for enforcing the date format: DD/MM/YYYY
-     * @param editText
-     */
-    private void createTextWatcher(EditText editText)
+
+    private void initDatePickerClick(EditText editText)
     {
-        editText.addTextChangedListener(new TextWatcher() {
+        editText.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            // enforcing a few parameters in XML, and adding '/' at proper indexes
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() == 2 || s.length() == 5) {
-                    s.append("/");
-                }
+            public void onClick(View v) {
+                initDatePicker(editText);
             }
         });
+
+    }
+    private void initSaveButton(Button button)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editAddEvent();
+            }
+        });
+    }
+    private void initCancelButton(Button button)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
+    //Citation: Code with Cal, Youtube. Pop Up Date Picker Android Studio Tutorial. Accessed March 30, 2024.
+    //Link: https://www.youtube.com/watch?v=qCoidM98zNk
+    private void initDatePicker(EditText editText)
+    {
+        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String monthWord = monthNames[month];
+                String selectedDate = monthWord +" " + dayOfMonth + " " + year;
+                editText.setText(selectedDate);
+            }
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+            Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+
+        datePicker.show();
     }
 
     /**
