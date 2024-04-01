@@ -84,9 +84,31 @@ public class MainActivity extends AppCompatActivity {
                     String eventStartTime = (String) doc.getData().get("eventStartTime");
                     String eventEndDate = (String) doc.getData().get("eventEndDate");
                     String eventEndTime = (String) doc.getData().get("eventEndTime");
+                    String eventMaxAttendees = (String) doc.getData().get("eventMaxAttendees");
+                    String eventCurrentAttendees = (String) doc.getData().get("eventCurrentAttendees");
 
-                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
-                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
+                    Event event;
+
+                    if (eventMaxAttendees.equals("-1")) {
+                        event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+
+                    } else {
+                        event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                    }
+
+                    if (eventCurrentAttendees != null) {
+                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                    } else {
+                        event.setCurrentAttendees(0);
+                    }
+
+
+                    eventList.add(event);
+
+//                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
+//                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
                 }
                 eventViewAdapter.notifyDataSetChanged();
             }
@@ -138,6 +160,8 @@ public class MainActivity extends AppCompatActivity {
             String eventStartTime = eventList.get(position).getStartTime();
             String eventEndDate = eventList.get(position).getEndDate();
             String eventEndTime = eventList.get(position).getEndTime();
+            String eventMaxAttendees = Integer.toString(eventList.get(position).getMaxAttendees());
+            String eventCurrentAttendees = Integer.toString(eventList.get(position).getCurrentAttendees());
 
 
             annoucementIntent.putExtra("eventID", eventID);
@@ -149,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
             annoucementIntent.putExtra("eventStartTime", eventStartTime);
             annoucementIntent.putExtra("eventEndDate", eventEndDate);
             annoucementIntent.putExtra("eventEndTime", eventEndTime);
+            annoucementIntent.putExtra("eventMaxAttendees", eventMaxAttendees);
+            annoucementIntent.putExtra("eventCurrentAttendees", eventCurrentAttendees);
 
 
             startActivity(annoucementIntent);

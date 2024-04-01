@@ -34,6 +34,7 @@ public class Firebase_organizer {
     {
         DocumentReference deviceRef = db.collection("qrcodes").document(qrcode.getQrID());
         HashMap<String, String> data = new HashMap<>();
+        data.put("deviceID", qrcode.getDeviceID());
         data.put("QrID", qrcode.getQrID());
         data.put("eventID", qrcode.getEventID());
         data.put("ImageBase64String", QrCodeManager.convertToBase64String(qrcode.getImage()));
@@ -73,7 +74,9 @@ public class Firebase_organizer {
         data.put("eventStartTime", event.getStartTime());
         data.put("eventEndTime", event.getEndTime());
         data.put("eventMaxAttendees", Integer.toString(event.getMaxAttendees()));
+        data.put("eventCurrentAttendees", Integer.toString(event.getCurrentAttendees()));
         data.put("qrID", event.getQrID());
+        data.put("qrPromoID", event.getQrPromoID());
         // Sets the data to Firebase.
         deviceRef
                 .set(data)

@@ -17,6 +17,18 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+    <Switch
+        android:id="@+id/geolocation_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Geolocation"
+        android:checked="false"
+        app:layout_constraintTop_toBottomOf="@id/switch_details_fragment_QRlayout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
 
     <Button
         android:id="@+id/view_sign_up_attendees_button"
@@ -55,7 +67,7 @@
 
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view_sign_up_attendees_button"
-        app:layout_constraintBottom_toTopOf="@+id/switch_details_fragment_QRlayout"/>
+        app:layout_constraintBottom_toTopOf="@+id/view_map_button"/>
     <Button
         android:id="@+id/view_map_button"
         android:layout_width="match_parent"
@@ -91,9 +103,9 @@
 
         <ImageView
             android:id="@+id/organizer_switch_details_fragment_qrImage"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_weight="1"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+
             android:src="@drawable/test_img"/>
         <LinearLayout
             android:id="@+id/switch_details_ShareButtonLayout"
