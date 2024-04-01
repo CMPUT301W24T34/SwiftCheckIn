@@ -61,7 +61,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-        eventId = "615ec84d6781c109Yeet";
     }
 
 

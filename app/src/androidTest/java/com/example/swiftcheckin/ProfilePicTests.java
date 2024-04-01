@@ -60,7 +60,7 @@ public class ProfilePicTests {
         // click if the avatar image is displayed (user has added some details )
         onView(withId(R.id.avatarImage)).check(matches(isDisplayed()));
         // Click on the add button to start the process of adding a profile picture
-        onView(withId(R.id.edit_photo_button)).perform(click());
+        onView(withId(R.id.remove_photo_button)).perform(click());
 
         // Handle permission dialog, if it appears
         UiObject2 allowButton = device.wait(Until.findObject(By.text("While using the app")), 5000);
@@ -92,7 +92,7 @@ public class ProfilePicTests {
         // click if the avatar image is displayed (user has added some details )
         onView(withId(R.id.avatarImage)).check(matches(isDisplayed()));
         // Click on the add button to start the process of adding a profile picture
-        onView(withId(R.id.edit_photo_button)).perform(click());
+        onView(withId(R.id.remove_photo_button)).perform(click());
 
         // Handle permission dialog, if it appears
         UiObject2 allowButton = device.wait(Until.findObject(By.text("While using the app")), 5000);
