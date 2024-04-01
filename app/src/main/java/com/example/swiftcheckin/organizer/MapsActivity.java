@@ -44,11 +44,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private GoogleMap myMap;
     private String eventId;
 
+
     private FirebaseFirestore db;
     private List<String> matchedProfiles = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         Intent intent = getIntent();
@@ -57,9 +59,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         if (intent != null) {
             eventId = intent.getStringExtra("eventId");
         }
-
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        eventId = "615ec84d6781c109Yeet";
     }
 
 
@@ -70,17 +72,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         db = FirebaseFirestore.getInstance();
         matchedProfiles.clear();
 
-        db.collection("SignedUpEvents")
-                .whereArrayContains("eventIds", eventId) // Check if the eventId is present in the list
+        //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get the field names and add them to a list
+        db.collection("checkedIn")
+                .document(eventId)
                 .get()
-                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                    @Override
-                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-
-                        for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots) {
-
-                            matchedProfiles.add(documentSnapshot.getId());
-                        }
+                .addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        Map<String, Object> checkedInData = documentSnapshot.getData();
+                        if (checkedInData != null) {
+                            matchedProfiles.addAll(checkedInData.keySet());
                         //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make a nested query to query twice based on the results of the first query
                         for (String id : matchedProfiles) {
 
@@ -111,7 +111,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     });
                         }
                     }
-                })
+                    }
+
+    })
+
+
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
