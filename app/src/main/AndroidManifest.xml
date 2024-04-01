@@ -26,6 +26,9 @@
         android:theme="@style/Theme.SwiftCheckIn"
         tools:targetApi="31">
         <activity
+            android:name=".organizer.ViewCheckInActivity"
+            android:exported="false" />
+        <activity
             android:name=".organizer.AddAnnouncementActivity"
             android:exported="false" />
         <activity
