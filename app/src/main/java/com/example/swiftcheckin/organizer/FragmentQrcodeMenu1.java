@@ -223,8 +223,8 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         db_organizer.getReuseQrData(qrDataList, new Firebase_organizer.ReuseQrDataCallback() {
             @Override
             public void onDataLoaded(ArrayList<Qr_Code> dataList) {
-                if(qrDataList.size() == 0)      // if no qr is available then button is hidden from the user
-                    selectQr.setVisibility(View.INVISIBLE);
+                if(qrDataList.size() != 0)      // if no qr is available then button is hidden from the user
+                    selectQr.setVisibility(View.VISIBLE);
                 reuseQrAdapter.notifyDataSetChanged();
             }
 
