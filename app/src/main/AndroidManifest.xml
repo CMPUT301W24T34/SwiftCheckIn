@@ -44,7 +44,8 @@
             android:exported="false" />
         <activity
             android:name=".organizer.OrganizerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".attendee.SettingsActivity"
             android:exported="false" />
@@ -53,7 +54,8 @@
             android:exported="false" />
         <activity
             android:name=".organizer.AddEventActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".attendee.MainActivity"
             android:exported="true">

@@ -66,7 +66,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="@string/qr_code_selection_menu1_title"
+            android:text="QR code Reuse"
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold"

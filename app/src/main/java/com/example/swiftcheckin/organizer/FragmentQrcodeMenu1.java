@@ -13,9 +13,11 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +32,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
 
 /**
@@ -43,10 +46,18 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private String eventId;     // Stores eventId
     private Button saveButton;  // Button to save the event.
 
+
+    private ImageView qrImageSuccess;
     private String deviceId;
     private Firebase_organizer db_organizer;
     private Qr_Code qrCodeGenerated;     // Qr_Code object
     private Qr_Code promoQrCode;
+
+    private ListView reuseQrList;
+    private ArrayList<Qr_Code> qrDataList;
+    private ReuseQrAdapter reuseQrAdapter;
+
+
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
     LinearLayout successLayout;     // Layout to show the generated qr, a button to share the qr, and a button to save the event.
@@ -100,22 +111,34 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         db_organizer = new Firebase_organizer(requireContext());    // citation: auto-suggested by android studio
         deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        ImageView imageView = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
-
         // layout 1
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
         layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
         successLayout = view.findViewById(R.id.qrCodeSelectionSuccessLayout);
 
-
+        // mediaplayer for saving sound
         mediaPlayer = MediaPlayer.create(getContext(), R.raw.swoosh);
 
 
+        // reusable qr layout
+        layout_selection = view.findViewById(R.id.existingQrSelectionMenuLayout);
+        reuseQrList = view.findViewById(R.id.existingQrSelectionMenuListView);
+        qrDataList = new ArrayList<>();
+        reuseQrAdapter = new ReuseQrAdapter(requireContext(), qrDataList);
+        reuseQrList.setAdapter(reuseQrAdapter);
+        populateReuseQr();
+
+
+        // final layout
+        qrImageSuccess = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
+
+
+        // onclick listener initializations
         LinearLayout shareButton = view.findViewById(R.id.qrCodeCreationSuccess_ShareButtonLayout);
         shareButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                BitmapDrawable bitmapDrawable = (BitmapDrawable) imageView.getDrawable();
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) qrImageSuccess.getDrawable();
                 Bitmap bitmap = bitmapDrawable.getBitmap();
                 shareImageAndText(bitmap);
 
@@ -124,6 +147,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
 
         saveButton = view.findViewById(R.id.qrCodeSelectionSuccessLayout_saveButton);
+
         newQr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -138,6 +162,40 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
                 }
             }
         });
+
+
+        selectQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                layout1.setVisibility(View.INVISIBLE);
+                layout_selection.setVisibility(View.VISIBLE);
+            }
+        });
+
+        reuseQrList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                try
+                {
+                    qrCodeGenerated = qrDataList.get(position);
+                    qrCodeGenerated.setEventID(eventId);
+                    promoQrCode = createQr();
+                    promoQrCode.setIsPromo(true);   // setting the promotional qr
+
+                    Log.d("Before success screen", qrCodeGenerated.getQrID());
+                    Log.d("Before success screen - promo", promoQrCode.getQrID());
+                    showSuccessScreen(view);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                    Log.e("QR selection error","Error in selecting reusable Qr code");
+                }
+
+            }
+        });
+
+
         // Citation: dismiss() -> https://developer.android.com/guide/fragments/dialogs :  dismiss the fragment and its dialog.(text from the website)
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -155,6 +213,26 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         return builder.setView(view)
                 .setCancelable(true)
                 .create();
+    }
+
+
+    /**
+     * Populates the list of unused qr in the dialog fragment
+     */
+    private void populateReuseQr() {
+        db_organizer.getReuseQrData(qrDataList, new Firebase_organizer.ReuseQrDataCallback() {
+            @Override
+            public void onDataLoaded(ArrayList<Qr_Code> dataList) {
+                if(qrDataList.size() == 0)      // if no qr is available then button is hidden from the user
+                    selectQr.setVisibility(View.INVISIBLE);
+                reuseQrAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("Firebase - Error", errorMessage);
+            }
+        });
     }
 
     /**
@@ -228,7 +306,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      * @param data
      */
     public void setData(String data) {
-        Log.e("EventID", "The id is " + data);
         this.eventId = data;
     }
 
@@ -259,10 +336,11 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         } else if (layout_selection.getVisibility() == View.VISIBLE) {
             layout_selection.setVisibility(View.INVISIBLE);
         }
-        ImageView qrImage = view.findViewById(R.id.eventQrCodeCreationSuccessDialog_ImageView);
+
         if (promoQrCode != null) {
-            qrImage.setImageBitmap(promoQrCode.getImage());
+            qrImageSuccess.setImageBitmap(promoQrCode.getImage());
         }
+        Log.d("Success Screen", "Showing success screen");
         successLayout.setVisibility(View.VISIBLE);
     }
 }
