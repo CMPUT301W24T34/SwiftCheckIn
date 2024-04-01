@@ -24,6 +24,8 @@ import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 import java.util.List;
+import java.util.Map;
+
 
 /**
  * The QR code scanner activity. This class deals with all the real time check-in functionality for a user where the user can scan the QR code of the event and check-in.
@@ -75,12 +77,12 @@ public class QRCodeScannerActivity extends CaptureActivity {
 
 
 
-   /**
+    /**
      * Handles the result of the QR code scanning process.
      *
      * @param requestCode The request code.
      * @param permissions The permissions requested.
-    *  @param grantResults The results of the permission requests.
+     *  @param grantResults The results of the permission requests.
      */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -111,16 +113,86 @@ public class QRCodeScannerActivity extends CaptureActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                String scannedEventId = result.getContents();
-                // This returns the scanned event ID
-                //  Toast.makeText(this, "Scanned: " + scannedEventId, Toast.LENGTH_LONG).show();
-                checkInAttendee(scannedEventId);
-                // Call checkInAttendee with the scanned ID
+                String scannedQRCode = result.getContents();
+                Log.d("QRCode", scannedQRCode);
+                handleScannedQRCode(scannedQRCode);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    private void handleScannedQRCode(String scannedQRCode) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference qrCodeRef = db.collection("qrcodes").document(scannedQRCode);
+
+        qrCodeRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot qrDocument = task.getResult();
+                if (qrDocument.exists()) {
+                    Map<String, Object> qrData = qrDocument.getData();
+                    if (qrData != null) {
+                        String isPromoString = (String) qrData.get("isPromo");
+                        boolean isPromo = "true".equalsIgnoreCase(isPromoString);
+                        Log.d("QRCodeScannerActivity", "isPromo: " + isPromo); // Log the value of isPromo
+                        String eventId = (String) qrData.get("eventID");
+                        if (isPromo) {
+                            // Redirect to the promo activity
+                            fetchEventDetailsAndRedirect(eventId);
+                        } else {
+                            // Check-in the attendee
+                            checkInAttendee(eventId);
+                        }
+
+                    } else {
+                        showDialog("Error", "QR Code data is missing.");
+                    }
+                } else {
+                    showDialog("Error", "QR Code is not valid.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching QR code document: ", task.getException());
+                showDialog("Error", "Failed to retrieve QR code information. Please try again.");
+            }
+        });
+    }
+
+
+
+    private void fetchEventDetailsAndRedirect(String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference eventRef = db.collection("events").document(eventId);
+
+        eventRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot eventSnapshot = task.getResult();
+                if (eventSnapshot.exists()) {
+                    // Create intent and pass all the necessary data to AnnouncementActivity
+                    Intent intent = new Intent(QRCodeScannerActivity.this, AnnoucementActivity.class);
+                    intent.putExtra("eventID", eventId);
+                    intent.putExtra("eventTitle", eventSnapshot.getString("eventTitle"));
+                    intent.putExtra("eventDescription", eventSnapshot.getString("eventDescription"));
+                    intent.putExtra("eventLocation", eventSnapshot.getString("eventLocation"));
+                    intent.putExtra("eventStartDate", eventSnapshot.getString("eventStartDate"));
+                    intent.putExtra("eventEndDate", eventSnapshot.getString("eventEndDate"));
+                    intent.putExtra("eventStartTime", eventSnapshot.getString("eventStartTime"));
+                    intent.putExtra("eventEndTime", eventSnapshot.getString("eventEndTime"));
+                    intent.putExtra("eventPosterURL", eventSnapshot.getString("eventPosterURL"));
+                    intent.putExtra("eventMaxAttendees", eventSnapshot.getString("eventMaxAttendees"));
+                    intent.putExtra("eventCurrentAttendees", eventSnapshot.getString("eventCurrentAttendees"));
+                    startActivity(intent);
+                } else {
+                    Log.e("QRCodeScannerActivity", "Event document does not exist.");
+                    showDialog("Error", "Event details cannot be found.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching event details: ", task.getException());
+                showDialog("Error", "Failed to retrieve event details. Please try again.");
+            }
+        });
+    }
+
+
 
 
     /**
@@ -133,12 +205,10 @@ public class QRCodeScannerActivity extends CaptureActivity {
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    /**
-     * Checks in the attendee for the event with the given ID.
-     *
-     * @param scannedEventId The ID of the event to check in the attendee for.
-     */
-    private void checkInAttendee(String scannedEventId) {
+
+
+
+    private void checkInAttendee(String eventID) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         String deviceId = retrieveDeviceId(); // Retrieve device ID
 
@@ -147,37 +217,16 @@ public class QRCodeScannerActivity extends CaptureActivity {
             if (task.isSuccessful() && task.getResult() != null) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
-
-                    DocumentReference qrDoc = db.collection("qrcodes").document(scannedEventId);
-                    qrDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                List<String> eventIds = (List<String>) document.get("eventIds");
-                                // Get information from the document.
-                                DocumentSnapshot qrcode = task.getResult();
-                                String eventID = (String) qrcode.getData().get("eventID");
-                                if (eventIds != null && eventIds.contains(eventID)) {
-                                    eventSignUp.addCheckedIn(eventID, deviceId);
-                                    showDialog("Check-in Successful", "You have been checked in successfully!");
-                                } else {
-                                    showDialog("Check-in Failed", "You did not sign up for this event");
-                                }
-
-                            }
-                        }
-                    });
-                    // On complete
-                    // Keep list
-                    // Add if statements
-//                    List<String> eventIds = (List<String>) document.get("eventIds");
-//                    if (eventIds != null && eventIds.contains(scannedEventId)) {
-//                        showDialog("Check-in Successful", "You have been checked in successfully!");
-//                    } else {
-//                        showDialog("Check-in Failed", "You did not sign up for this event");
-//                    }
+                    List<String> eventIds = (List<String>) document.get("eventIds");
+                    if (eventIds != null && eventIds.contains(eventID)) {
+                        // The eventID matches, so proceed with check-in
+                        showDialog("Check-in Successful", "You have been checked in successfully!");
+                    } else {
+                        // The eventID does not match, meaning the user is not signed up
+                        showDialog("Check-in Failed", "You did not sign up for this event");
+                    }
                 } else {
-                    showDialog("Error", "No events found ");
+                    showDialog("Error", "No events found for this device.");
                 }
             } else {
                 Log.e("FirestoreError", "Error fetching document: ", task.getException());
@@ -185,6 +234,39 @@ public class QRCodeScannerActivity extends CaptureActivity {
             }
         });
     }
+
+
+
+    private void performCheckInAndUpdateScanCounter(String deviceId, String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference signedUpEventsRef = db.collection("SignedUpEvents").document(deviceId);
+        signedUpEventsRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot signedUpEventsSnapshot = task.getResult();
+                if (signedUpEventsSnapshot != null && signedUpEventsSnapshot.exists()) {
+                    List<String> eventIds = (List<String>) signedUpEventsSnapshot.get("eventIds");
+                    if (eventIds != null && eventIds.contains(eventId)) {
+                        // Increment the scan counter here
+                        updateScanCounter(deviceId); // Implement this method to update the scan counter in Firestore
+                        showDialog("Check-in Successful", "You have been checked in successfully!");
+                    } else {
+                        showDialog("Check-in Failed", "You did not sign up for this event.");
+                    }
+                } else {
+                    showDialog("Error", "You have not signed up for any events.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching signed-up events document: ", task.getException());
+                showDialog("Error", "Failed to retrieve signed-up events information. Please try again.");
+            }
+        });
+    }
+
+    // Example placeholder method for incrementing scan counter
+    private void updateScanCounter(String deviceId) {
+        // Logic to increment the scan counter in Firestore
+    }
+
 
     /**
      * Shows a dialog with the given title and message.
@@ -206,7 +288,5 @@ public class QRCodeScannerActivity extends CaptureActivity {
             dialog.show();
         });
     }
-
-
 
 }
