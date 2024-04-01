@@ -55,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         Button settingsButton = findViewById(R.id.settings_button);
         Button backButton = findViewById(R.id.back_button);
         db = FirebaseFirestore.getInstance();
-        Button editPhotoButton = findViewById(R.id.remove_photo_button);
+        Button editPhotoButton = findViewById(R.id.edit_photo_button);
         editPhotoButton.setOnClickListener(v -> showImagePickerOptions());
         getData();
 
