@@ -45,8 +45,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     Bitmap bitmap_qr;
 
     String eventTitle;
-    Boolean geolocation;
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private Firebase_organizer firebase_organizer;
 
 //    public static SwitchOrgDetailsFragment newInstance(String extraData) {
 //        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
@@ -78,6 +77,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         qrImageView.setImageBitmap(bitmap_qr);
 
         LinearLayout shareLayout = view.findViewById(R.id.switch_details_ShareButtonLayout);
+        firebase_organizer = new Firebase_organizer(requireContext());
 
         shareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,44 +95,14 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
                 startActivity(intent);
             }
         });
-        DocumentReference geolocationRef = db.collection("geolocation").document(eventId);
-        geolocationRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to set a default geolocation setting to false
-                if (!documentSnapshot.exists()) {
-                    geolocationRef.set(new HashMap<String, Object>() {{
-                                put("geolocation", false);
-                            }})
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "Geolocation document created successfully");
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e(TAG, "Error creating geolocation document", e);
-                                }
-                            });
-                }
-            }
-        });
+        firebase_organizer.addGeolocation(eventId);
         Switch geolocationSwitch = view.findViewById(R.id.geolocation_switch);
-        geolocationRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+        firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
             @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    //Citation: For the following code code ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make the switch state true or false based on firebase
-                    Boolean geolocationValue = documentSnapshot.getBoolean("geolocation");
-                    geolocationSwitch.setChecked(geolocationValue != null && geolocationValue);
-                }
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e(TAG, "Error fetching geolocation", e);
+            public void onGeolocationStatus(boolean enabled) {
+
+                geolocationSwitch.setChecked(enabled);
             }
         });
 
@@ -141,49 +111,32 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         geolocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to update firebase geolocation with the switch state
-                geolocationRef.update("geolocation", isChecked)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
-                                // Update successful
-                                Toast.makeText(getContext(), "Geolocation setting updated successfully", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getContext(), "Failed to update geolocation setting", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                firebase_organizer.updateGeolocation(eventId, isChecked);
             }
         });
+
+
 
         viewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                ///Citation: For the following code line, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+                firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
+                    @Override
+                    public void onGeolocationStatus(boolean enabled) {
+                        if (enabled) {
 
-            geolocationRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to only open the map intent if the geolocation enabling is set to true in firebase
-                    if (documentSnapshot.exists() && documentSnapshot.getBoolean("geolocation") != null
-                            && documentSnapshot.getBoolean("geolocation")) {
-                        Intent intent = new Intent(getContext(), MapsActivity.class);
-                        intent.putExtra("eventId", eventId);
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), "Enable Geolocation", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getContext(), MapsActivity.class);
+                            intent.putExtra("eventId", eventId);
+                            startActivity(intent);
+                        } else {
+
+                            Toast.makeText(getContext(), "Enable Geolocation", Toast.LENGTH_SHORT).show();
+                        }
                     }
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e(TAG, "Error querying geolocation", e);
-                }
-            });
-        }
-    });
+                });
+            }
+        });
 
 
         sendNotifs.setOnClickListener(new View.OnClickListener() {

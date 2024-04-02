@@ -45,11 +45,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String eventId;
 
 
-    private FirebaseFirestore db;
-    private List<String> matchedProfiles = new ArrayList<>();
+    private Firebase_organizer firebase_organizer ;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        firebase_organizer = new Firebase_organizer(this);
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
@@ -68,59 +70,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;
-        db = FirebaseFirestore.getInstance();
-        matchedProfiles.clear();
+        firebase_organizer.getCheckedIn(eventId,myMap);
 
-        //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get the field names and add them to a list
-        db.collection("checkedIn")
-                .document(eventId)
-                .get()
-                .addOnSuccessListener(documentSnapshot -> {
-                    if (documentSnapshot.exists()) {
-                        Map<String, Object> checkedInData = documentSnapshot.getData();
-                        if (checkedInData != null) {
-                            matchedProfiles.addAll(checkedInData.keySet());
-                        //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make a nested query to query twice based on the results of the first query
-                        for (String id : matchedProfiles) {
-
-                            db.collection("profiles").document(id)
-                                    .get()
-                                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                        @Override
-                                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                            if (documentSnapshot.exists()) {
-                                                Map<String, Object> data = documentSnapshot.getData();
-                                                String locationPermission = (String) data.get("locationPermission");
-                                                if (locationPermission != "False") {
-                                                    String latitudeStr = (String) data.get("latitude");
-                                                    String longitudeStr = (String) data.get("longitude");
-
-                                                    Double latitude = Double.parseDouble(latitudeStr);
-                                                    Double longitude = Double.parseDouble(longitudeStr);
-                                                    if (latitude != null && longitude != null) {
-                                                        LatLng location = new LatLng(latitude, longitude);
-                                                        myMap.addMarker(new MarkerOptions().position(location).title((String) data.get("name")));
-                                                        float zoomLevel = 16.0f;
-                                                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom( location, zoomLevel);
-                                                        myMap.moveCamera(cameraUpdate);
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                    }
-
-    })
-
-
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.e(TAG, "Error querying documents: ", e);
-                    }
-                });
     }
 
 }
