@@ -67,7 +67,11 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.org_switch_details_fragment, null);
         Button viewSignedUp = view.findViewById(R.id.view_sign_up_attendees_button);
         Button sendNotifs = view.findViewById(R.id.send_notifications_button);
+
         Button viewMap = view.findViewById(R.id.view_map_button);
+
+        Button viewCheckedIn = view.findViewById(R.id.view_check_in_attendees_button);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         TextView title = view.findViewById(R.id.eventExtras);
@@ -143,6 +147,16 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddAnnouncementActivity.class);
+                intent.putExtra("eventId", eventId);
+                dismiss();
+                startActivity(intent);
+            }
+        });
+
+        viewCheckedIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ViewCheckInActivity.class);
                 intent.putExtra("eventId", eventId);
                 dismiss();
                 startActivity(intent);

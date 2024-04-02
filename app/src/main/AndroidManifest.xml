@@ -42,6 +42,9 @@ gin map
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
+            android:name=".organizer.ViewCheckInActivity"
+            android:exported="false" />
+        <activity
             android:name=".organizer.AddAnnouncementActivity"
             android:exported="false" />
         <activity
@@ -60,7 +63,8 @@ gin map
             android:exported="false" />
         <activity
             android:name=".organizer.OrganizerActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".attendee.SettingsActivity"
             android:exported="false" />
@@ -69,7 +73,8 @@ gin map
             android:exported="false" />
         <activity
             android:name=".organizer.AddEventActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".attendee.MainActivity"
             android:exported="true">
