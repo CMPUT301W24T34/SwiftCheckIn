@@ -234,6 +234,8 @@ public class QRCodeScannerActivity extends CaptureActivity {
      * @param title   The title of the dialog.
      * @param message The message to be displayed in the dialog.
      */
+    private AlertDialog currentDialog = null; // Class level variable to hold the dialog
+
     private void showDialog(String title, String message) {
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(QRCodeScannerActivity.this);
@@ -241,12 +243,20 @@ public class QRCodeScannerActivity extends CaptureActivity {
             builder.setMessage(message);
             builder.setPositiveButton("OK", (dialog, id) -> {
                 dialog.dismiss();
-                // Close the activity after the dialog is dismissed
                 finish();
             });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            currentDialog = builder.create();
+            currentDialog.show();
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if (currentDialog != null && currentDialog.isShowing()) {
+            currentDialog.dismiss(); // Dismiss the dialog to prevent window leaks
+        }
+        super.onDestroy();
+    }
+
 
 }
