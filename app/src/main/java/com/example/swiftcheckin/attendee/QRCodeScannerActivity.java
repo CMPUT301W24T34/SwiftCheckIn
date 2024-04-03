@@ -218,7 +218,7 @@ public class QRCodeScannerActivity extends CaptureActivity {
                 if (document.exists()) {
                     List<String> eventIds = (List<String>) document.get("eventIds");
                     if (eventIds != null && eventIds.contains(scannedEventId)){
-
+                        eventSignUp.addCheckedIn(scannedEventId, deviceId);
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
                         showDialog("Check-in Failed", "You did not sign up for this event");
