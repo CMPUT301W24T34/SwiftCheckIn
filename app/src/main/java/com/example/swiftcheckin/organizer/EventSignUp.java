@@ -103,4 +103,49 @@ public class EventSignUp {
         }
 
     }
+
+
+
+    public void addCheckedIn(String eventId, String attendeeDeviceId){
+        db = FirebaseFirestore.getInstance();
+        DocumentReference checkedInDoc = db.collection("checkedIn").document(eventId);
+
+        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    HashMap<String, String> data = new HashMap<>();
+
+                    if (document.exists()){
+                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
+
+                    }
+                    else {
+                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
+                    }
+                }
+
+            }
+        });
+
+
+    }
+
+
+    public void updateCheckedIn(String attendeeDeviceId, DocumentReference checkedInDoc){
+        HashMap<String, String> data = new HashMap<>();
+        data.put(attendeeDeviceId, "1");
+
+        checkedInDoc.set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
+                })
+                .addOnFailureListener(e -> {
+                    System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
+                });
+
+    }
+
+
 }

@@ -175,7 +175,6 @@ public class OrganizerActivity extends AppCompatActivity {
 
         // Id of the device that will go to the organizer mode.
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        getData();
 
 
         // registering receiver
@@ -190,6 +189,8 @@ public class OrganizerActivity extends AppCompatActivity {
         eventAdapter = new EventArrayAdapter(this, dataList);
         eventList.setAdapter(eventAdapter);
         FloatingActionButton backButtonOrg = findViewById(R.id.back_button_org);
+
+        getData();
 
         addEventButton = findViewById(R.id.add_event_button);
 

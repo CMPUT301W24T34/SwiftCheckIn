@@ -1,16 +1,21 @@
 package com.example.swiftcheckin.organizer;
 
+import static android.content.ContentValues.TAG;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +25,11 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.swiftcheckin.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import org.w3c.dom.Text;
 
@@ -27,6 +37,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class SwitchOrgDetailsFragment extends DialogFragment {
 
@@ -34,6 +45,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     Bitmap bitmap_qr;
 
     String eventTitle;
+    private Firebase_organizer firebase_organizer;
 
 //    public static SwitchOrgDetailsFragment newInstance(String extraData) {
 //        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
@@ -55,6 +67,11 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.org_switch_details_fragment, null);
         Button viewSignedUp = view.findViewById(R.id.view_sign_up_attendees_button);
         Button sendNotifs = view.findViewById(R.id.send_notifications_button);
+
+        Button viewMap = view.findViewById(R.id.view_map_button);
+
+        Button viewCheckedIn = view.findViewById(R.id.view_check_in_attendees_button);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         TextView title = view.findViewById(R.id.eventExtras);
@@ -64,6 +81,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         qrImageView.setImageBitmap(bitmap_qr);
 
         LinearLayout shareLayout = view.findViewById(R.id.switch_details_ShareButtonLayout);
+        firebase_organizer = new Firebase_organizer(requireContext());
 
         shareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,11 +99,64 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
                 startActivity(intent);
             }
         });
+        firebase_organizer.addGeolocation(eventId);
+        Switch geolocationSwitch = view.findViewById(R.id.geolocation_switch);
+        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+        firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
+            @Override
+            public void onGeolocationStatus(boolean enabled) {
+
+                geolocationSwitch.setChecked(enabled);
+            }
+        });
+
+
+
+        geolocationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                firebase_organizer.updateGeolocation(eventId, isChecked);
+            }
+        });
+
+
+
+        viewMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ///Citation: For the following code line, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+                firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
+                    @Override
+                    public void onGeolocationStatus(boolean enabled) {
+                        if (enabled) {
+
+                            Intent intent = new Intent(getContext(), MapsActivity.class);
+                            intent.putExtra("eventId", eventId);
+                            startActivity(intent);
+                        } else {
+
+                            Toast.makeText(getContext(), "Enable Geolocation", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
 
         sendNotifs.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getContext(), AddAnnouncementActivity.class);
+                intent.putExtra("eventId", eventId);
+                dismiss();
+                startActivity(intent);
+            }
+        });
+
+        viewCheckedIn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ViewCheckInActivity.class);
                 intent.putExtra("eventId", eventId);
                 dismiss();
                 startActivity(intent);
