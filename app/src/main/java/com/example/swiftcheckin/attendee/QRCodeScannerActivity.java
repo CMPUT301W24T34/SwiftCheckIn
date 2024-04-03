@@ -13,6 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
+import com.example.swiftcheckin.organizer.EventSignUp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -32,6 +33,7 @@ import java.util.List;
 public class QRCodeScannerActivity extends CaptureActivity {
 
     private static final int PERMISSION_REQUEST_CAMERA = 1;
+    private EventSignUp eventSignUp = new EventSignUp();
 
     /**
      * Called when the activity is first created.
@@ -213,7 +215,7 @@ public class QRCodeScannerActivity extends CaptureActivity {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     List<String> eventIds = (List<String>) document.get("eventIds");
-                    if (eventIds != null && eventIds.contains(scannedEventId)) {
+                    if (eventIds != null && eventIds.contains(scannedEventId)){
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
                         showDialog("Check-in Failed", "You did not sign up for this event");
