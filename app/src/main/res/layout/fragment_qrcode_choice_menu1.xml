@@ -43,6 +43,7 @@
             android:id="@+id/fragmentQrCodeMenu1ExistingButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:visibility="invisible"
 
             app:layout_constraintWidth_percent="0.7"
             app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1NewButton"
@@ -66,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
-            android:text="@string/qr_code_selection_menu1_title"
+            android:text="QR code Reuse"
             android:textAlignment="center"
             android:textSize="30sp"
             android:textStyle="bold"

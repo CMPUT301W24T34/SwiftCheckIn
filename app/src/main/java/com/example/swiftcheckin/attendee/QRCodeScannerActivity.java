@@ -14,6 +14,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.example.swiftcheckin.organizer.EventSignUp;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -216,10 +218,12 @@ public class QRCodeScannerActivity extends CaptureActivity {
                 if (document.exists()) {
                     List<String> eventIds = (List<String>) document.get("eventIds");
                     if (eventIds != null && eventIds.contains(scannedEventId)){
+
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
                         showDialog("Check-in Failed", "You did not sign up for this event");
                     }
+
                 } else {
                     showDialog("Error", "No events found ");
                 }
@@ -236,6 +240,8 @@ public class QRCodeScannerActivity extends CaptureActivity {
      * @param title   The title of the dialog.
      * @param message The message to be displayed in the dialog.
      */
+    private AlertDialog currentDialog = null; // Class level variable to hold the dialog
+
     private void showDialog(String title, String message) {
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(QRCodeScannerActivity.this);
@@ -243,12 +249,21 @@ public class QRCodeScannerActivity extends CaptureActivity {
             builder.setMessage(message);
             builder.setPositiveButton("OK", (dialog, id) -> {
                 dialog.dismiss();
-                // Close the activity after the dialog is dismissed
                 finish();
             });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            currentDialog = builder.create();
+            currentDialog.show();
         });
     }
+
+    @Override
+    protected void onDestroy() {
+        if (currentDialog != null && currentDialog.isShowing()) {
+            currentDialog.dismiss(); // Dismiss the dialog to prevent window leaks
+        }
+        super.onDestroy();
+    }
+
+
 
 }
