@@ -52,7 +52,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <View
-        android:id="@+id/horizontal_redLine"
+        android:id="@+id/horizontal_Line"
         android:layout_width="200dp"
         android:layout_height="2dp"
         android:background="@android:color/white"
