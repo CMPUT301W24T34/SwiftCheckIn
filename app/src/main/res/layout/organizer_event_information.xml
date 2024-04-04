@@ -123,7 +123,6 @@
         android:orientation="horizontal"
         android:weightSum="2"
 
-        android:layout_marginTop="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:background="@drawable/less_round_edit_text">
