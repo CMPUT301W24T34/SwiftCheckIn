@@ -172,6 +172,4 @@ public class EventSignUp {
         // Update on firebase.
 
     }
-
-
 }

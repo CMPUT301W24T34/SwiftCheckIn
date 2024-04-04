@@ -111,16 +111,85 @@ public class QRCodeScannerActivity extends CaptureActivity {
             if (result.getContents() == null) {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
-                String scannedEventId = result.getContents();
-                // This returns the scanned event ID
-                //  Toast.makeText(this, "Scanned: " + scannedEventId, Toast.LENGTH_LONG).show();
-                checkInAttendee(scannedEventId);
-                // Call checkInAttendee with the scanned ID
+                String scannedQRCode = result.getContents();
+                Log.d("QRCode", scannedQRCode);
+                handleScannedQRCode(scannedQRCode);
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
     }
+
+    private void handleScannedQRCode(String scannedQRCode) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference qrCodeRef = db.collection("qrcodes").document(scannedQRCode);
+
+        qrCodeRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot qrDocument = task.getResult();
+                if (qrDocument.exists()) {
+                    String isPromoString = qrDocument.getString("isPromo");
+                    boolean isPromo = "true".equalsIgnoreCase(isPromoString); // Handle 'isPromo' as a string
+
+                    String eventId = qrDocument.getString("eventID");
+                    if (eventId != null) {
+                        if (isPromo) {
+                            fetchEventDetailsAndRedirect(eventId); // Fetch details before redirecting
+                        } else {
+                            // If 'isPromo' is false, continue with the normal check-in process
+                            checkInAttendee(eventId);
+                        }
+                    } else {
+                        // Handle case where 'eventId' is not retrieved properly
+                        Log.e("QRCodeScannerActivity", "Event ID is missing in the QR code document.");
+                        showDialog("Error", "Event details cannot be found.");
+                    }
+                } else {
+                    showDialog("Error", "QR Code is not valid.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching QR code document: ", task.getException());
+                showDialog("Error", "Failed to retrieve QR code information. Please try again.");
+            }
+        });
+    }
+
+    private void fetchEventDetailsAndRedirect(String eventId) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference eventRef = db.collection("events").document(eventId);
+
+        eventRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot eventSnapshot = task.getResult();
+                if (eventSnapshot.exists()) {
+                    // Create intent and pass all the necessary data to AnnouncementActivity
+                    Intent intent = new Intent(QRCodeScannerActivity.this, AnnoucementActivity.class);
+                    intent.putExtra("eventID", eventId);
+                    intent.putExtra("eventTitle", eventSnapshot.getString("eventTitle"));
+                    intent.putExtra("eventDescription", eventSnapshot.getString("eventDescription"));
+                    intent.putExtra("eventLocation", eventSnapshot.getString("eventLocation"));
+                    intent.putExtra("eventStartDate", eventSnapshot.getString("eventStartDate"));
+                    intent.putExtra("eventEndDate", eventSnapshot.getString("eventEndDate"));
+                    intent.putExtra("eventStartTime", eventSnapshot.getString("eventStartTime"));
+                    intent.putExtra("eventEndTime", eventSnapshot.getString("eventEndTime"));
+                    intent.putExtra("eventPosterURL", eventSnapshot.getString("eventPosterURL"));
+                    intent.putExtra("eventMaxAttendees", eventSnapshot.getString("eventMaxAttendees"));
+                    intent.putExtra("eventCurrentAttendees", eventSnapshot.getString("eventCurrentAttendees"));
+                    startActivity(intent);
+                } else {
+                    Log.e("QRCodeScannerActivity", "Event document does not exist.");
+                    showDialog("Error", "Event details cannot be found.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching event details: ", task.getException());
+                showDialog("Error", "Failed to retrieve event details. Please try again.");
+            }
+        });
+    }
+
+
+
+
 
 
     /**
@@ -147,35 +216,14 @@ public class QRCodeScannerActivity extends CaptureActivity {
             if (task.isSuccessful() && task.getResult() != null) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
+                    List<String> eventIds = (List<String>) document.get("eventIds");
+                    if (eventIds != null && eventIds.contains(scannedEventId)){
+                        eventSignUp.addCheckedIn(scannedEventId, deviceId);
+                        showDialog("Check-in Successful", "You have been checked in successfully!");
+                    } else {
+                        showDialog("Check-in Failed", "You did not sign up for this event");
+                    }
 
-                    DocumentReference qrDoc = db.collection("qrcodes").document(scannedEventId);
-                    qrDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                            if (task.isSuccessful()){
-                                List<String> eventIds = (List<String>) document.get("eventIds");
-                                // Get information from the document.
-                                DocumentSnapshot qrcode = task.getResult();
-                                String eventID = (String) qrcode.getData().get("eventID");
-                                if (eventIds != null && eventIds.contains(eventID)) {
-                                    eventSignUp.addCheckedIn(eventID, deviceId);
-                                    showDialog("Check-in Successful", "You have been checked in successfully!");
-                                } else {
-                                    showDialog("Check-in Failed", "You did not sign up for this event");
-                                }
-
-                            }
-                        }
-                    });
-                    // On complete
-                    // Keep list
-                    // Add if statements
-//                    List<String> eventIds = (List<String>) document.get("eventIds");
-//                    if (eventIds != null && eventIds.contains(scannedEventId)) {
-//                        showDialog("Check-in Successful", "You have been checked in successfully!");
-//                    } else {
-//                        showDialog("Check-in Failed", "You did not sign up for this event");
-//                    }
                 } else {
                     showDialog("Error", "No events found ");
                 }
@@ -192,6 +240,8 @@ public class QRCodeScannerActivity extends CaptureActivity {
      * @param title   The title of the dialog.
      * @param message The message to be displayed in the dialog.
      */
+    private AlertDialog currentDialog = null; // Class level variable to hold the dialog
+
     private void showDialog(String title, String message) {
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(QRCodeScannerActivity.this);
@@ -199,12 +249,19 @@ public class QRCodeScannerActivity extends CaptureActivity {
             builder.setMessage(message);
             builder.setPositiveButton("OK", (dialog, id) -> {
                 dialog.dismiss();
-                // Close the activity after the dialog is dismissed
                 finish();
             });
-            AlertDialog dialog = builder.create();
-            dialog.show();
+            currentDialog = builder.create();
+            currentDialog.show();
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (currentDialog != null && currentDialog.isShowing()) {
+            currentDialog.dismiss(); // Dismiss the dialog to prevent window leaks
+        }
+        super.onDestroy();
     }
 
 

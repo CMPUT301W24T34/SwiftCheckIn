@@ -18,4 +18,5 @@
     <string name="qr_code_selection_menu1_title">QR Code Selection</string>
     <string name="event_created_successfully_qr_menu">Event Created Successfully</string>
     <string name="organizer_mode_string">Organizer Mode</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>
