@@ -140,6 +140,7 @@
             android:textSize="20dp"
             />
         <TextView
+            android:id="@+id/organizerEventInfo_SignedUpTitle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -158,12 +159,12 @@
             android:id="@+id/organizerEventInfo_CheckedInList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="invisible"/>
+            android:visibility="visible"/>
         <ListView
             android:id="@+id/organizerEventInfo_SignedUpList"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="visible"/>
+            android:visibility="invisible"/>
     </RelativeLayout>
     <LinearLayout
         android:layout_width="match_parent"
