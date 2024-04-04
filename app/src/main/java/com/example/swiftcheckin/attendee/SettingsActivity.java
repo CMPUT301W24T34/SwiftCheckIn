@@ -62,11 +62,14 @@ public class SettingsActivity extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private String deviceId;
+    private LocationReceiver locationReceiver;
+    private FirebaseAttendee fb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        locationReceiver = new LocationReceiver();
         nameEditText = findViewById(R.id.name);
         birthdayEditText = findViewById(R.id.birthday);
         phoneNumberEditText = findViewById(R.id.phonenumber);
@@ -75,8 +78,9 @@ public class SettingsActivity extends AppCompatActivity {
         addressEditText = findViewById(R.id.address);
         locationCheckBox = findViewById(R.id.locationCheckbox);
         Button saveButton = findViewById(R.id.save_button);
-        db = FirebaseFirestore.getInstance();
         deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
+        fb = new FirebaseAttendee();
+        db = fb.getDb();
         getData();
         // Citation: OpenAI, 03-29-2024, ChatGPT, How to set a listener for the location checkbox
         // output was below, the onCheckedChangeListener and onCheckedChanged Method
@@ -213,97 +217,15 @@ public class SettingsActivity extends AppCompatActivity {
 
         if (locationPermission) {
             data.put("locationPermission", "True");
-            saveToFirebase(deviceId, data);
-            getLocation(deviceId);
+            fb.saveProfileToFirebase(deviceId, data);
 
         }
         else {
             data.put("locationPermission", "False");
             data.put("latitude", "Unknown");
             data.put("longitude", "Unknown");
-            saveToFirebase(deviceId, data);
+            fb.saveProfileToFirebase(deviceId, data);
         }
-    }
-
-    /**
-     * Saves profile data to firebase
-     * @param deviceId id of users device
-     * @param data data to be updated
-     */
-    private void saveToFirebase(String deviceId, HashMap<String, String> data) {
-        db.collection("profiles").document(deviceId)
-                .set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "User data has been added successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener(){
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "User data could not be added");
-                    }
-                });
-    }
-
-    // Citation: OpenAI, 03-29-2024, ChatGPT, How to obtain location of user
-    // output was to use a location manager and listener, gave me the onLocationChanged, onProviderDisabled, onProviderEnabled, onStatusChanged methods
-    // also gave the checking of permissions
-
-    /**
-     * Gets the latitude and longitude coordinates of the users device
-     * @param deviceId
-     */
-    private void getLocation(String deviceId) {
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-
-        locationListener = new LocationListener() {
-            @Override
-            public void onLocationChanged(@NonNull Location location) {
-                double latitude = location.getLatitude();
-                double longitude = location.getLongitude();
-                Log.d("Location", "Latitude: " + latitude + ", Longitude: " + longitude);
-                // Citation: OpenAI, 03-29-2024, ChatGPT, How to ensure that the updates don't keep coming
-                // output was locationManager.removeUpdates(this);
-                // Remove updates after first one
-                locationManager.removeUpdates(this);
-                // Save location data to Firebase
-                HashMap<String, Object> data = new HashMap<>();
-                data.put("latitude", String.valueOf(latitude));
-                data.put("longitude", String.valueOf(longitude));
-                updateLocationInfo(deviceId, data);
-            }
-
-            @Override
-            public void onProviderDisabled(@NonNull String provider) {
-                Log.d("Location", "Provider disabled: " + provider);
-            }
-
-            @Override
-            public void onProviderEnabled(@NonNull String provider) {
-                Log.d("Location", "Provider enabled: " + provider);
-            }
-
-            @Override
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-                Log.d("Location", "Provider status changed: " + provider);
-            }
-        };
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED &&
-                ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)
-                        != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION,
-                            Manifest.permission.ACCESS_COARSE_LOCATION},
-                    LOCATION_PERMISSION);
-            return;
-        }
-
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-                0, 0, locationListener);
     }
 
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to ask user for location permission
@@ -360,7 +282,7 @@ public class SettingsActivity extends AppCompatActivity {
                 data.put("locationPermission", "False");
                 data.put("latitude", "Unknown");
                 data.put("longitude", "Unknown");
-                updateLocationInfo(deviceId, data);
+                fb.updateLocationInfo(deviceId, data);
 
                 dialog.dismiss();
             }
@@ -368,29 +290,5 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog dialog = popup.create();
         dialog.show();
     }
-
-    /**
-     * update the firebase collection with the location data
-     * @param deviceId - deviceid of users phone
-     * @param data - the data to be updated to firebase
-     */
-
-    private void updateLocationInfo(String deviceId, HashMap<String, Object> data){
-        db.collection("profiles").document(deviceId)
-                .update(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Log.d(TAG, "Location data has been added successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener(){
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Location data could not be added");
-                    }
-                });
-    }
-
 
 }
