@@ -1,5 +1,7 @@
 package com.example.swiftcheckin.attendee;
 
+import static androidx.core.content.ContentProviderCompat.requireContext;
+
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -14,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 
 import com.example.swiftcheckin.organizer.EventSignUp;
+import com.example.swiftcheckin.organizer.Firebase_organizer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
@@ -35,7 +38,8 @@ import java.util.List;
 public class QRCodeScannerActivity extends CaptureActivity {
 
     private static final int PERMISSION_REQUEST_CAMERA = 1;
-    private EventSignUp eventSignUp = new EventSignUp();
+//    private EventSignUp eventSignUp = new EventSignUp();
+    private final Firebase_organizer db_organizer = new Firebase_organizer();
 
     /**
      * Called when the activity is first created.
@@ -218,7 +222,8 @@ public class QRCodeScannerActivity extends CaptureActivity {
                 if (document.exists()) {
                     List<String> eventIds = (List<String>) document.get("eventIds");
                     if (eventIds != null && eventIds.contains(scannedEventId)){
-                        eventSignUp.addCheckedIn(scannedEventId, deviceId);
+                        db_organizer.addCheckedIn(scannedEventId, deviceId);
+//                        eventSignUp.addCheckedIn(scannedEventId, deviceId);
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
                         showDialog("Check-in Failed", "You did not sign up for this event");
