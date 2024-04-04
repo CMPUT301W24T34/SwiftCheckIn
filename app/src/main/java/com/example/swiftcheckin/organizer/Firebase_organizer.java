@@ -28,6 +28,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,6 +49,9 @@ public class Firebase_organizer {
     public Firebase_organizer(Context context) {
         this.db = FirebaseFirestore.getInstance();
         deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+    public Firebase_organizer(){
+        this.db = FirebaseFirestore.getInstance();
     }
 
     public void addQrCode(Qr_Code qrcode) {
@@ -299,6 +303,142 @@ public class Firebase_organizer {
                 {
                     callback.onError("Error in fetching reusable QRs");
                 }
+            }
+        });
+    }
+
+
+    public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
+        int maxAttendees = Integer.parseInt(eventMaxAttendees);
+        int currentAttendees = Integer.parseInt(eventCurrentAttendees);
+        DocumentReference eventDoc = db.collection("eventsWithAttendees").document(eventId);
+
+        eventDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                // Check if task is successful
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    HashMap<String, String> data = new HashMap<>();
+
+                    if (document.exists()){
+                        if (!document.contains(attendeeDeviceId)){
+                            updateEvent(eventId, maxAttendees, currentAttendees, attendeeDeviceId, eventDoc, eventCurrentAttendees);
+                        }
+                    }
+                    else {
+                        updateEvent(eventId, maxAttendees, currentAttendees, attendeeDeviceId, eventDoc, eventCurrentAttendees);
+                    }
+                }
+                // If currentAttendees is 0, add (Done)
+                // Check if deviceId is in the firebase
+                // If it is, ignore it. Otherwise, add the deviceId
+            }
+        });
+
+    }
+
+    public void updateEvent(String eventId, int maxAttendees, int currentAttendees, String attendeeDeviceId, DocumentReference eventDoc, String eventCurrentAttendees){
+        if (currentAttendees != maxAttendees) {
+            HashMap<String, String> data = new HashMap<>();
+            data.put(attendeeDeviceId, attendeeDeviceId);
+            // Citation: OpenAI, 03-07-2024,  ChatGPT, updating data in documents without resetting the entire document.
+        /*
+        I wanted to know how to update fields without overwriting previous data and I tried using .update(), but that did not work
+        I asked ChatGPT how to update and it provided this code,
+        eventDoc.set(data, SetOptions.merge())
+                .addOnSuccessListener(aVoid -> {
+                    System.out.println("Attendee added to event successfully.");
+                })
+                .addOnFailureListener(e -> {
+                    System.out.println("Error adding attendee to event: " + e.getMessage());
+                });
+         Where SetOptions.merge() helped me avoid overwriting any information.
+         */
+            eventDoc.set(data, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> {
+                        System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
+                    })
+                    .addOnFailureListener(e -> {
+                        System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
+                    });
+            currentAttendees += 1;
+
+            eventCurrentAttendees = Integer.toString(currentAttendees);
+
+            DocumentReference updateEventDoc = db.collection("events").document(eventId);
+            HashMap<String, String> data2 = new HashMap<>();
+            data2.put("eventCurrentAttendees", eventCurrentAttendees);
+            updateEventDoc.set(data2, SetOptions.merge())
+                    .addOnSuccessListener(aVoid -> {
+                        System.out.println("Event updated successfully");  // Checks if attendee is added here
+                    })
+                    .addOnFailureListener(e -> {
+                        System.out.println("Error updating event: " + e.getMessage());  // In case attendee is not added.
+                    });
+        }
+
+    }
+
+
+    public void addCheckedIn(String eventId, String attendeeDeviceId){
+        DocumentReference checkedInDoc = db.collection("checkedIn").document(eventId);
+
+        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+                    HashMap<String, String> data = new HashMap<>();
+
+                    if (document.exists()){
+                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
+
+                    }
+                    else {
+                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
+                    }
+                }
+
+            }
+        });
+
+
+    }
+
+    public void updateCheckedIn(String attendeeDeviceId, DocumentReference checkedInDoc){
+        HashMap<String, String> data = new HashMap<>();
+        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
+
+                    if (document.exists()){
+                        if (document.contains(attendeeDeviceId)){
+                            String checkInCountStr = (String) document.get(attendeeDeviceId);
+                            if (checkInCountStr != null) {
+                                int checkInCount = Integer.parseInt(checkInCountStr) + 1;
+                                checkInCountStr = Integer.toString(checkInCount);
+                                // Try document .set
+                                data.put(attendeeDeviceId, checkInCountStr);
+                            }
+                        } else {
+                            data.put(attendeeDeviceId, "1");
+                        }
+                    } else {
+                        data.put(attendeeDeviceId, "1");
+                    }
+                    checkedInDoc.set(data, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> {
+                                System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
+                            })
+                            .addOnFailureListener(e -> {
+                                System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
+                            });
+
+                }
+
             }
         });
     }
