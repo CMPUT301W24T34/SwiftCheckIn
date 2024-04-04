@@ -56,6 +56,7 @@ public class EventSignUp {
                 // If currentAttendees is 0, add (Done)
                 // Check if deviceId is in the firebase
                 // If it is, ignore it. Otherwise, add the deviceId
+                return null;
             }
         });
 
@@ -126,6 +127,7 @@ public class EventSignUp {
                     }
                 }
 
+                return null;
             }
         });
 

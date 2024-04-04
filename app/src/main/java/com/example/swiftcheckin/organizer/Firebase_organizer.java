@@ -139,6 +139,7 @@ public class Firebase_organizer {
                             Log.e("Error in fetching qr Id for eventID", "Error - event: " + eventId);
                             callback.onQrIDReceived(null); // Signal failure
                         }
+                        return null;
                     }
                 });
     }
@@ -304,4 +305,42 @@ public class Firebase_organizer {
     }
 
 
+    // make callback interface
+    public Event getEvent(String eventId)
+    {
+        CollectionReference eventCol = db.collection("events");
+        final Event[] event = new Event[1];
+        eventCol.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    QuerySnapshot queryEventSnapshots = task.getResult();
+                    for (QueryDocumentSnapshot doc : queryEventSnapshots) {
+                        String eventTitleFrame = doc.getId();  // Document Id, AKA eventId = deviceId + eventTitle
+                        if (eventTitleFrame.contains(deviceID)) {   // Ensures that the organizer can only see their events.
+                            String eventTitle = (String) doc.getData().get("eventTitle");
+                            String eventLocation = (String) doc.getData().get("eventLocation");
+                            String eventDescription = (String) doc.getData().get("eventDescription");
+                            String deviceID = (String) doc.getData().get("deviceId");
+
+                            String eventImageURL = (String) doc.getData().get("eventPosterURL");
+                            String startDate = (String) doc.getData().get("eventStartDate");
+                            String endDate = (String) doc.getData().get("eventEndDate");
+                            String startTime = (String) doc.getData().get("eventStartTime");
+                            String endTime = (String) doc.getData().get("eventEndTime");
+                            String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
+
+                            if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
+                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime);
+                            } else {   // In case max attendees was specified.
+                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
+                            }
+                        }
+                    }
+                }
+            }
+            });
+
+        return event[0];
+    }
 }

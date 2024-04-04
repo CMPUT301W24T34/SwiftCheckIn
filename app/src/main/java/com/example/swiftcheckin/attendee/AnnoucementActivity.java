@@ -205,6 +205,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                         addData(data, ref);
                     }
                 }
+                return null;
             }
         });
     }

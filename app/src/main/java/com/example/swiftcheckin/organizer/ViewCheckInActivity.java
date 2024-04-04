@@ -80,6 +80,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
                             finalUpdated_event.setDeviceId(eventDeviceId);
 
                         }
+                        return null;
                     }
                 });
         queryAttendees(eventId);
@@ -116,6 +117,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
                 } else {
                     Log.e("Failed Task", "Error getting documents.", task.getException());
                 }
+                return null;
             }
         });
     }
@@ -161,6 +163,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
 
                     }
                 }
+                return null;
             }
         });
     }
