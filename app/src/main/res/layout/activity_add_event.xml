@@ -19,11 +19,11 @@
             android:orientation="horizontal">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="8dp"
-                android:fontFamily="casual"
                 android:text="@string/AppName"
+                android:textAlignment="center"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 />
