@@ -135,17 +135,41 @@ public class EventSignUp {
 
     public void updateCheckedIn(String attendeeDeviceId, DocumentReference checkedInDoc){
         HashMap<String, String> data = new HashMap<>();
-        data.put(attendeeDeviceId, "1");
+        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot document = task.getResult();
 
-        checkedInDoc.set(data, SetOptions.merge())
-                .addOnSuccessListener(aVoid -> {
-                    System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
-                })
-                .addOnFailureListener(e -> {
-                    System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
-                });
+                    if (document.exists()){
+                        if (document.contains(attendeeDeviceId)){
+                            String checkInCountStr = (String) document.get(attendeeDeviceId);
+                            if (checkInCountStr != null) {
+                                int checkInCount = Integer.parseInt(checkInCountStr) + 1;
+                                checkInCountStr = Integer.toString(checkInCount);
+                                // Try document .set
+                                data.put(attendeeDeviceId, checkInCountStr);
+                            }
+                        } else {
+                            data.put(attendeeDeviceId, "1");
+                        }
+                    } else {
+                        data.put(attendeeDeviceId, "1");
+                    }
+                    checkedInDoc.set(data, SetOptions.merge())
+                            .addOnSuccessListener(aVoid -> {
+                                System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
+                            })
+                            .addOnFailureListener(e -> {
+                                System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
+                            });
+
+                }
+
+            }
+        });
+        // Get check in count, convert it to an integer, increment, set the new check in count
+        // Update on firebase.
 
     }
-
-
 }
