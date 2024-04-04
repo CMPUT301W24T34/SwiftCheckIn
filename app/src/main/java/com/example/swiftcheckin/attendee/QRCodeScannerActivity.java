@@ -52,6 +52,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
     private PreviewView previewView;
     private ExecutorService cameraExecutor;
     private EventSignUp eventSignUp = new EventSignUp();
+    private LocationReceiver locationReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
 
         previewView = findViewById(R.id.previewView);
         cameraExecutor = Executors.newSingleThreadExecutor();
+        locationReceiver = new LocationReceiver();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera();
@@ -240,6 +242,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
                     List<String> eventIds = (List<String>) document.get("eventIds");
                     if (eventIds != null && eventIds.contains(scannedEventId)) {
                         eventSignUp.addCheckedIn(scannedEventId, deviceId);
+                        locationReceiver.getLocation(deviceId, QRCodeScannerActivity.this);
                         showDialog("Check-in Successful", "You have been checked in successfully!");
                     } else {
                         showDialog("Check-in Failed", "You did not sign up for this event");

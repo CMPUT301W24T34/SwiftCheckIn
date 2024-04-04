@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -54,6 +55,7 @@ public class AnnoucementActivity extends AppCompatActivity {
     private ListView announcementList;  // List view in activity_organizer.
     private AnnouncementArrayAdapter announceAdapter; // Adapter meant to keep track of changes in the number of events.
     EventSignUp eventSignUp = new EventSignUp();
+    private FirebaseAttendee fb;
 
 
 
@@ -71,6 +73,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         dataList = new ArrayList<>();
         announceAdapter = new AnnouncementArrayAdapter(this, dataList);
         announcementList.setAdapter(announceAdapter);
+        fb = new FirebaseAttendee();
 
 
         String eventId = getIntent().getStringExtra("eventID");
@@ -90,7 +93,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-                        saveData(deviceId, eventId);
+                        fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
                         eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
 
@@ -153,84 +156,6 @@ public class AnnoucementActivity extends AppCompatActivity {
         Glide.with(this)
                 .load(eventImageUrl)
                 .into(imageViewEventPoster);
-    }
-
-
-    // Citation: OpenAI, 03-05-2024, ChatGPT, Saving the data as a list in an attribute called eventIds
-    /* Chatgpt suggested to use Map<String, Object> data = new HashMap<>() for the list
-    output was also about the oncompletelistener and document snapshots and tasks
-    giving this code: ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-     and if (document.exists() && document.contains("eventIds")) to see if there is already a list for this user
-     and List<String> eventIds = (List<String>) document.get("eventIds") to get it
-    */
-
-    /**
-     * Saves the attendance data for a specific user and event.
-     *
-     * @param deviceId the unique identifier of the device
-     * @param eventId  the unique identifier of the event
-     */
-    private void saveData(String deviceId, String eventId) {
-        DocumentReference ref = db.collection("SignedUpEvents").document(deviceId);
-
-        ref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    Map<String, Object> data = new HashMap<>();
-
-                    // already has a list
-                    if (document.exists() && document.contains("eventIds")) {
-                        List<String> eventIds = (List<String>) document.get("eventIds");
-                        if (!eventIds.contains(eventId)) {
-                            eventIds.add(eventId);
-                            data.put("eventIds", eventIds);
-                            addData(data,ref);
-                        }
-                        // they've already signed up for this event
-                        else{
-                            Toast.makeText(AnnoucementActivity.this, "You are already signed up for this event", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                    // no list yet
-                    else {
-                        List<String> eventIds = new ArrayList<>();
-                        eventIds.add(eventId);
-                        data.put("eventIds", eventIds);
-                        addData(data, ref);
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Adds data to the Firestore database.
-     *
-     * @param data the data to be added
-     * @param ref  the reference to the Firestore document
-     */
-    private void addData(Map<String, Object> data, DocumentReference ref){
-        ref.set(data)
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void unused) {
-                        Toast.makeText(AnnoucementActivity.this, "Signed up!", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "Event ID added successfully");
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.d(TAG, "Error adding event ID", e);
-                        Toast.makeText(AnnoucementActivity.this, "Could not sign up", Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 
 
