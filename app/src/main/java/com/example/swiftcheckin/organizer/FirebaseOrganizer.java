@@ -6,6 +6,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.provider.Settings;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -490,6 +491,47 @@ public class FirebaseOrganizer {
 
                 }
 
+            }
+        });
+    }
+
+
+    public interface getCheckInCallback
+    {
+        void onDataFetched(ArrayList<Pair<String, String>> dataList);
+        void onError(String errorMessage);
+    }
+
+    public void getCheckedInDetails(String eventId, getCheckInCallback callback)
+    {
+        DocumentReference checkInDoc = db.collection("checkedIn").document(eventId);
+
+        checkInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot document = task.getResult();
+                    ArrayList<Pair<String, String>> dataList = new ArrayList<>();
+                    if(document.exists())
+                    {
+                        Map<String, Object> data = document.getData();
+                        if(data != null)
+                        {
+                            for(Map.Entry<String, Object> entry: data.entrySet())
+                            {
+                                String device = entry.getKey();
+                                String count = entry.getValue().toString();
+                                dataList.add(new Pair<>(device, count));
+                            }
+                        }
+                    }
+                    callback.onDataFetched(dataList);
+                }
+                else
+                {
+                    callback.onError("Unable to fetch check in information");
+                }
             }
         });
     }

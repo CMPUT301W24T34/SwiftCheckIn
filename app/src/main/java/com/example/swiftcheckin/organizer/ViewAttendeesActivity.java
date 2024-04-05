@@ -91,7 +91,6 @@ public class ViewAttendeesActivity extends AppCompatActivity {
                             finalUpdated_event.setDeviceId(eventDeviceId);
 
                         }
-                        return null;
                     }
                 });
         queryAttendees(eventId);  // Query through the attendees who have signed up.
@@ -147,7 +146,6 @@ public class ViewAttendeesActivity extends AppCompatActivity {
 
                     }
                 }
-                return null;
             }
         });
     }
@@ -214,7 +212,6 @@ public class ViewAttendeesActivity extends AppCompatActivity {
                 } else {
                     Log.e("Failed Task", "Error getting documents.", task.getException());
                 }
-                return null;
             }
         });
     }

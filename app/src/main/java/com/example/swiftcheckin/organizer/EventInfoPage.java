@@ -1,6 +1,8 @@
 package com.example.swiftcheckin.organizer;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -13,12 +15,15 @@ import com.example.swiftcheckin.R;
 
 import org.w3c.dom.Text;
 
+import java.util.ArrayList;
+
 public class EventInfoPage extends AppCompatActivity {
 
 
     ListView checkedInList;
+    ArrayList<Pair<String, String>> checkedInDataList;
     ListView signedUpList;
-
+    ArrayList<String> signedUpDataList;
     TextView checkedInButton;
 
     TextView signedUpButton;
@@ -42,7 +47,8 @@ public class EventInfoPage extends AppCompatActivity {
         checkedInList = findViewById(R.id.organizerEventInfo_CheckedInList);
         signedUpList = findViewById(R.id.organizerEventInfo_SignedUpList);
 
-        getEventInformation(view);
+        getEventInformation(view);      // event specific data is fetched
+
         initializeListButton(checkedInButton);
         initializeListButton(signedUpButton);
 
@@ -98,9 +104,14 @@ public class EventInfoPage extends AppCompatActivity {
 
             @Override
             public void onError(String errorMessage) {
-
+                Log.e("event fetch", errorMessage);
             }
         });
+    }
+
+    private void fetchCheckedInDetails()
+    {
+
     }
 }
 

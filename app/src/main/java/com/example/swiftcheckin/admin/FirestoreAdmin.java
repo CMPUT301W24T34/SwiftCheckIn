@@ -124,7 +124,6 @@ public class FirestoreAdmin {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        return null;
                     }
                 });
     }
@@ -170,7 +169,6 @@ public class FirestoreAdmin {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        return null;
                     }
                 });
 
@@ -217,7 +215,6 @@ public class FirestoreAdmin {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        return null;
                     }
                 });
 
@@ -261,7 +258,6 @@ public class FirestoreAdmin {
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                        return null;
                     }
                 });
     }
@@ -302,7 +298,6 @@ public class FirestoreAdmin {
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                            return null;
                         }
                     });
         }
@@ -345,7 +340,6 @@ public class FirestoreAdmin {
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                            return null;
                         }
                     });
         }
@@ -390,7 +384,6 @@ public class FirestoreAdmin {
                             } else {
                                 Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                            return null;
                         }
                     });
         }
