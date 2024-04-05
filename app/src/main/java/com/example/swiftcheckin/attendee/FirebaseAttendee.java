@@ -4,12 +4,13 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.swiftcheckin.organizer.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,7 +18,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,5 +168,63 @@ public class FirebaseAttendee {
                         Toast.makeText(context, "Could not sign up", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    interface EventListCallback
+    {
+        public void onDataFetched(ArrayList<Event> eventList);
+    }
+
+    public void getEventList(ArrayList<Event> eventList, EventListCallback callback)
+    {
+        CollectionReference eventCol = db.collection("events");
+
+        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+
+                eventList.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    String eventTitle = (String) doc.getData().get("eventTitle");
+                    String eventDescription = (String) doc.getData().get("eventDescription");
+                    String eventLocation = (String) doc.getData().get("eventLocation");
+                    String deviceId = (String) doc.getData().get("deviceId");
+                    String eventImageUrl = (String) doc.getData().get("eventPosterURL");
+                    String eventStartDate = (String) doc.getData().get("eventStartDate");
+                    String eventStartTime = (String) doc.getData().get("eventStartTime");
+                    String eventEndDate = (String) doc.getData().get("eventEndDate");
+                    String eventEndTime = (String) doc.getData().get("eventEndTime");
+                    String eventMaxAttendees = (String) doc.getData().get("eventMaxAttendees");
+                    String eventCurrentAttendees = (String) doc.getData().get("eventCurrentAttendees");
+
+                    com.example.swiftcheckin.organizer.Event event;
+
+                    if (eventMaxAttendees.equals("-1")) {
+                        event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+
+                    } else {
+                        event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                    }
+
+                    if (eventCurrentAttendees != null) {
+                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                    } else {
+                        event.setCurrentAttendees(0);
+                    }
+
+
+                    eventList.add(event);
+
+//                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
+//                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
+                }
+               callback.onDataFetched(eventList);
+            }
+        });
     }
 }

@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Event> eventList;
     private static final String TAG = "MainActivity";
     private FirebaseFirestore db;
-
+    private FirebaseAttendee db_attendee;
     String eventTitle;
 
     @Override
@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
         eventList = new ArrayList<>();
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
-
+        db_attendee = new FirebaseAttendee();
         db = FirebaseFirestore.getInstance();
 
         setupUI();
@@ -63,53 +63,9 @@ public class MainActivity extends AppCompatActivity {
      */
 
     private void getData(){
-        String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-        CollectionReference eventCol = db.collection("events");
-
-        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db_attendee.getEventList(eventList, new FirebaseAttendee.EventListCallback() {
             @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    return;
-                }
-
-                eventList.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
-                    eventTitle = (String) doc.getData().get("eventTitle");
-                    String eventDescription = (String) doc.getData().get("eventDescription");
-                    String eventLocation = (String) doc.getData().get("eventLocation");
-                    String deviceId = (String) doc.getData().get("deviceId");
-                    String eventImageUrl = (String) doc.getData().get("eventPosterURL");
-                    String eventStartDate = (String) doc.getData().get("eventStartDate");
-                    String eventStartTime = (String) doc.getData().get("eventStartTime");
-                    String eventEndDate = (String) doc.getData().get("eventEndDate");
-                    String eventEndTime = (String) doc.getData().get("eventEndTime");
-                    String eventMaxAttendees = (String) doc.getData().get("eventMaxAttendees");
-                    String eventCurrentAttendees = (String) doc.getData().get("eventCurrentAttendees");
-
-                    Event event;
-
-                    if (eventMaxAttendees.equals("-1")) {
-                        event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-
-                    } else {
-                        event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-                    }
-
-                    if (eventCurrentAttendees != null) {
-                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
-                    } else {
-                        event.setCurrentAttendees(0);
-                    }
-
-
-                    eventList.add(event);
-
-//                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
-//                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
-                }
+            public void onDataFetched(ArrayList<Event> eventList) {
                 eventViewAdapter.notifyDataSetChanged();
             }
         });
