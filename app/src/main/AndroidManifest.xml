@@ -76,6 +76,10 @@ gin map
             android:exported="true"
             android:screenOrientation="portrait"/>
         <activity
+            android:name=".organizer.EventInfoPage"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".attendee.MainActivity"
             android:exported="true">
             <intent-filter>

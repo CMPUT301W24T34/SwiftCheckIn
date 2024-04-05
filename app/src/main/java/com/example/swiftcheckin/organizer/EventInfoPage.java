@@ -41,7 +41,7 @@ public class EventInfoPage extends AppCompatActivity {
         setContentView(R.layout.organizer_event_information);   // This the xml the activity is connected to.
         View view = getWindow().getDecorView();     // OpenAI, April 4, 2024. ChatGPT. Prompt: how to get the current acitivity view in the activity
 
-        dbOrganizer = new FirebaseOrganizer();
+        dbOrganizer = new FirebaseOrganizer(getApplicationContext());
         eventId = getIntent().getStringExtra("eventId");
 
         checkedInButton= findViewById(R.id.organizerEventInfo_CheckedInTitle);
@@ -53,9 +53,11 @@ public class EventInfoPage extends AppCompatActivity {
         getEventInformation(view);      // event specific data is fetched
 
         // check-in and signup details initialization
+        checkedInDataList = new ArrayList<>();
         checkInArrayAdapter = new CheckInArrayAdapter(this, checkedInDataList);
         checkedInList.setAdapter(checkInArrayAdapter);
 
+        signedUpDataList = new ArrayList<>();
         signUpArrayAdapter = new CheckInArrayAdapter(this, signedUpDataList);
         signedUpList.setAdapter(signUpArrayAdapter);
 
@@ -112,7 +114,15 @@ public class EventInfoPage extends AppCompatActivity {
                 date.setText(event.getStartDate());
                 time.setText(event.getStartTime());
                 description.setText(event.getDescription());
-                Glide.with(getApplicationContext()).load(event.getEventImageUrl()).into(poster);
+                if(event.getEventImageUrl() == null)
+                {
+                    poster.setImageResource(R.drawable.test_rect);
+                }
+                else
+                {
+                    Glide.with(getApplicationContext()).load(event.getEventImageUrl()).into(poster);
+                }
+
             }
 
             @Override

@@ -82,7 +82,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         viewSignedUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ViewAttendeesActivity.class);
+                Intent intent = new Intent(getContext(), EventInfoPage.class);
                 intent.putExtra("eventId", eventId);
                 dismiss();
                 startActivity(intent);

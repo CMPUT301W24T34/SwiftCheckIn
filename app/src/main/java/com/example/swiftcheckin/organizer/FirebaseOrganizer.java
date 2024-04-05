@@ -326,7 +326,7 @@ public class FirebaseOrganizer {
                             String eventTitle = (String) doc.getData().get("eventTitle");
                             String eventLocation = (String) doc.getData().get("eventLocation");
                             String eventDescription = (String) doc.getData().get("eventDescription");
-                            String deviceID = (String) doc.getData().get("deviceId");
+                            String deviceId = (String) doc.getData().get("deviceId");
 
                             String eventImageURL = (String) doc.getData().get("eventPosterURL");
                             String startDate = (String) doc.getData().get("eventStartDate");
@@ -336,12 +336,13 @@ public class FirebaseOrganizer {
                             String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
 
                             if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
-                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, startDate, endDate, startTime, endTime);
+                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, startDate, endDate, startTime, endTime);
                             } else {   // In case max attendees was specified.
-                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceID, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
+                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
                             }
                         }
                     }
+                    eventCallback.onCompleteFetch(event[0]);
                 }
                 else
                 {
@@ -350,14 +351,6 @@ public class FirebaseOrganizer {
             }
             });
 
-        if(event[0] != null)
-        {
-            eventCallback.onCompleteFetch(event[0]);
-        }
-        else
-        {
-            eventCallback.onError("Error fetching event information");
-        }
 
     }
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
