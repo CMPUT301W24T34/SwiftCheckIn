@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,10 +23,12 @@ public class EventInfoPage extends AppCompatActivity {
 
     ListView checkedInList;
     ArrayList<Pair<String, String>> checkedInDataList;
+    CheckInArrayAdapter checkInArrayAdapter;
     ListView signedUpList;
-    ArrayList<String> signedUpDataList;
-    TextView checkedInButton;
+    ArrayList<Pair<String, String>> signedUpDataList;
+    CheckInArrayAdapter signUpArrayAdapter;
 
+    TextView checkedInButton;
     TextView signedUpButton;
 
     String eventId;
@@ -48,6 +51,16 @@ public class EventInfoPage extends AppCompatActivity {
         signedUpList = findViewById(R.id.organizerEventInfo_SignedUpList);
 
         getEventInformation(view);      // event specific data is fetched
+
+        // check-in and signup details initialization
+        checkInArrayAdapter = new CheckInArrayAdapter(this, checkedInDataList);
+        checkedInList.setAdapter(checkInArrayAdapter);
+
+        signUpArrayAdapter = new CheckInArrayAdapter(this, signedUpDataList);
+        signedUpList.setAdapter(signUpArrayAdapter);
+
+        fetchCheckedInDetails();
+        fetchSignUpDetails();
 
         initializeListButton(checkedInButton);
         initializeListButton(signedUpButton);
@@ -111,7 +124,32 @@ public class EventInfoPage extends AppCompatActivity {
 
     private void fetchCheckedInDetails()
     {
+        dbOrganizer.getCheckedInDetails(eventId, "checkedIn", checkedInDataList, new FirebaseOrganizer.getCheckInCallback() {
+            @Override
+            public void onDataFetched(ArrayList<Pair<String, String>> dataList) {
+                checkInArrayAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onError(String errorMessage) {
+                Log.e("Firebase - checkin", errorMessage);
+            }
+        });
+    }
+
+    private void fetchSignUpDetails()
+    {
+        dbOrganizer.getCheckedInDetails(eventId, "eventsWithAttendees", signedUpDataList, new FirebaseOrganizer.getCheckInCallback() {
+            @Override
+            public void onDataFetched(ArrayList<Pair<String, String>> dataList) {
+                signUpArrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
     }
 }
 

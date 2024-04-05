@@ -502,9 +502,9 @@ public class FirebaseOrganizer {
         void onError(String errorMessage);
     }
 
-    public void getCheckedInDetails(String eventId, getCheckInCallback callback)
+    public void getCheckedInDetails(String eventId, String collection, ArrayList<Pair<String, String>> dataList, getCheckInCallback callback)
     {
-        DocumentReference checkInDoc = db.collection("checkedIn").document(eventId);
+        DocumentReference checkInDoc = db.collection(collection).document(eventId);
 
         checkInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -512,7 +512,7 @@ public class FirebaseOrganizer {
                 if(task.isSuccessful())
                 {
                     DocumentSnapshot document = task.getResult();
-                    ArrayList<Pair<String, String>> dataList = new ArrayList<>();
+                    dataList.clear();
                     if(document.exists())
                     {
                         Map<String, Object> data = document.getData();
@@ -522,7 +522,15 @@ public class FirebaseOrganizer {
                             {
                                 String device = entry.getKey();
                                 String count = entry.getValue().toString();
-                                dataList.add(new Pair<>(device, count));
+                                if(collection.equals("eventsWithAttendees"))
+                                {
+                                    dataList.add(new Pair<>(device, "None"));
+                                }
+                                else
+                                {
+                                    dataList.add(new Pair<>(device, count));
+                                }
+
                             }
                         }
                     }

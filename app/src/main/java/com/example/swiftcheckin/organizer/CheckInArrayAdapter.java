@@ -26,6 +26,32 @@ public class CheckInArrayAdapter extends ArrayAdapter<Pair<String, String>> {
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        return null;
+        View view;
+        if(convertView == null)
+        {
+            view = LayoutInflater.from(getContext()).inflate(R.layout.organizer_info_checkedin_item, parent, false);
+        }
+        else
+        {
+            view = convertView;
+        }
+
+        Pair<String, String> pair = getItem(position);
+        TextView attendeeName = view.findViewById(R.id.organizerEventInfo_item_CheckedInName);
+        TextView attendeeCount = view.findViewById(R.id.organizerEventInfo_item_CheckedInCount);
+
+        assert pair != null;
+        attendeeName.setText(pair.first);
+        if(pair.second.equals("None"))
+        {
+            attendeeCount.setText("Signed Up");
+        }
+        else
+        {
+            attendeeCount.setText(pair.second);
+        }
+
+
+        return view;
     }
 }
