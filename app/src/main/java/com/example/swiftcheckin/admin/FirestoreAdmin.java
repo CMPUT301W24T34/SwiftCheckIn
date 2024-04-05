@@ -27,11 +27,24 @@ public class FirestoreAdmin {
     private FirebaseFirestore db;
     private CollectionReference eventsCollectionRef;
     private CollectionReference profilesCollectionRef;
+    private CollectionReference geolocationCollectionRef;
+    private CollectionReference qrcodesCollectionRef;
+    private CollectionReference eventsWithAttendeesCollectionRef;
+    private CollectionReference  checkedInCollectionRef;
+    private CollectionReference announcementCollectionRef;
+    private CollectionReference signedUpEventsCollectionRef;
 
     public FirestoreAdmin() {
         db = FirebaseFirestore.getInstance();
         eventsCollectionRef = db.collection("events");
         profilesCollectionRef = db.collection("profiles");
+        geolocationCollectionRef = db.collection("geolocation");
+        qrcodesCollectionRef = db.collection("qrcodes");
+        eventsWithAttendeesCollectionRef = db.collection("eventsWithAttendees");
+        checkedInCollectionRef = db.collection("checkedIn");
+        announcementCollectionRef = db.collection("Announcements");
+        signedUpEventsCollectionRef = db.collection("SignedUpEvents");
+
     }
 
     public void queryEvents(List<Event> eventList, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
@@ -145,6 +158,12 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
+                                deleteGeolocationEvents(documentId);
+                                deleteQRCodesByEventID(documentId);
+                                deleteEventsWithAttendees(documentId);
+                                deleteCheckedIn(documentId);
+                                deleteAnnouncement(documentId);
+                                deleteSignedUpEvents(documentId);
                                 eventsCollectionRef.document(documentId)
                                         .delete()
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -176,50 +195,57 @@ public class FirestoreAdmin {
     }
 
     public void deleteFirebaseEvent(List<Event> eventList, Integer selectedPosition, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
-        String nameToDelete = "filler";
-
         if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
-            nameToDelete = eventList.get(selectedPosition).getEventTitle();
-        }
-        //Citation: For the following code idea, OpenAI, 2024, ChatGPT, Licensing: Creative Commons, Prompt: How to check if the device Id is not "pass"
-        eventsCollectionRef.whereEqualTo("eventTitle", nameToDelete)
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            for (QueryDocumentSnapshot document : task.getResult()) {
-                                String documentId = document.getId();
-                                eventsCollectionRef.document(documentId)
-                                        .delete()
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d(TAG, "Event data has been deleted successfully!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Event data could not be deleted! " + e.toString());
-                                            }
-                                        });
+            Event selectedEvent = eventList.get(selectedPosition);
+            String title = selectedEvent.getEventTitle();
+            String deviceId = selectedEvent.getDeviceId();
+            String combinedName = deviceId + title;
+            Log.d(TAG, "COMBINED NAME IS " + combinedName);
+            deleteGeolocationEvents(combinedName);
+            deleteQRCodesByEventID(combinedName);
+            deleteEventsWithAttendees(combinedName);
+            deleteCheckedIn(combinedName);
+            deleteAnnouncement(combinedName);
+            deleteSignedUpEvents(combinedName);
 
-                                //eventList.remove(selectedPosition);
-                                eventArrayAdapter.notifyDataSetChanged();
-                                imageArrayAdapter.notifyDataSetChanged();
-                                profileArrayAdapter.notifyDataSetChanged();
-
-
+            eventsCollectionRef.whereEqualTo("eventTitle", title)
+                    .whereEqualTo("deviceId", deviceId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String documentId = document.getId();
+                                    eventsCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Event data has been deleted successfully!");
+                                                    // Now you can delete related data or update UI as needed
+                                                    eventArrayAdapter.notifyDataSetChanged();
+                                                    imageArrayAdapter.notifyDataSetChanged();
+                                                    profileArrayAdapter.notifyDataSetChanged();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Event data could not be deleted! " + e.toString());
+                                                }
+                                            });
+                                }
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
                             }
-                        } else {
-                            Log.d(TAG, "Error getting documents: ", task.getException());
                         }
-                    }
-                });
-
-
+                    });
+        } else {
+            Log.d(TAG, "Selected event position is invalid.");
+        }
     }
+
     public void deleteFirebaseImage(List<Event> eventList, Integer selectedPosition, ImageArrayAdapter imageArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         String nameToUpdate = "filler";
 
@@ -388,6 +414,224 @@ public class FirestoreAdmin {
                     });
         }
     }
+    //CITE
+    public void deleteGeolocationEvents(String eventId) {
+        geolocationCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                // Check if the document ID matches the eventId
+                                if (documentId.equals(eventId)) {
+                                    geolocationCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Geolocation data with ID " + eventId + " has been deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete geolocation data: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+
+    //CITE
+    public void deleteQRCodesByEventID(String eventIDToDelete) {
+        qrcodesCollectionRef.whereEqualTo("eventID", eventIDToDelete)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                qrcodesCollectionRef.document(documentId)
+                                        .delete()
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void unused) {
+                                                Log.d(TAG, "QR code data has been deleted successfully!");
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Log.d(TAG, "Failed to delete QR code data: " + e.toString());
+                                            }
+                                        });
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //delete eventswithattendees
+    public void deleteEventsWithAttendees(String eventId) {
+        eventsWithAttendeesCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                // Check if the document ID matches the eventId
+                                if (documentId.equals(eventId)) {
+                                    eventsWithAttendeesCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Event with attendees data has been deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete event with attendees data: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+    //deleteCheckedIn
+
+    public void deleteCheckedIn(String eventId) {
+        checkedInCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                // Check if the document ID matches the eventId
+                                if (documentId.equals(eventId)) {
+                                    checkedInCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Data has been deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete data: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+
+    //delete announcement
+
+    public void deleteAnnouncement(String eventId) {
+        announcementCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                String documentId = document.getId();
+                                // Check if the document ID matches the eventId
+                                if (documentId.equals(eventId)) {
+                                    announcementCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Announcement data with ID " + eventId + " has been deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete announcement data: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    // delete signedupevents
+    //Cite
+
+    public void deleteSignedUpEvents(String eventId) {
+        signedUpEventsCollectionRef.whereArrayContains("eventIds", eventId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                List<String> eventsIds = (List<String>) document.get("eventIds");
+                                if (eventsIds != null) {
+                                    eventsIds.remove(eventId);
+                                    document.getReference().update("eventIds", eventsIds)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Event ID removed from SignedUpEvents successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to remove event ID from SignedUpEvents: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+
+
 
 
 }
