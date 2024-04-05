@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.admin.ProfileArrayAdapter;
+import com.example.swiftcheckin.attendee.FirebaseAttendee;
 import com.example.swiftcheckin.attendee.Profile;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -121,6 +123,20 @@ public class ViewCheckInActivity extends AppCompatActivity {
         });
     }
 
+
+    private String retrieveDeviceId() {
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+    private void populateDeviceTokens() {
+        FirebaseAttendee firebaseAttendee = new FirebaseAttendee();
+
+        for (Profile profile : profileList) {
+            String deviceToken = firebaseAttendee.getDeviceToken(this);
+            profile.setDeviceToken(deviceToken);
+        }
+    }
 
 
     public void createProfile(String profileId, String profileCount){   // Add the value here, set the value in profile, and notify the new array adapter.

@@ -12,15 +12,24 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+
+
 import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.attendee.Profile;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.lang.ref.Reference;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.firebase.messaging.RemoteMessage;
 
 public class AddAnnouncementActivity extends AppCompatActivity {
 
@@ -81,6 +90,7 @@ public class AddAnnouncementActivity extends AppCompatActivity {
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Announcement Added Successfully");
                         Toast.makeText(AddAnnouncementActivity.this, "Announcement Added Successfully", Toast.LENGTH_SHORT).show();
+                        sendPushNotificationToAttendees(announcementHeading, announcementDes);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener(){ // In the event, the event fails to be added to Firebase.
@@ -91,4 +101,55 @@ public class AddAnnouncementActivity extends AppCompatActivity {
                     }
                 });
     }
-}
+    private void sendPushNotificationToAttendees(String announcementHeading, String announcementDes) {
+        List<String> attendeesDeviceTokens = getAttendeesDeviceTokensFromFirestore();
+
+        if (!attendeesDeviceTokens.isEmpty()) {
+            Map<String, String> notificationData = new HashMap<>();
+            notificationData.put("title", announcementHeading);
+            notificationData.put("body", announcementDes);
+
+            for (String deviceToken : attendeesDeviceTokens) {
+                FirebaseMessaging.getInstance().sendToDevice(deviceToken)
+                        .addOnCompleteListener(new OnCompleteListener<String>() {
+                            @Override
+                            public void onComplete(@NonNull Task<String> task) {
+                                if (task.isSuccessful()) {
+                                    Log.d(TAG, "Push notification sent successfully to " + deviceToken);
+                                } else {
+                                    Log.e(TAG, "Error sending push notification to " + deviceToken, task.getException());
+                                }
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.e(TAG, "Error sending push notification to " + deviceToken, e);
+                            }
+                        })
+                        .addData(notificationData);
+            }
+        } else {
+            Log.d(TAG, "No attendees' device tokens found.");
+        }
+    }
+
+        // Implement this method to retrieve the attendees' device tokens from Firestore
+        private List<String> getAttendeesDeviceTokensFromFirestore() {
+            List<String> deviceTokens = new ArrayList<>();
+
+            // Get the profileList from the ViewCheckInActivity
+            ViewCheckInActivity viewCheckInActivity = new ViewCheckInActivity();
+            viewCheckInActivity.queryAttendees(eventId); // Call the queryAttendees method to populate the profileList
+
+            // Retrieve the device tokens from the profileList
+            for (Profile profile : viewCheckInActivity.profileList) {
+                String deviceToken = profile.getDeviceToken();
+                if (deviceToken != null) {
+                    deviceTokens.add(deviceToken);
+                }
+            }
+
+            return deviceTokens;
+        }
+    }

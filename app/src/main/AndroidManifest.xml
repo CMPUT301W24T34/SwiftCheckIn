@@ -88,6 +88,14 @@ gin map
             android:name=".admin.AdminActivity"
             android:exported="true" />
 
+        <service
+            android:name=".attendee.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.swiftcheckin"

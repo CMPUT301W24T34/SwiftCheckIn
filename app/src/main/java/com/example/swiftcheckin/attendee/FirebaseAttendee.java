@@ -18,6 +18,7 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.messaging.FirebaseMessaging; // Added this import for FirebaseMessaging
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,6 @@ public class FirebaseAttendee {
     public FirebaseAttendee() {
         db = FirebaseFirestore.getInstance();
         profilesCollectionRef = db.collection("profiles");
-
     }
 
     public FirebaseFirestore getDb() {
@@ -43,6 +43,32 @@ public class FirebaseAttendee {
         return profilesCollectionRef;
     }
 
+
+    public String getDeviceToken(Context context) {
+        String deviceId = retrieveDeviceId(context);
+
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Failed to get device token", task.getException());
+                            return;
+                        }
+
+                        // Store the device token in a variable or return it
+                        String deviceToken = task.getResult();
+                        // ...
+                    }
+                });
+
+        // Return the device token if you stored it in a variable, or return null if not
+        return null;
+    }
+
+    private String retrieveDeviceId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 
     /**
      * update the firebase collection with the location data
@@ -88,6 +114,7 @@ public class FirebaseAttendee {
                 });
     }
 
+
     // Citation: OpenAI, 03-05-2024, ChatGPT, Saving the data as a list in an attribute called eventIds
     /* Chatgpt suggested to use Map<String, Object> data = new HashMap<>() for the list
     output was also about the oncompletelistener and document snapshots and tasks
@@ -99,7 +126,6 @@ public class FirebaseAttendee {
      and if (document.exists() && document.contains("eventIds")) to see if there is already a list for this user
      and List<String> eventIds = (List<String>) document.get("eventIds") to get it
     */
-
     /**
      * Saves the attendance data for a specific user and event.
      *
@@ -122,7 +148,8 @@ public class FirebaseAttendee {
                         if (!eventIds.contains(eventId)) {
                             eventIds.add(eventId);
                             data.put("eventIds", eventIds);
-                            addSignUpData(data,ref, context);
+                            addSignUpData(data, ref, context);
+                            storeDeviceToken(deviceId, eventId, context); // Added this line to store the device token
                         }
                         // they've already signed up for this event
                         else{
@@ -135,6 +162,7 @@ public class FirebaseAttendee {
                         eventIds.add(eventId);
                         data.put("eventIds", eventIds);
                         addSignUpData(data, ref, context);
+                        storeDeviceToken(deviceId, eventId, context); // Added this line to store the device token
                     }
                 }
             }
@@ -161,6 +189,42 @@ public class FirebaseAttendee {
                     public void onFailure(@NonNull Exception e) {
                         Log.d(ContentValues.TAG, "Error adding event ID", e);
                         Toast.makeText(context, "Could not sign up", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
+    // Added this new method to store the device token
+    private void storeDeviceToken(String deviceId, String eventId, Context context) {
+        FirebaseMessaging.getInstance().getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        if (!task.isSuccessful()) {
+                            Log.w(TAG, "Failed to get device token", task.getException());
+                            return;
+                        }
+
+                        String deviceToken = task.getResult();
+
+                        // Store the device token in Firestore
+                        Map<String, Object> tokenData = new HashMap<>();
+                        tokenData.put("eventId", eventId);
+                        tokenData.put("deviceToken", deviceToken);
+
+                        db.collection("AttendeeDeviceTokens")
+                                .add(tokenData)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "Device token stored successfully");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error storing device token", e);
+                                    }
+                                });
                     }
                 });
     }

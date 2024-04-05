@@ -1,5 +1,9 @@
 package com.example.swiftcheckin.attendee;
 // This represents a user's profile
+
+import android.content.Context;
+import android.provider.Settings;
+
 /**
  * This represents a user's profile, includes their contact and personal information
  */
@@ -16,6 +20,11 @@ public class Profile {
     private boolean locationPermission;
 
     private int checkInCount = 0;
+    private String deviceToken;
+
+    public String retrieveDeviceId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
     /**
      * This creates a profile
      */
@@ -43,6 +52,16 @@ public class Profile {
         this.locationPermission = locationPermission;
         this.profileImageUrl = profileImageUrl;
 
+    }
+
+
+
+    public void setDeviceToken(String deviceToken) {
+        this.deviceToken = deviceToken;
+    }
+
+    public String getDeviceToken() {
+        return deviceToken;
     }
     /**
      * This returns the user's name
