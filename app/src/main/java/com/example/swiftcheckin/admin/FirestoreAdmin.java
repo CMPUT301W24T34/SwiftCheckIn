@@ -22,6 +22,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+/**
+ * The admin firebase activity
+ */
 
 public class FirestoreAdmin {
     private FirebaseFirestore db;
@@ -33,6 +36,10 @@ public class FirestoreAdmin {
     private CollectionReference  checkedInCollectionRef;
     private CollectionReference announcementCollectionRef;
     private CollectionReference signedUpEventsCollectionRef;
+
+    /**
+     * The firestore admin constructor
+     */
 
     public FirestoreAdmin() {
         db = FirebaseFirestore.getInstance();
@@ -46,6 +53,13 @@ public class FirestoreAdmin {
         signedUpEventsCollectionRef = db.collection("SignedUpEvents");
 
     }
+    /**
+     * Queries the events
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     */
 
     public void queryEvents(List<Event> eventList, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
         eventsCollectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
@@ -65,6 +79,15 @@ public class FirestoreAdmin {
 
     }
 
+    /**
+     * Queries the events
+     * @param profileList, List<Profile>: the list of profiles
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     */
+
+
     public void queryProfiles(List<Profile> profileList, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         profilesCollectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -83,6 +106,14 @@ public class FirestoreAdmin {
 
     }
 
+    /**
+     * Queries the images
+     * @param imageList, List<Event>: the list of images
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     */
+
     public void queryImages(List<Event> imageList, ImageArrayAdapter imageArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
         eventsCollectionRef.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -91,7 +122,6 @@ public class FirestoreAdmin {
                 imageList.clear();
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     Event event = doc.toObject(Event.class);
-                    // Set the event's image URL to be the eventPosterURL from Firebase
                     event.setEventImageUrl(doc.getString("eventPosterURL"));
                     imageList.add(event);
                 }
@@ -101,6 +131,16 @@ public class FirestoreAdmin {
             }
         });
     }
+    /**
+     * Deletes a profile
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param profileList, List<Profile>: the list of profiles
+     * @param nameToDelete, String: the name of the element to delete
+     * @param selectedPosition, Integer: the position of the element to delete
+     */
 
     public void deleteFirebaseProfile(List<Event> eventList, String nameToDelete, List<Profile> profileList, Integer selectedPosition, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         //delete not just profile but all events associated with that profile
@@ -140,6 +180,14 @@ public class FirestoreAdmin {
                     }
                 });
     }
+    /**
+     * Deletes multiple events
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param selectedPosition, Integer: the position of the element to delete
+     */
 
     public void deleteFirebaseMultiEvent(List<Event> eventList, Integer selectedPosition, AdminEventArrayAdapter eventArrayAdapter, String deviceId, ImageArrayAdapter imageArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
         String nameToDelete = "filler";
@@ -193,6 +241,14 @@ public class FirestoreAdmin {
 
 
     }
+    /**
+     * Deletes a single event
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param selectedPosition, Integer: the position of the element to delete
+     */
 
     public void deleteFirebaseEvent(List<Event> eventList, Integer selectedPosition, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter, ProfileArrayAdapter profileArrayAdapter) {
         if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
@@ -245,6 +301,14 @@ public class FirestoreAdmin {
             Log.d(TAG, "Selected event position is invalid.");
         }
     }
+    /**
+     * Deletes an image
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param selectedPosition, Integer: the position of the element to delete
+     */
 
     public void deleteFirebaseImage(List<Event> eventList, Integer selectedPosition, ImageArrayAdapter imageArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         String nameToUpdate = "filler";
@@ -287,6 +351,14 @@ public class FirestoreAdmin {
                     }
                 });
     }
+    /**
+     * Filters firebase events
+     * @param eventList, List<Event>: the list of events
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param query, String: the name of the string being searched
+     */
     //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     public void filterFirebaseEvents(List<Event> eventList,String query, AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         //Citation: For the following code line for lowercase, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to convert to lowercase
@@ -328,6 +400,14 @@ public class FirestoreAdmin {
                     });
         }
     }
+    /**
+     * Filters firebase images
+     * @param imageList, List<Event>: the list of images
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param query, String: the name of the string being searched
+     */
     //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     public void filterFirebaseImageList(List<Event> imageList, String query, ImageArrayAdapter imageArrayAdapter, AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
 
@@ -370,6 +450,15 @@ public class FirestoreAdmin {
                     });
         }
     }
+    /**
+     * Filters firebase profiles
+     * @param profileList, List<Profile>: the list of profiles
+     * @param eventArrayAdapter: AdminEventArrayAdapter the event array adapter
+     * @param imageArrayAdapter: ImageArrayAdapter the image array adapter
+     * @param profileArrayAdapter: ProfileArrayAdapter the profile array adapter
+     * @param query, String: the name of the string being searched
+     */
+
     //Citation: For the following code idea to use the search bar and filter searches, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
     public void filterProfileList(List<Profile> profileList, String query, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
 
@@ -414,7 +503,11 @@ public class FirestoreAdmin {
                     });
         }
     }
-    //CITE
+    /**
+     * Deletes geolocation event
+     * @param eventId, String: the id of the event
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
     public void deleteGeolocationEvents(String eventId) {
         geolocationCollectionRef
                 .get()
@@ -424,7 +517,6 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                // Check if the document ID matches the eventId
                                 if (documentId.equals(eventId)) {
                                     geolocationCollectionRef.document(documentId)
                                             .delete()
@@ -449,9 +541,12 @@ public class FirestoreAdmin {
                 });
     }
 
+    /**
+     * Deletes qr code for event
+     * @param eventIDToDelete, String: the id of the event
+     */
 
-
-    //CITE
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for all documents with an attribute in a field that matches a string and remove the document if so
     public void deleteQRCodesByEventID(String eventIDToDelete) {
         qrcodesCollectionRef.whereEqualTo("eventID", eventIDToDelete)
                 .get()
@@ -482,8 +577,11 @@ public class FirestoreAdmin {
                     }
                 });
     }
-
-    //delete eventswithattendees
+    /**
+     * Deletes events with attendees
+     * @param eventId, String: the id of the event
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
     public void deleteEventsWithAttendees(String eventId) {
         eventsWithAttendeesCollectionRef
                 .get()
@@ -517,8 +615,12 @@ public class FirestoreAdmin {
                     }
                 });
     }
+    /**
+     * Deletes events with checked in status
+     * @param eventId, String: the id of the event
+     */
 
-    //deleteCheckedIn
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
 
     public void deleteCheckedIn(String eventId) {
         checkedInCollectionRef
@@ -555,8 +657,11 @@ public class FirestoreAdmin {
     }
 
 
-
-    //delete announcement
+    /**
+     * Deletes announcements for event
+     * @param eventId, String: the id of the event
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
 
     public void deleteAnnouncement(String eventId) {
         announcementCollectionRef
@@ -591,10 +696,12 @@ public class FirestoreAdmin {
                     }
                 });
     }
+    /**
+     * Deletes events with people signed up
+     * @param eventId, String: the id of the event
+     */
 
-
-    // delete signedupevents
-    //Cite
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for if an attribute in a firebase array matches a string and remove the attribute if so
 
     public void deleteSignedUpEvents(String eventId) {
         signedUpEventsCollectionRef.whereArrayContains("eventIds", eventId)

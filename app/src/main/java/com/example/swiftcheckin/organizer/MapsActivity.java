@@ -37,7 +37,9 @@ import java.util.List;
 import java.util.Map;
 
 //Citation: The following code for creating google map and adding markers, 2024, Youtube, "Step by Step Google Maps Implementation in Android App | Google Maps in Android: Step-by-Step Guide", Codingzest, https://www.youtube.com/watch?v=pOKPQ8rYe6g
-
+/**
+ * The Map activity
+ */
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
