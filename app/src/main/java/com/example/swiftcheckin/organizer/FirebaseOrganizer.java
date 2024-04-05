@@ -4,10 +4,8 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -34,11 +32,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 
-public class Firebase_organizer {
+public class FirebaseOrganizer {
     private FirebaseFirestore db;
 
     private List<String> matchedProfiles = new ArrayList<>();
@@ -46,11 +41,11 @@ public class Firebase_organizer {
     String deviceID;
 
 
-    public Firebase_organizer(Context context) {
+    public FirebaseOrganizer(Context context) {
         this.db = FirebaseFirestore.getInstance();
         deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-    public Firebase_organizer(){
+    public FirebaseOrganizer(){
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -143,7 +138,6 @@ public class Firebase_organizer {
                             Log.e("Error in fetching qr Id for eventID", "Error - event: " + eventId);
                             callback.onQrIDReceived(null); // Signal failure
                         }
-                        return null;
                     }
                 });
     }
@@ -310,7 +304,13 @@ public class Firebase_organizer {
 
 
     // make callback interface
-    public Event getEvent(String eventId)
+
+    public interface EventCallback
+    {
+        void onCompleteFetch(Event event);
+        void onError(String errorMessage);
+    }
+    public void getEvent(String eventId, EventCallback eventCallback)
     {
         CollectionReference eventCol = db.collection("events");
         final Event[] event = new Event[1];
@@ -342,10 +342,22 @@ public class Firebase_organizer {
                         }
                     }
                 }
+                else
+                {
+                    eventCallback.onError("Error fetching event information");
+                }
             }
             });
 
-        return event[0];
+        if(event[0] != null)
+        {
+            eventCallback.onCompleteFetch(event[0]);
+        }
+        else
+        {
+            eventCallback.onError("Error fetching event information");
+        }
+
     }
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);

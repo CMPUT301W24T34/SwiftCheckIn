@@ -2,12 +2,16 @@ package com.example.swiftcheckin.organizer;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.example.swiftcheckin.R;
+
+import org.w3c.dom.Text;
 
 public class EventInfoPage extends AppCompatActivity {
 
@@ -21,12 +25,15 @@ public class EventInfoPage extends AppCompatActivity {
 
     String eventId;
 
+    FirebaseOrganizer dbOrganizer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.organizer_event_information);   // This the xml the activity is connected to.
         View view = getWindow().getDecorView();     // OpenAI, April 4, 2024. ChatGPT. Prompt: how to get the current acitivity view in the activity
 
+        dbOrganizer = new FirebaseOrganizer();
         eventId = getIntent().getStringExtra("eventId");
 
         checkedInButton= findViewById(R.id.organizerEventInfo_CheckedInTitle);
@@ -35,7 +42,7 @@ public class EventInfoPage extends AppCompatActivity {
         checkedInList = findViewById(R.id.organizerEventInfo_CheckedInList);
         signedUpList = findViewById(R.id.organizerEventInfo_SignedUpList);
 
-
+        getEventInformation(view);
         initializeListButton(checkedInButton);
         initializeListButton(signedUpButton);
 
@@ -71,9 +78,29 @@ public class EventInfoPage extends AppCompatActivity {
         }
     }
 
-    private void getEventInformation()
+    private void getEventInformation(View view)
     {
+        dbOrganizer.getEvent(eventId, new FirebaseOrganizer.EventCallback() {
+            @Override
+            public void onCompleteFetch(Event event) {
+                TextView title = view.findViewById(R.id.organizerEventInfo_eventTitle);
+                TextView date = view.findViewById(R.id.organizerEventInfo_eventStartDate);
+                TextView time = view.findViewById(R.id.organizerEventInfo_eventStartTime);
+                TextView description = view.findViewById(R.id.organizerEventInfo_eventDescription);
+                ImageView poster = view.findViewById(R.id.organizerEventInfo_eventPoster);
 
+                title.setText(event.getEventTitle() + " - Details");
+                date.setText(event.getStartDate());
+                time.setText(event.getStartTime());
+                description.setText(event.getDescription());
+                Glide.with(getApplicationContext()).load(event.getEventImageUrl()).into(poster);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+
+            }
+        });
     }
 }
 
