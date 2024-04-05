@@ -14,6 +14,8 @@ public class Profile {
 
     private String profileImageUrl;
     private boolean locationPermission;
+
+    private int checkInCount = 0;
     /**
      * This creates a profile
      */
@@ -125,5 +127,13 @@ public class Profile {
      */
     public void setLocationPermission(String locationPermission) {
         this.locationPermission = Boolean.parseBoolean(locationPermission);
+    }
+
+    public int getCheckInCount() {
+        return checkInCount;
+    }
+
+    public void setCheckInCount(int checkInCount) {
+        this.checkInCount = checkInCount;
     }
 }

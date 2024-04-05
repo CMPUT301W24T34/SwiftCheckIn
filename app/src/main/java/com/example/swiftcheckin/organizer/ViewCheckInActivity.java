@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -27,7 +28,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
     ArrayList<Profile> profileList = new ArrayList<>();  // Attendees are represented by profiles
     ListView dataList;  // For multiple profiles
     FloatingActionButton back_button;
-    ProfileArrayAdapter profileArrayAdapter;   // From Admin
+    CheckInArrayAdapter checkInArrayAdapter;   // From Admin
 
     TextView bigEventTitle;  // Name change due to complications regarding creating the activity.
 
@@ -37,9 +38,9 @@ public class ViewCheckInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_check_in);
         back_button = findViewById(R.id.viewCheckInBackButton);
         bigEventTitle = findViewById(R.id.viewCheckInEventTitle);
-        profileArrayAdapter = new ProfileArrayAdapter(this, profileList);
+        checkInArrayAdapter = new CheckInArrayAdapter(this, profileList);
         dataList = findViewById(R.id.viewCheckInEventList);
-        dataList.setAdapter(profileArrayAdapter);
+        dataList.setAdapter(checkInArrayAdapter);
 
         String eventId = getIntent().getStringExtra("eventId");  // eventId passed through Intent
 
@@ -108,7 +109,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
                             for (Map.Entry<String, Object> entry : eventData.entrySet()) {   // Both are the same value, helps create profile.
                                 String profileKey = entry.getKey();
                                 Object profileValue = entry.getValue();
-                                createProfile(profileKey);  // Create profile
+                                createProfile(profileKey, (String) profileValue);  // Create profile
                             }
                         }
                     } else {  // Some checks.
@@ -124,9 +125,11 @@ public class ViewCheckInActivity extends AppCompatActivity {
 
 
 
-    public void createProfile(String profileId){
+    public void createProfile(String profileId, String profileCount){   // Add the value here, set the value in profile, and notify the new array adapter.
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference profileRef = db.collection("profiles").document(profileId);
+
+        int checkInCount = Integer.parseInt(profileCount);
 
 
         profileRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -156,10 +159,16 @@ public class ViewCheckInActivity extends AppCompatActivity {
                         ;
                         String profileBday = (String) profileData.get("birthday");
 
+                        Profile profile = new Profile(profileName, profileBday, profilePhone, profileEmail, profileWebsite, profileImageUrl, profileAddress, permission);
+
+                        profile.setCheckInCount(checkInCount);
+
+
+
                         ;
                         // Create and add the profile.
-                        profileList.add(new Profile(profileName, profileBday, profilePhone, profileEmail, profileWebsite, profileImageUrl, profileAddress, permission));
-                        profileArrayAdapter.notifyDataSetChanged();
+                        profileList.add(profile);
+                        checkInArrayAdapter.notifyDataSetChanged();
 
                     }
                 }
