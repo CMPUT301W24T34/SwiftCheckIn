@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.swiftcheckin.R;
 import com.google.android.gms.maps.CameraUpdate;
@@ -38,7 +40,9 @@ import java.util.Map;
 
 //Citation: The following code for creating google map and adding markers, 2024, Youtube, "Step by Step Google Maps Implementation in Android App | Google Maps in Android: Step-by-Step Guide", Codingzest, https://www.youtube.com/watch?v=pOKPQ8rYe6g
 
-
+/**
+ * Displays the map activity
+ */
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap myMap;
@@ -63,6 +67,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Button backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+
+            }
+        });
     }
 
 
@@ -73,5 +86,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         firebase_organizer.getCheckedIn(eventId,myMap);
 
     }
+
 
 }
