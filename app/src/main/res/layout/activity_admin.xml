@@ -21,7 +21,8 @@
         app:layout_constraintHorizontal_weight="1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="0.33"
-        tools:layout_editor_absoluteY="0dp" />
+        tools:layout_editor_absoluteY="0dp"
+        tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/profile_button"
@@ -46,7 +47,8 @@
         app:layout_constraintHorizontal_weight="1"
         android:textColor="#673AB7"
         android:backgroundTint="#EEEEEE"
-        app:layout_constraintWidth_percent="0.33" />
+        app:layout_constraintWidth_percent="0.33"
+        tools:ignore="MissingConstraints" />
 
     <SearchView
         android:id="@+id/searchView"
@@ -86,6 +88,18 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/listView"
         app:layout_constraintWidth_percent="1.0" />
+    <TextView
+        android:id="@+id/back_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textColor="#673AB7"
+        android:clickable="true"
+        android:background="?android:attr/selectableItemBackgroundBorderless"
+        android:padding="8dp"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
