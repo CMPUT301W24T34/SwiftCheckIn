@@ -1,10 +1,12 @@
 package com.example.swiftcheckin.organizer;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,6 +36,8 @@ public class EventInfoPage extends AppCompatActivity {
     TextView signedUpButton;
 
     String eventId;
+
+    Event finalEvent = new Event();
 
     FirebaseOrganizer dbOrganizer;
 
@@ -65,12 +69,15 @@ public class EventInfoPage extends AppCompatActivity {
         signUpArrayAdapter = new CheckInArrayAdapter(this, signedUpDataList);
         signedUpList.setAdapter(signUpArrayAdapter);
 
+        // button initializations
+        Button showQrButton = findViewById(R.id.organizerEventInfo_qrButton);
+
         fetchCheckedInDetails();
         fetchSignUpDetails();
 
-
         initializeListButton(checkedInButton);
         initializeListButton(signedUpButton);
+        initializeShowQrButton(showQrButton);
 
     }
 
@@ -108,6 +115,7 @@ public class EventInfoPage extends AppCompatActivity {
         dbOrganizer.getEvent(eventId, new FirebaseOrganizer.EventCallback() {
             @Override
             public void onCompleteFetch(Event event) {
+                finalEvent = event;
                 TextView title = view.findViewById(R.id.organizerEventInfo_eventTitle);
                 TextView date = view.findViewById(R.id.organizerEventInfo_eventStartDate);
                 TextView time = view.findViewById(R.id.organizerEventInfo_eventStartTime);
@@ -196,5 +204,25 @@ public class EventInfoPage extends AppCompatActivity {
             }
         });
     }
+
+    private void initializeShowQrButton(Button button)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showQrFragment();
+            }
+        });
+    }
+
+    private void showQrFragment()
+    {
+        Bitmap checkInImage = QrCodeManager.generateQRCode(finalEvent.getQrID());
+        Bitmap promoImage = QrCodeManager.generateQRCode(finalEvent.getQrPromoID());
+
+        EventFragmentQrs fragmentQrs = new EventFragmentQrs(eventId, checkInImage, promoImage);
+        fragmentQrs.show(getSupportFragmentManager(), "Event Information Qr options");
+    }
+
 }
 

@@ -292,7 +292,7 @@ public class OrganizerActivity extends AppCompatActivity {
 
     private Bitmap getAssociatedQrImage(String eventId, QrImageCallback callback)
     {
-        dbOrganizer.getAssociatedCodeID(eventId, new FirebaseOrganizer.QrIDCallback() {
+        dbOrganizer.getAssociatedCodeID(eventId, "qrID", new FirebaseOrganizer.QrIDCallback() {
             @Override
             public void onQrIDReceived(String qrID) {
                 if (qrID != null) {

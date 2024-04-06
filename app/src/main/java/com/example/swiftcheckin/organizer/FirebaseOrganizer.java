@@ -120,7 +120,7 @@ public class FirebaseOrganizer {
         void onQrIDReceived(String qrID);
     }
 
-    public void getAssociatedCodeID(String eventId, QrIDCallback callback) {
+    public void getAssociatedCodeID(String eventId, String field, QrIDCallback callback) {
         // Citation: OpenAI, Date: 29 March, 2024. ChatGPT. Used to find a way to wait till db operation is complete.
         // gave the code without this and asked how to make the program not crash due to asynchronous behaviour of db.
         // ChatGPT suggested this
@@ -134,7 +134,7 @@ public class FirebaseOrganizer {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String qrID = document.getString("qrID");
+                                String qrID = document.getString(field);
                                 Log.e("Qr Code Id requested for fragment", qrID);
                                 callback.onQrIDReceived(qrID);
                             }
@@ -358,11 +358,16 @@ public class FirebaseOrganizer {
                         String endTime = (String) result.getData().get("eventEndTime");
                         String maxAttendees = (String) result.getData().get("eventMaxAttendees");
 
+                        String checkInQrId = (String) result.getData().get("qrID");
+                        String promoQrId = (String) result.getData().get("qrPromoID");
+
                         if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
                             event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, startDate, endDate, startTime, endTime);
                         } else {   // In case max attendees was specified.
                             event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
                         }
+                        event.setQrID(checkInQrId);
+                        event.setQrPromoID(promoQrId);
                         eventCallback.onCompleteFetch(event);
                     }
                 }
