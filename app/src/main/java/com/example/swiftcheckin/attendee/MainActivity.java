@@ -1,10 +1,8 @@
 package com.example.swiftcheckin.attendee;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -15,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
 import java.util.ArrayList;
 
 
@@ -46,8 +45,8 @@ public class MainActivity extends AppCompatActivity {
         listViewMyEvent = findViewById(R.id.attendee_my_events_list);
         listViewEvents = findViewById(R.id.attendee_other_events_list);
 
-        myEventButton = findViewById(R.id.other_events);
-        eventButton = findViewById(R.id.my_events);
+        eventButton = findViewById(R.id.other_events);
+         myEventButton= findViewById(R.id.my_events);
 
 
         eventList = new ArrayList<>();
@@ -60,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
 
         db_attendee = new FirebaseAttendee();
 
-        intializeListButton(myEventButton);
-        intializeListButton(eventButton);
+        intializeSignedUpEventListButton(myEventButton);
+        intializeEventListButton(eventButton);
 
 
         setupUI();
@@ -178,31 +177,49 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    protected void intializeListButton(TextView view1) {
+    protected void intializeEventListButton(TextView view1) {
 
         view1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showList();
+                showEventList();
 
             }
         });
     }
 
-    private void showList() {
-        if(listViewEvents.getVisibility() == View.INVISIBLE) {
-            listViewEvents.setVisibility(View.VISIBLE);
-            listViewMyEvent.setVisibility(View.INVISIBLE);
-            myEventButton.setBackground(null);
-            eventButton.setBackgroundResource(R.drawable.grey_circle_background);
+    protected void intializeSignedUpEventListButton(TextView view1) {
 
-        } else if (listViewMyEvent.getVisibility() == View.INVISIBLE) {
-            listViewEvents.setVisibility(View.INVISIBLE);
-            listViewMyEvent.setVisibility(View.VISIBLE);
-            eventButton.setBackground(null);
-            myEventButton.setBackgroundResource(R.drawable.grey_circle_background);
+        view1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showSignedUpEventList();
 
+            }
+        });
+    }
+
+
+    private void showSignedUpEventList() {
+         if (listViewMyEvent.getVisibility() == View.INVISIBLE) {
+             listViewMyEvent.setVisibility(View.VISIBLE);
+             myEventButton.setBackgroundResource(R.drawable.grey_circle_background);
+
+             listViewEvents.setVisibility(View.INVISIBLE);
+             eventButton.setBackground(null);
 
         }
     }
+
+    private void showEventList() {
+        if(listViewEvents.getVisibility() == View.INVISIBLE) {
+            listViewEvents.setVisibility(View.VISIBLE);
+            eventButton.setBackgroundResource(R.drawable.grey_circle_background);
+
+            listViewMyEvent.setVisibility(View.INVISIBLE);
+            myEventButton.setBackground(null);
+        }
+    }
+
+
 }
