@@ -64,20 +64,23 @@ public class MainActivity extends AppCompatActivity {
 
 
         setupUI();
-        getData();
+        getEventData();
+        getMyEventData();
     }
 
 
     /**
      * Fetches event data from Firestore.
      */
-    private void getData(){
+    private void getEventData() {
         db_attendee.getEventList(eventList, new FirebaseAttendee.EventListCallback() {
             @Override
             public void onDataFetched(ArrayList<Event> eventList) {
                 eventViewAdapter.notifyDataSetChanged();
             }
         });
+    }
+    private void getMyEventData() {
 
         db_attendee.getMyEventIds(myEventList, getApplicationContext(),
                 new FirebaseAttendee.EventListCallback() {
@@ -194,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 showSignedUpEventList();
-
+                getMyEventData();
             }
         });
     }
@@ -220,6 +223,5 @@ public class MainActivity extends AppCompatActivity {
             myEventButton.setBackground(null);
         }
     }
-
 
 }
