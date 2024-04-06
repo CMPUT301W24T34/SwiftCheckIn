@@ -557,7 +557,7 @@ public class FirestoreAdmin {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
                                 qrcodesCollectionRef.document(documentId)
-                                        .delete()
+                                        .update("eventID", "Null")
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
