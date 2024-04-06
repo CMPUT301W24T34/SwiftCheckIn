@@ -92,6 +92,27 @@ public class EventInfoPage extends AppCompatActivity {
 
     }
 
+    private void initializeSignedListButton(TextView view1)
+    {
+        view1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showList();
+            }
+        });
+
+    }
+
+    private void showSignedUpList()
+    {
+        if(signedUpList.getVisibility() == View.INVISIBLE)
+        {
+            checkedInList.setVisibility(View.INVISIBLE);
+            signedUpList.setVisibility(View.VISIBLE);
+            checkedInButton.setBackground(null);
+            signedUpButton.setBackgroundResource(R.drawable.grey_circle_background);
+        }
+    }
     private void showList()
     {
         if(checkedInList.getVisibility() == View.INVISIBLE)
@@ -100,13 +121,6 @@ public class EventInfoPage extends AppCompatActivity {
             checkedInList.setVisibility(View.VISIBLE);
             signedUpButton.setBackground(null);
             checkedInButton.setBackgroundResource(R.drawable.grey_circle_background);
-        }
-        else if(signedUpList.getVisibility() == View.INVISIBLE)
-        {
-            checkedInList.setVisibility(View.INVISIBLE);
-            signedUpList.setVisibility(View.VISIBLE);
-            checkedInButton.setBackground(null);
-            signedUpButton.setBackgroundResource(R.drawable.grey_circle_background);
         }
     }
 
