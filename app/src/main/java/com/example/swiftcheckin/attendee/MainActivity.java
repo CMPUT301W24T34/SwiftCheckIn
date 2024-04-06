@@ -4,6 +4,7 @@ package com.example.swiftcheckin.attendee;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -34,24 +35,44 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private ListView listViewEvents;
+    private ListView listViewMyEvent;
+
     private EventViewAdapter eventViewAdapter;
+    private EventViewAdapter myEventViewAdapter;
     private ArrayList<Event> eventList;
+    private ArrayList<Event> myEventList;
     private static final String TAG = "MainActivity";
-    private FirebaseFirestore db;
     private FirebaseAttendee db_attendee;
-    String eventTitle;
+
+
+    TextView myEventButton;
+    TextView eventButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.attendee_otherevent);
 
+        listViewMyEvent = findViewById(R.id.attendee_my_events_list);
         listViewEvents = findViewById(R.id.attendee_other_events_list);
+
+        myEventButton = findViewById(R.id.other_events);
+        eventButton = findViewById(R.id.my_events);
+
+
         eventList = new ArrayList<>();
         eventViewAdapter = new EventViewAdapter(this, eventList);
         listViewEvents.setAdapter(eventViewAdapter);
+
+        myEventList = new ArrayList<>();
+        myEventViewAdapter = new EventViewAdapter(this, myEventList);
+        listViewMyEvent.setAdapter(myEventViewAdapter);
+
         db_attendee = new FirebaseAttendee();
-        db = FirebaseFirestore.getInstance();
+
+        intializeListButton(myEventButton);
+        intializeListButton(eventButton);
+
 
         setupUI();
         getData();
@@ -61,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Fetches event data from Firestore.
      */
-
     private void getData(){
         db_attendee.getEventList(eventList, new FirebaseAttendee.EventListCallback() {
             @Override
@@ -69,8 +89,14 @@ public class MainActivity extends AppCompatActivity {
                 eventViewAdapter.notifyDataSetChanged();
             }
         });
-    }
 
+        db_attendee.getEventList(myEventList, new FirebaseAttendee.EventListCallback() {
+            @Override
+            public void onDataFetched(ArrayList<Event> myEventList) {
+                myEventViewAdapter.notifyDataSetChanged();
+            }
+        });
+    }
 
     /**
      * Sets up UI elements and listeners.
@@ -83,12 +109,13 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Other Page
-        TextView myEventPage = findViewById(R.id.my_events);
-        myEventPage.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, MyEventActivity.class);
-            startActivity(intent);
-        });
+
+//        // Other Page
+//        TextView myEventPage = findViewById(R.id.my_events);
+//        myEventPage.setOnClickListener(v -> {
+//            Intent intent = new Intent(MainActivity.this, MyEventActivity.class);
+//            startActivity(intent);
+//        });
 
 //         Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
@@ -138,6 +165,35 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    protected void intializeListButton(TextView view1) {
+
+        view1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showList();
+
+            }
+        });
+    }
+
+    private void showList() {
+        if(listViewEvents.getVisibility() == View.INVISIBLE) {
+            listViewEvents.setVisibility(View.VISIBLE);
+            listViewMyEvent.setVisibility(View.INVISIBLE);
+            myEventButton.setBackground(null);
+            eventButton.setBackgroundResource(R.drawable.grey_circle_background);
+
+        } else if (listViewMyEvent.getVisibility() == View.INVISIBLE) {
+            listViewEvents.setVisibility(View.INVISIBLE);
+            listViewMyEvent.setVisibility(View.VISIBLE);
+            eventButton.setBackground(null);
+            myEventButton.setBackgroundResource(R.drawable.grey_circle_background);
+
+
+        }
+
+
+    }
 
 
 
