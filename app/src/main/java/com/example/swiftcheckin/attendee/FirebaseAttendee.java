@@ -256,61 +256,120 @@ public class FirebaseAttendee {
      *
      * @param eventIds List of event IDs
      */
+//    private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
+//        CollectionReference eventCol = db.collection("events");
+//        myEventList.clear(); // Clear the old list
+//
+//        if (eventIds.isEmpty()) {
+//            callback.onDataFetched(myEventList); // Handle case with no event IDs immediately
+//            return;
+//        }
+//
+//        for (String eventId : eventIds) {
+//            eventCol.document(eventId).get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//
+//                        String eventTitle = document.getString("eventTitle");
+//                        String eventDescription = document.getString("eventDescription");
+//                        String eventLocation = document.getString("eventLocation");
+//                        String deviceId = document.getString("deviceId");
+//                        String eventImageUrl = document.getString("eventPosterURL");
+//                        String eventStartDate = document.getString("eventStartDate");
+//                        String eventStartTime = document.getString("eventStartTime");
+//                        String eventEndDate = document.getString("eventEndDate");
+//                        String eventEndTime = document.getString("eventEndTime");
+//                        String eventMaxAttendees = document.getString("eventMaxAttendees");
+//                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
+//
+//                        Event event;
+//
+//                        if (eventMaxAttendees.equals("-1")) {
+//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+//                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+//
+//                        } else {
+//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+//                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+//                        }
+//
+//                        if (eventCurrentAttendees != null) {
+//                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+//                        } else {
+//                            event.setCurrentAttendees(0);
+//                        }
+//
+//                        myEventList.add(event);
+//                    } else {
+//                        Log.d("fetchEventsData", "No such document");
+//                    }
+//                } else {
+//                    Log.d("fetchEventsData", "get failed with ", task.getException());
+//                }
+//            });
+//
+//        }
+//        callback.onDataFetched(myEventList);
+//
+//    }
+
     private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
         CollectionReference eventCol = db.collection("events");
         myEventList.clear(); // Clear the old list
 
         if (eventIds.isEmpty()) {
-            callback.onDataFetched(myEventList); // Handle case with no event IDs immediately
+            callback.onDataFetched(myEventList); // If no event IDs, callback immediately
             return;
         }
 
+        final int[] remainingFetches = {eventIds.size()}; // Track remaining fetches
+
         for (String eventId : eventIds) {
             eventCol.document(eventId).get().addOnCompleteListener(task -> {
-                if (task.isSuccessful()) {
-                    DocumentSnapshot document = task.getResult();
-                    if (document.exists()) {
+                synchronized (remainingFetches) {
+                    remainingFetches[0]--;
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Extract event data
+                            String eventTitle = document.getString("eventTitle");
+                            String eventDescription = document.getString("eventDescription");
+                            String eventLocation = document.getString("eventLocation");
+                            String deviceId = document.getString("deviceId");
+                            String eventImageUrl = document.getString("eventPosterURL");
+                            String eventStartDate = document.getString("eventStartDate");
+                            String eventStartTime = document.getString("eventStartTime");
+                            String eventEndDate = document.getString("eventEndDate");
+                            String eventEndTime = document.getString("eventEndTime");
+                            String eventMaxAttendees = document.getString("eventMaxAttendees");
+                            String eventCurrentAttendees = document.getString("eventCurrentAttendees");
 
-                        String eventTitle = document.getString("eventTitle");
-                        String eventDescription = document.getString("eventDescription");
-                        String eventLocation = document.getString("eventLocation");
-                        String deviceId = document.getString("deviceId");
-                        String eventImageUrl = document.getString("eventPosterURL");
-                        String eventStartDate = document.getString("eventStartDate");
-                        String eventStartTime = document.getString("eventStartTime");
-                        String eventEndDate = document.getString("eventEndDate");
-                        String eventEndTime = document.getString("eventEndTime");
-                        String eventMaxAttendees = document.getString("eventMaxAttendees");
-                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
+                            // Create the event object
+                            Event event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                            if (eventMaxAttendees != null && !eventMaxAttendees.equals("-1")) {
+                                event.setMaxAttendees(Integer.parseInt(eventMaxAttendees));
+                            }
+                            if (eventCurrentAttendees != null) {
+                                event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                            } else {
+                                event.setCurrentAttendees(0);
+                            }
 
-                        Event event;
-
-                        if (eventMaxAttendees.equals("-1")) {
-                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-
+                            // Add event to list
+                            myEventList.add(event);
                         } else {
-                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                            Log.d("fetchEventsData", "No such document");
                         }
-
-                        if (eventCurrentAttendees != null) {
-                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
-                        } else {
-                            event.setCurrentAttendees(0);
-                        }
-
-                        myEventList.add(event);
                     } else {
-                        Log.d("fetchEventsData", "No such document");
+                        Log.d("fetchEventsData", "get failed with ", task.getException());
                     }
-                } else {
-                    Log.d("fetchEventsData", "get failed with ", task.getException());
+
+                    if (remainingFetches[0] == 0) { // All fetches completed
+                        callback.onDataFetched(myEventList);
+                    }
                 }
             });
-
         }
-        callback.onDataFetched(myEventList);
-
     }
 }

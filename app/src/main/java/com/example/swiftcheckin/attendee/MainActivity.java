@@ -118,7 +118,6 @@ public class MainActivity extends AppCompatActivity {
         listViewEvents.setOnItemClickListener((parent, view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
             String eventID = eventList.get(position).getDeviceId() + eventList.get(position).getEventTitle();
-
             String eventTitle = eventList.get(position).getEventTitle();
             String eventLocation = eventList.get(position).getLocation();
             String eventDescription = eventList.get(position).getDescription();
@@ -205,10 +204,5 @@ public class MainActivity extends AppCompatActivity {
 
 
         }
-
-
     }
-
-
-
 }
