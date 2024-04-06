@@ -12,6 +12,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.swiftcheckin.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -19,8 +26,12 @@ import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.lang.ref.Reference;
 import java.util.HashMap;
+import java.util.Map;
 
 public class AddAnnouncementActivity extends AppCompatActivity {
 
@@ -48,7 +59,8 @@ public class AddAnnouncementActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 saveAnnouncementToFirebase();
-                Toast.makeText(getApplicationContext(), "To be continued", Toast.LENGTH_SHORT).show();
+                sendAnnouncementToServer(editAnnouncementHeading.getText().toString(), editAnnouncementDes.getText().toString());
+               // Toast.makeText(getApplicationContext(), "To be continued", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -91,4 +103,58 @@ public class AddAnnouncementActivity extends AppCompatActivity {
                     }
                 });
     }
+
+
+    public void sendAnnouncementToServer(String title, String description) {
+        HashMap<String, String> announcementDetails = new HashMap<>();
+        announcementDetails.put("title", title);
+        announcementDetails.put("description", description);
+
+        // Create a JSON payload for the notification
+        JSONObject notification = new JSONObject();
+        try {
+            notification.put("title", title);
+            notification.put("body", description);
+
+            JSONObject data = new JSONObject();
+            data.put("eventId", eventId);
+
+            JSONObject jsonPayload = new JSONObject();
+            jsonPayload.put("to", "/topics/event_" + eventId);
+            jsonPayload.put("notification", notification);
+            jsonPayload.put("data", data);
+
+            // Send the JSON payload to FCM server using HTTP POST request
+            String fcmServerKey = "AAAACN8H9G8:APA91bGnK-j4ge9u-ioFzTNAqjBOHEyIPgiS4Km_hOTaGNRqqfPOw00u5dh_CGW66L1YYcJc9yDL7aXoQprHTVuZjXHUgQhG4EuPuh1HG0zZ6Z0wUMM_DOtgF-8a2zfkWX_eR050x2bt";
+            String fcmUrl = "https://fcm.googleapis.com/fcm/send";
+
+            RequestQueue queue = Volley.newRequestQueue(this);
+            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.POST, fcmUrl, jsonPayload,
+                    new Response.Listener<JSONObject>() {
+                        @Override
+                        public void onResponse(JSONObject response) {
+                            Log.d(TAG, "Notification sent successfully");
+                        }
+                    },
+                    new Response.ErrorListener() {
+                        @Override
+                        public void onErrorResponse(VolleyError error) {
+                            Log.e(TAG, "Error sending notification: " + error.getMessage());
+                        }
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() throws AuthFailureError {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Content-Type", "application/json");
+                    headers.put("Authorization", "key=" + fcmServerKey);
+                    return headers;
+                }
+            };
+
+            queue.add(jsonObjectRequest);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

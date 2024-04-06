@@ -1,16 +1,24 @@
 package com.example.swiftcheckin.attendee;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.example.swiftcheckin.R;
+import android.Manifest;
 import com.example.swiftcheckin.organizer.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -33,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
     private FirebaseAttendee db_attendee;
 
-
+    private static final int PERMISSION_REQUEST_CODE = 123;
     TextView myEventButton;
     TextView eventButton;
 
@@ -66,8 +74,19 @@ public class MainActivity extends AppCompatActivity {
         setupUI();
         getEventData();
         getMyEventData();
+
+        requestNotificationPermission();
+
     }
 
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
 
     /**
      * Fetches event data from Firestore.
