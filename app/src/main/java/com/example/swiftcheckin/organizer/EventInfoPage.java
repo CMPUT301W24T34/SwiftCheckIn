@@ -76,7 +76,7 @@ public class EventInfoPage extends AppCompatActivity {
         fetchSignUpDetails();
 
         initializeListButton(checkedInButton);
-        initializeListButton(signedUpButton);
+        initializeSignedListButton(signedUpButton);
         initializeShowQrButton(showQrButton);
 
     }
@@ -97,7 +97,7 @@ public class EventInfoPage extends AppCompatActivity {
         view1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showList();
+                showSignedUpList();
             }
         });
 
