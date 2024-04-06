@@ -1,5 +1,7 @@
 package com.example.swiftcheckin.organizer;
 
+import static androidx.appcompat.resources.Compatibility.Api18Impl.setAutoCancel;
+
 import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -21,6 +23,7 @@ import com.google.firebase.messaging.RemoteMessage;
 public class MyFirebaseMessagingServices extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMessagingServices";
+    private static final String FOREGROUND_CHANNEL_ID = "com.example.swiftcheckin.foreground";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -44,9 +47,9 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
                 .setSmallIcon(R.mipmap.ic_notification)
                 .setContentTitle(title)
                 .setContentText(body)
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true);
+
 
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
 
@@ -68,7 +71,7 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
 
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("default", "Default Channel", NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel("default", "Default Channel", NotificationManager.IMPORTANCE_HIGH);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
