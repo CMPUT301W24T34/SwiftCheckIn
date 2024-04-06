@@ -204,7 +204,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
 
                     String announcementTitleFrame = doc.getId();
-                    if (announcementTitleFrame.contains(eventId + "@")){
+                    if (announcementTitleFrame.contains(eventId)){
                         String announcementTitle= (String) doc.getData().get("announcementTitle");
                         String announcementDes = (String) doc.getData().get("announcementDes");
 
