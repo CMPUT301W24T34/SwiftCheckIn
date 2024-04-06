@@ -292,6 +292,10 @@ public class AdminActivity extends AppCompatActivity {
 
         }
 
+    public List<Event> getEventList() {
+        return eventList;
+    }
+
 
 
 
