@@ -80,7 +80,7 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // 3. Create a collection and create announcement object.
 
-        DocumentReference eventWithAnnounce = db.collection("Announcements").document(eventId + announcementHeading);
+        DocumentReference eventWithAnnounce = db.collection("Announcements").document(eventId + "@" + announcementHeading);
 
         HashMap<String, String> data = new HashMap<>();
         data.put("announcementTitle", announcementHeading);
