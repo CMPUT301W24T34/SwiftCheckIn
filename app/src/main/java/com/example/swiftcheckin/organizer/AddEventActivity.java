@@ -199,13 +199,13 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
         // Information entered by the user.
         EditText eventNameEditText = findViewById(R.id.eventName);
-        String eventName = eventNameEditText.getText().toString();
+        String eventName = eventNameEditText.getText().toString().trim();
 
         EditText addressEditText = findViewById(R.id.eventPageAddressEditText);
-        String eventAddress = addressEditText.getText().toString();
+        String eventAddress = addressEditText.getText().toString().trim();
 
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
-        String eventDescription = descriptionEditText.getText().toString();
+        String eventDescription = descriptionEditText.getText().toString().trim();
 
         TextView eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
         String eventStartDate = eventStartDateEditText.getText().toString();
@@ -220,7 +220,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         String eventEndTime = eventEndTimeEditText.getText().toString();
 
         EditText eventMaxAttendeesEditText = findViewById(R.id.editMaxAttendeeText);
-        String eventMaxAttendee = eventMaxAttendeesEditText.getText().toString();
+        String eventMaxAttendee = eventMaxAttendeesEditText.getText().toString().trim();
 
         broadcastIntent = new Intent("com.example.ADD_EVENT");
         // Puts all the information into broadcastIntent.
