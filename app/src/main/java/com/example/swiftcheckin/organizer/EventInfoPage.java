@@ -71,7 +71,7 @@ public class EventInfoPage extends AppCompatActivity {
 
         // button initializations
         Button showQrButton = findViewById(R.id.organizerEventInfo_qrButton);
-
+        
         fetchCheckedInDetails();
         fetchSignUpDetails();
 
@@ -222,6 +222,11 @@ public class EventInfoPage extends AppCompatActivity {
 
         EventFragmentQrs fragmentQrs = new EventFragmentQrs(eventId, checkInImage, promoImage);
         fragmentQrs.show(getSupportFragmentManager(), "Event Information Qr options");
+    }
+
+    private void launchAnnouncementPage()
+    {
+
     }
 
 }
