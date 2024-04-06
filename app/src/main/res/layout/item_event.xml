@@ -126,6 +126,7 @@
             android:id="@+id/calendar_icon"
             android:layout_width="21dp"
             android:layout_height="26dp"
+            android:layout_marginStart="40dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/edit_event_date"
             app:layout_constraintStart_toStartOf="parent"

@@ -1,6 +1,7 @@
 package com.example.swiftcheckin.attendee;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -9,22 +10,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import com.example.swiftcheckin.organizer.Event;
-
 import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.organizer.Event;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-
 import java.util.ArrayList;
 
 
@@ -90,7 +80,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        db_attendee.getEventList(myEventList, new FirebaseAttendee.EventListCallback() {
+        db_attendee.getMyEventIds(myEventList, getApplicationContext(),
+                new FirebaseAttendee.EventListCallback() {
             @Override
             public void onDataFetched(ArrayList<Event> myEventList) {
                 myEventViewAdapter.notifyDataSetChanged();
@@ -110,13 +101,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//        // Other Page
-//        TextView myEventPage = findViewById(R.id.my_events);
-//        myEventPage.setOnClickListener(v -> {
-//            Intent intent = new Intent(MainActivity.this, MyEventActivity.class);
-//            startActivity(intent);
-//        });
-
 //         Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
@@ -131,9 +115,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Event Details
-        listViewEvents.setOnItemClickListener((parent,view, position, id) -> {
+        listViewEvents.setOnItemClickListener((parent, view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
-            String eventID = eventList.get(position).getDeviceId() +  eventList.get(position).getEventTitle();
+            String eventID = eventList.get(position).getDeviceId() + eventList.get(position).getEventTitle();
 
             String eventTitle = eventList.get(position).getEventTitle();
             String eventLocation = eventList.get(position).getLocation();
@@ -159,6 +143,36 @@ public class MainActivity extends AppCompatActivity {
             annoucementIntent.putExtra("eventMaxAttendees", eventMaxAttendees);
             annoucementIntent.putExtra("eventCurrentAttendees", eventCurrentAttendees);
 
+
+            startActivity(annoucementIntent);
+
+        });
+        listViewMyEvent.setOnItemClickListener((parent, view, position, id) -> {
+            Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
+            String eventID = myEventList.get(position).getDeviceId() + eventList.get(position).getEventTitle();
+
+            String eventTitle = myEventList.get(position).getEventTitle();
+            String eventLocation = myEventList.get(position).getLocation();
+            String eventDescription = myEventList.get(position).getDescription();
+            String eventImageUrl = myEventList.get(position).getEventImageUrl();
+            String eventStartDate = myEventList.get(position).getStartDate();
+            String eventStartTime = myEventList.get(position).getStartTime();
+            String eventEndDate = myEventList.get(position).getEndDate();
+            String eventEndTime = myEventList.get(position).getEndTime();
+            String eventMaxAttendees = Integer.toString(myEventList.get(position).getMaxAttendees());
+            String eventCurrentAttendees = Integer.toString(myEventList.get(position).getCurrentAttendees());
+
+            annoucementIntent.putExtra("eventID", eventID);
+            annoucementIntent.putExtra("eventTitle", eventTitle);
+            annoucementIntent.putExtra("eventLocation", eventLocation);
+            annoucementIntent.putExtra("eventDescription", eventDescription);
+            annoucementIntent.putExtra("eventImageUrl", eventImageUrl);
+            annoucementIntent.putExtra("eventStartDate", eventStartDate);
+            annoucementIntent.putExtra("eventStartTime", eventStartTime);
+            annoucementIntent.putExtra("eventEndDate", eventEndDate);
+            annoucementIntent.putExtra("eventEndTime", eventEndTime);
+            annoucementIntent.putExtra("eventMaxAttendees", eventMaxAttendees);
+            annoucementIntent.putExtra("eventCurrentAttendees", eventCurrentAttendees);
 
             startActivity(annoucementIntent);
 

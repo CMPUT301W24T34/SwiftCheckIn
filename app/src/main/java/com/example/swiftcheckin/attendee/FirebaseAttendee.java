@@ -4,6 +4,7 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -178,7 +179,6 @@ public class FirebaseAttendee {
     public void getEventList(ArrayList<Event> eventList, EventListCallback callback)
     {
         CollectionReference eventCol = db.collection("events");
-
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
@@ -220,11 +220,97 @@ public class FirebaseAttendee {
 
                     eventList.add(event);
 
-//                    eventList.add(new Event(eventTitle, eventDescription, eventLocation, deviceId
-//                            , eventImageUrl,eventStartDate,eventEndDate, eventStartTime, eventEndTime ));
                 }
-               callback.onDataFetched(eventList);
+                callback.onDataFetched(eventList);
             }
         });
+    }
+
+    /**
+     * Fetches the data of events that the user has signed up for from Firestore.
+     */
+    public void getMyEventIds(ArrayList<Event> myEventList, Context context,
+                              EventListCallback callback) {
+
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        DocumentReference deviceRef = db.collection("SignedUpEvents").document(deviceId);
+        deviceRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                List<String> eventIds = new ArrayList<>();
+                if (document.exists()) {
+                    eventIds = (List<String>) document.get("eventIds");
+                }
+//                ArrayList<Event> myEventList = new ArrayList<>();
+                fetchMyEventsData(eventIds, myEventList, callback);
+
+            } else {
+                Log.d("getData", "Error getting documents: ", task.getException());
+            }
+        });
+    }
+
+
+    /**
+     * Fetches event data from Firestore based on event IDs.
+     *
+     * @param eventIds List of event IDs
+     */
+    private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
+        CollectionReference eventCol = db.collection("events");
+        myEventList.clear(); // Clear the old list
+
+        if (eventIds.isEmpty()) {
+            callback.onDataFetched(myEventList); // Handle case with no event IDs immediately
+            return;
+        }
+
+        for (String eventId : eventIds) {
+            eventCol.document(eventId).get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        String eventTitle = document.getString("eventTitle");
+                        String eventDescription = document.getString("eventDescription");
+                        String eventLocation = document.getString("eventLocation");
+                        String deviceId = document.getString("deviceId");
+                        String eventImageUrl = document.getString("eventPosterURL");
+                        String eventStartDate = document.getString("eventStartDate");
+                        String eventStartTime = document.getString("eventStartTime");
+                        String eventEndDate = document.getString("eventEndDate");
+                        String eventEndTime = document.getString("eventEndTime");
+                        String eventMaxAttendees = document.getString("eventMaxAttendees");
+                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
+
+                        Event event;
+
+                        if (eventMaxAttendees.equals("-1")) {
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+
+                        } else {
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                        }
+
+                        if (eventCurrentAttendees != null) {
+                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                        } else {
+                            event.setCurrentAttendees(0);
+                        }
+
+                        myEventList.add(event);
+                    } else {
+                        Log.d("fetchEventsData", "No such document");
+                    }
+                } else {
+                    Log.d("fetchEventsData", "get failed with ", task.getException());
+                }
+            });
+
+        }
+        callback.onDataFetched(myEventList);
+
     }
 }
