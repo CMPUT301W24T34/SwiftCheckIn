@@ -1,5 +1,6 @@
 package com.example.swiftcheckin.organizer;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -240,7 +241,9 @@ public class EventInfoPage extends AppCompatActivity {
 
     private void launchAnnouncementPage()
     {
-
+        Intent intent = new Intent(getApplicationContext(), AddAnnouncementActivity.class);
+        intent.putExtra("eventId", eventId);
+        startActivity(intent);
     }
 
 }
