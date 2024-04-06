@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -153,6 +154,10 @@ public class FirestoreAdmin {
                             //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to delete all items with a certain device ID
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
+                                deleteEventsWithAttendeesProfile(documentId);
+                                deleteCheckedInProfile(documentId);
+                                deleteSignedUpProfile(documentId);
+
                                 profilesCollectionRef.document(documentId)
                                         .delete()
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -631,7 +636,6 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                // Check if the document ID matches the eventId
                                 if (documentId.equals(eventId)) {
                                     checkedInCollectionRef.document(documentId)
                                             .delete()
@@ -672,7 +676,6 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                // Check if the document ID matches the eventId
                                 if (documentId.equals(eventId)) {
                                     announcementCollectionRef.document(documentId)
                                             .delete()
@@ -735,6 +738,122 @@ public class FirestoreAdmin {
                     }
                 });
     }
+
+    /**
+     * Deletes profile for events with attendees
+     * @param deviceIDToDelete, String: the id of the device
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query and delete a field that matches a string
+    public void deleteEventsWithAttendeesProfile(String deviceIDToDelete) {
+        eventsWithAttendeesCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.contains(deviceIDToDelete)) {
+                                    document.getReference()
+                                            .update(deviceIDToDelete, FieldValue.delete())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Field with device ID deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete field with device ID: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * Deletes profile for checked in
+     * @param deviceIDToDelete, String: the id of the device
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query and delete a field that matches a string
+
+    public void deleteCheckedInProfile(String deviceIDToDelete) {
+        checkedInCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.contains(deviceIDToDelete)) {
+                                    document.getReference()
+                                            .update(deviceIDToDelete, FieldValue.delete())
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Field with device ID deleted successfully from checkedInCollectionRef!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete field with device ID from checkedInCollectionRef: " + e.toString());
+                                                }
+                                            });
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents from checkedInCollectionRef: ", task.getException());
+                        }
+                    }
+                });
+    }
+
+
+    /**
+     * Deletes profile for signed up
+     * @param deviceIDToDelete, String: the id of the device
+     */
+    //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query and delete a document that matches a string
+    public void deleteSignedUpProfile(String deviceIDToDelete) {
+        signedUpEventsCollectionRef
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                if (document.getId().equals(deviceIDToDelete)) {
+                                    document.getReference()
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "Document with matching ID deleted successfully from signedUpEventsCollectionRef!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete document with matching ID from signedUpEventsCollectionRef: " + e.toString());
+                                                }
+                                            });
+                                    break; // Break the loop if a match is found
+                                }
+                            }
+                        } else {
+                            Log.d(TAG, "Error getting documents from signedUpEventsCollectionRef: ", task.getException());
+                        }
+                    }
+                });
+    }
+
 
 
 
