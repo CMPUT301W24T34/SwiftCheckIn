@@ -32,7 +32,7 @@
         android:theme="@style/Theme.SwiftCheckIn"
         tools:targetApi="31">
 
-gin map
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAE2ZFQ1O7xaQW37bDO7X80S0MMWvRo_g4" />
@@ -41,6 +41,7 @@ gin map
             android:name=".organizer.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
+        <activity android:name=".attendee.AdminPassword" />
         <activity
             android:name=".organizer.ViewCheckInActivity"
             android:exported="false" />
