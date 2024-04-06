@@ -39,9 +39,9 @@ public class CheckInArrayAdapter extends ArrayAdapter<Pair<String, String>> {
         Pair<String, String> pair = getItem(position);
         TextView attendeeName = view.findViewById(R.id.organizerEventInfo_item_CheckedInName);
         TextView attendeeCount = view.findViewById(R.id.organizerEventInfo_item_CheckedInCount);
-
         assert pair != null;
         attendeeName.setText(pair.first);
+
         if(pair.second.equals("None"))
         {
             attendeeCount.setText("Signed Up");

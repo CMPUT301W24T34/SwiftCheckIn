@@ -9,6 +9,7 @@ import android.util.Log;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -24,7 +25,9 @@ import com.google.firebase.firestore.CollectionReference;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -499,39 +502,64 @@ public class FirebaseOrganizer {
     {
         DocumentReference checkInDoc = db.collection(collection).document(eventId);
 
-        checkInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        checkInDoc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful())
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error != null)
                 {
-                    DocumentSnapshot document = task.getResult();
-                    dataList.clear();
-                    if(document.exists())
+                    callback.onError("Error in fetching check-in details");
+                    return;
+                }
+                dataList.clear();
+                if(value!= null && value.exists())
+                {
+                    Map<String, Object> data = value.getData();
+                    if(data != null)
                     {
-                        Map<String, Object> data = document.getData();
-                        if(data != null)
+                        for(Map.Entry<String, Object> entry: data.entrySet())
                         {
-                            for(Map.Entry<String, Object> entry: data.entrySet())
+                            String device = entry.getKey();
+                            String count = entry.getValue().toString();
+                            if(collection.equals("eventsWithAttendees"))
                             {
-                                String device = entry.getKey();
-                                String count = entry.getValue().toString();
-                                if(collection.equals("eventsWithAttendees"))
-                                {
-                                    dataList.add(new Pair<>(device, "None"));
-                                }
-                                else
-                                {
-                                    dataList.add(new Pair<>(device, count));
-                                }
-
+                                dataList.add(new Pair<>(device, "None"));
                             }
+                            else
+                            {
+                                dataList.add(new Pair<>(device, count));
+                            }
+
                         }
                     }
-                    callback.onDataFetched(dataList);
                 }
-                else
+                callback.onDataFetched(dataList);
+            }
+        });
+    }
+
+    interface getNameCallBack
+    {
+        public void onNameFetched(String name);
+    }
+
+    public void getUserName(String device, getNameCallBack callBack)
+    {
+        DocumentReference documentReference = db.collection("profiles").document(device);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete())
                 {
-                    callback.onError("Unable to fetch check in information");
+                    DocumentSnapshot result = task.getResult();
+                    if(result.exists())
+                    {
+                        String name = (String) result.get("name");
+                        if(name.equals(""))
+                        {
+                            callBack.onNameFetched("No Name");
+                        }
+                        callBack.onNameFetched(name);
+                    }
                 }
             }
         });

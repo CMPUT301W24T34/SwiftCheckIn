@@ -70,7 +70,7 @@ public class EventInfoPage extends AppCompatActivity {
 
     }
 
-    protected void initializeListButton(TextView view1)
+    private void initializeListButton(TextView view1)
     {
         view1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,7 +137,22 @@ public class EventInfoPage extends AppCompatActivity {
         dbOrganizer.getCheckedInDetails(eventId, "checkedIn", checkedInDataList, new FirebaseOrganizer.getCheckInCallback() {
             @Override
             public void onDataFetched(ArrayList<Pair<String, String>> dataList) {
-                checkInArrayAdapter.notifyDataSetChanged();
+                for(int i = 0; i < dataList.size(); i++)
+                {
+                    Pair<String, String> pair = dataList.get(i);
+                    String deviceId = pair.first;
+                    int index = i;
+                    dbOrganizer.getUserName(deviceId, new FirebaseOrganizer.getNameCallBack() {
+                        @Override
+                        public void onNameFetched(String name) {
+                            Pair<String, String> updatedPair = new Pair<>(name, pair.second);
+                            dataList.set(index, updatedPair);
+                            if (index == dataList.size() - 1) {
+                                checkInArrayAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
             }
 
             @Override
@@ -152,12 +167,27 @@ public class EventInfoPage extends AppCompatActivity {
         dbOrganizer.getCheckedInDetails(eventId, "eventsWithAttendees", signedUpDataList, new FirebaseOrganizer.getCheckInCallback() {
             @Override
             public void onDataFetched(ArrayList<Pair<String, String>> dataList) {
-                signUpArrayAdapter.notifyDataSetChanged();
+                for(int i = 0; i < dataList.size(); i++)
+                {
+                    Pair<String, String> pair = dataList.get(i);
+                    String deviceId = pair.first;
+                    int index = i;
+                    dbOrganizer.getUserName(deviceId, new FirebaseOrganizer.getNameCallBack() {
+                        @Override
+                        public void onNameFetched(String name) {
+                            Pair<String, String> updatedPair = new Pair<>(name, pair.second);
+                            dataList.set(index, updatedPair);
+                            if (index == dataList.size() - 1) {
+                                signUpArrayAdapter.notifyDataSetChanged();
+                            }
+                        }
+                    });
+                }
             }
 
             @Override
             public void onError(String errorMessage) {
-
+                Log.e("Error", errorMessage);
             }
         });
     }
