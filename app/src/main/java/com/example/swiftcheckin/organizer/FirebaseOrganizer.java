@@ -145,7 +145,10 @@ public class FirebaseOrganizer {
                     }
                 });
     }
-
+    /**
+     * Creates a default geolocation for an event
+     * @return eventId: the id of the event, String
+     */
 
     public void addGeolocation(String eventId) {
         DocumentReference geolocationRef = db.collection("geolocation").document(eventId);
@@ -174,6 +177,11 @@ public class FirebaseOrganizer {
         });
 
     }
+    /**
+     * Checks if geolocation is enabled
+     * @return eventId: the id of the event, String
+     * @return callback: the callback to asynchronously set the switch, GeolocationCallback
+     */
 
     //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to return a boolean with a firebase query asynchronously
     public void geolocationEnabled(String eventId, GeolocationCallback callback) {
@@ -191,17 +199,28 @@ public class FirebaseOrganizer {
                     callback.onGeolocationStatus(false); // Handle failure
                 });
     }
-
+    /**
+     * The callback for the geolocation boolean
+     */
     public interface GeolocationCallback {
         void onGeolocationStatus(boolean enabled);
     }
-
+    /**
+     * Updates the geolocation when the switch is clicked
+     * @return eventId: the id of the event, String
+     * @return isChecked: sees if the switch is enabled, Boolean
+     */
     //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to update firebase geolocation with the switch state
     public void updateGeolocation(String eventId, Boolean isChecked) {
         DocumentReference geolocationRef = db.collection("geolocation").document(eventId);
         geolocationRef.update("geolocation", isChecked);
     }
 
+    /**
+     * Gets the checked in location of the checked in profiles and displays the locations on a map
+     * @return eventId: the id of the event, String
+     * @return myMap: The map with the profiles, GoogleMap
+     */
     public void getCheckedIn(String eventId, GoogleMap myMap) {
         //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get the field names and add them to a list
         matchedProfiles.clear();

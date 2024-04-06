@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 
 import com.example.swiftcheckin.organizer.Event;
@@ -78,6 +79,15 @@ public class AdminActivity extends AppCompatActivity {
         ImageArrayAdapter imageArrayAdapter = new ImageArrayAdapter(this, imageList);
         //Make the default view the events tab
         displayEventsTab(eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
+        TextView backButton = findViewById(R.id.back_button);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                finish();
+
+            }
+        });
 
         //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
