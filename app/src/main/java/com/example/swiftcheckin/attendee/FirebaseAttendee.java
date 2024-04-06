@@ -314,6 +314,12 @@ public class FirebaseAttendee {
 //
 //    }
 
+    // Citation: OpenAI, 04-06-2024,  ChatGPT, Had some synchronicity issues with the above
+    // commented function
+
+        /*
+            Asked Gpt to help fix the issues, cuz I'm getting myEvents list data on the app
+         */
     private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
         CollectionReference eventCol = db.collection("events");
         myEventList.clear(); // Clear the old list
