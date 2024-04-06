@@ -28,6 +28,8 @@ public class EventInfoPage extends AppCompatActivity {
     ArrayList<Pair<String, String>> signedUpDataList;
     CheckInArrayAdapter signUpArrayAdapter;
 
+    TextView liveCount;
+
     TextView checkedInButton;
     TextView signedUpButton;
 
@@ -50,6 +52,8 @@ public class EventInfoPage extends AppCompatActivity {
         checkedInList = findViewById(R.id.organizerEventInfo_CheckedInList);
         signedUpList = findViewById(R.id.organizerEventInfo_SignedUpList);
 
+        liveCount = findViewById(R.id.organizerEventInfo_LiveAttendance);
+
         getEventInformation(view);      // event specific data is fetched
 
         // check-in and signup details initialization
@@ -64,9 +68,9 @@ public class EventInfoPage extends AppCompatActivity {
         fetchCheckedInDetails();
         fetchSignUpDetails();
 
+
         initializeListButton(checkedInButton);
         initializeListButton(signedUpButton);
-
 
     }
 
@@ -149,6 +153,7 @@ public class EventInfoPage extends AppCompatActivity {
                             dataList.set(index, updatedPair);
                             if (index == dataList.size() - 1) {
                                 checkInArrayAdapter.notifyDataSetChanged();
+                                liveCount.setText(String.valueOf(checkedInDataList.size()));
                             }
                         }
                     });

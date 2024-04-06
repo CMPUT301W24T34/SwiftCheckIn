@@ -335,44 +335,43 @@ public class FirebaseOrganizer {
     }
     public void getEvent(String eventId, EventCallback eventCallback)
     {
-        CollectionReference eventCol = db.collection("events");
-        final Event[] event = new Event[1];
-        eventCol.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        DocumentReference eventDoc = db.collection("events").document(eventId);
+
+        eventDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    QuerySnapshot queryEventSnapshots = task.getResult();
-                    for (QueryDocumentSnapshot doc : queryEventSnapshots) {
-                        String eventTitleFrame = doc.getId();  // Document Id, AKA eventId = deviceId + eventTitle
-                        if (eventTitleFrame.contains(deviceID)) {   // Ensures that the organizer can only see their events.
-                            String eventTitle = (String) doc.getData().get("eventTitle");
-                            String eventLocation = (String) doc.getData().get("eventLocation");
-                            String eventDescription = (String) doc.getData().get("eventDescription");
-                            String deviceId = (String) doc.getData().get("deviceId");
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete())
+                {
+                    Event event;
+                    DocumentSnapshot result = task.getResult();
+                    if(result.exists())
+                    {
+                        String eventTitle = (String) result.getData().get("eventTitle");
+                        String eventLocation = (String) result.getData().get("eventLocation");
+                        String eventDescription = (String) result.getData().get("eventDescription");
+                        String deviceId = (String) result.getData().get("deviceId");
 
-                            String eventImageURL = (String) doc.getData().get("eventPosterURL");
-                            String startDate = (String) doc.getData().get("eventStartDate");
-                            String endDate = (String) doc.getData().get("eventEndDate");
-                            String startTime = (String) doc.getData().get("eventStartTime");
-                            String endTime = (String) doc.getData().get("eventEndTime");
-                            String maxAttendees = (String) doc.getData().get("eventMaxAttendees");
+                        String eventImageURL = (String) result.getData().get("eventPosterURL");
+                        String startDate = (String) result.getData().get("eventStartDate");
+                        String endDate = (String) result.getData().get("eventEndDate");
+                        String startTime = (String) result.getData().get("eventStartTime");
+                        String endTime = (String) result.getData().get("eventEndTime");
+                        String maxAttendees = (String) result.getData().get("eventMaxAttendees");
 
-                            if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
-                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, startDate, endDate, startTime, endTime);
-                            } else {   // In case max attendees was specified.
-                                event[0] = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
-                            }
+                        if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, startDate, endDate, startTime, endTime);
+                        } else {   // In case max attendees was specified.
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
                         }
+                        eventCallback.onCompleteFetch(event);
                     }
-                    eventCallback.onCompleteFetch(event[0]);
                 }
                 else
                 {
                     eventCallback.onError("Error fetching event information");
                 }
             }
-            });
-
+        });
 
     }
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
