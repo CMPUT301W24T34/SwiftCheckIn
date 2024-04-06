@@ -1,17 +1,25 @@
 package com.example.swiftcheckin.attendee;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 
+import android.Manifest;
 import com.example.swiftcheckin.organizer.Event;
 
 import com.example.swiftcheckin.R;
@@ -38,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<Event> eventList;
     private static final String TAG = "MainActivity";
     private FirebaseFirestore db;
-
+    private static final int PERMISSION_REQUEST_CODE = 123;
     String eventTitle;
 
     @Override
@@ -53,10 +61,23 @@ public class MainActivity extends AppCompatActivity {
 
         db = FirebaseFirestore.getInstance();
 
+
+
         setupUI();
         getData();
+
+        requestNotificationPermission();
+
     }
 
+
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
 
     /**
      * Fetches event data from Firestore.
@@ -115,6 +136,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, proceed with sending notifications
+            } else {
+                // Permission denied, handle accordingly (e.g., show a message to the user)
+            }
+        }
+    }
 
     /**
      * Sets up UI elements and listeners.
