@@ -38,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,9 +96,17 @@ public class AnnoucementActivity extends AppCompatActivity {
                     if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
                         fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
                         eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
-
-
-
+                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_" + eventId)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
+                                        } else {
+                                            Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
+                                        }
+                                    }
+                                });
                     } else {
                         Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
 //                        sign_up.setBackgroundColor(Color.LTGRAY);
@@ -105,6 +114,31 @@ public class AnnoucementActivity extends AppCompatActivity {
 
                 }
             });
+
+
+//        sign_up.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+//                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+//                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+//
+//                    FirebaseMessaging.getInstance().subscribeToTopic(eventId)
+//                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if (task.isSuccessful()) {
+//                                        Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
+//                                    } else {
+//                                        Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
+//                                    }
+//                                }
+//                            });
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
 
         ImageView profileButton = findViewById(R.id.profile_picture);

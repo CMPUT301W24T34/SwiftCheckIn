@@ -21,9 +21,11 @@ import com.google.android.gms.maps.SupportMapFragment;
 
 //Citation: The following code for creating google map and adding markers, 2024, Youtube, "Step by Step Google Maps Implementation in Android App | Google Maps in Android: Step-by-Step Guide", Codingzest, https://www.youtube.com/watch?v=pOKPQ8rYe6g
 
+
 /**
  * Displays the map activity
  */
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap myMap;
