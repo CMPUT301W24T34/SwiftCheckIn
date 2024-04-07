@@ -9,7 +9,9 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.example.swiftcheckin.organizer.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -17,7 +19,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -163,5 +169,213 @@ public class FirebaseAttendee {
                         Toast.makeText(context, "Could not sign up", Toast.LENGTH_SHORT).show();
                     }
                 });
+    }
+
+    interface EventListCallback
+    {
+        public void onDataFetched(ArrayList<Event> eventList);
+    }
+
+    public void getEventList(ArrayList<Event> eventList, EventListCallback callback)
+    {
+        CollectionReference eventCol = db.collection("events");
+        eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    return;
+                }
+
+                eventList.clear();
+                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                    String eventTitle = (String) doc.getData().get("eventTitle");
+                    String eventDescription = (String) doc.getData().get("eventDescription");
+                    String eventLocation = (String) doc.getData().get("eventLocation");
+                    String deviceId = (String) doc.getData().get("deviceId");
+                    String eventImageUrl = (String) doc.getData().get("eventPosterURL");
+                    String eventStartDate = (String) doc.getData().get("eventStartDate");
+                    String eventStartTime = (String) doc.getData().get("eventStartTime");
+                    String eventEndDate = (String) doc.getData().get("eventEndDate");
+                    String eventEndTime = (String) doc.getData().get("eventEndTime");
+                    String eventMaxAttendees = (String) doc.getData().get("eventMaxAttendees");
+                    String eventCurrentAttendees = (String) doc.getData().get("eventCurrentAttendees");
+
+                    com.example.swiftcheckin.organizer.Event event;
+
+                    if (eventMaxAttendees.equals("-1")) {
+                        event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+
+                    } else {
+                        event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
+                                eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                    }
+
+                    if (eventCurrentAttendees != null) {
+                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                    } else {
+                        event.setCurrentAttendees(0);
+                    }
+
+
+                    eventList.add(event);
+
+                }
+                callback.onDataFetched(eventList);
+            }
+        });
+    }
+
+    /**
+     * Fetches the data of events that the user has signed up for from Firestore.
+     */
+    public void getMyEventIds(ArrayList<Event> myEventList, Context context,
+                              EventListCallback callback) {
+
+        String deviceId = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+        DocumentReference deviceRef = db.collection("SignedUpEvents").document(deviceId);
+        deviceRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                List<String> eventIds = new ArrayList<>();
+                if (document.exists()) {
+                    eventIds = (List<String>) document.get("eventIds");
+                }
+//                ArrayList<Event> myEventList = new ArrayList<>();
+                fetchMyEventsData(eventIds, myEventList, callback);
+
+            } else {
+                Log.d("getData", "Error getting documents: ", task.getException());
+            }
+        });
+    }
+
+
+    /**
+     * Fetches event data from Firestore based on event IDs.
+     *
+     * @param eventIds List of event IDs
+     */
+//    private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
+//        CollectionReference eventCol = db.collection("events");
+//        myEventList.clear(); // Clear the old list
+//
+//        if (eventIds.isEmpty()) {
+//            callback.onDataFetched(myEventList); // Handle case with no event IDs immediately
+//            return;
+//        }
+//
+//        for (String eventId : eventIds) {
+//            eventCol.document(eventId).get().addOnCompleteListener(task -> {
+//                if (task.isSuccessful()) {
+//                    DocumentSnapshot document = task.getResult();
+//                    if (document.exists()) {
+//
+//                        String eventTitle = document.getString("eventTitle");
+//                        String eventDescription = document.getString("eventDescription");
+//                        String eventLocation = document.getString("eventLocation");
+//                        String deviceId = document.getString("deviceId");
+//                        String eventImageUrl = document.getString("eventPosterURL");
+//                        String eventStartDate = document.getString("eventStartDate");
+//                        String eventStartTime = document.getString("eventStartTime");
+//                        String eventEndDate = document.getString("eventEndDate");
+//                        String eventEndTime = document.getString("eventEndTime");
+//                        String eventMaxAttendees = document.getString("eventMaxAttendees");
+//                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
+//
+//                        Event event;
+//
+//                        if (eventMaxAttendees.equals("-1")) {
+//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+//                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+//
+//                        } else {
+//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
+//                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+//                        }
+//
+//                        if (eventCurrentAttendees != null) {
+//                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+//                        } else {
+//                            event.setCurrentAttendees(0);
+//                        }
+//
+//                        myEventList.add(event);
+//                    } else {
+//                        Log.d("fetchEventsData", "No such document");
+//                    }
+//                } else {
+//                    Log.d("fetchEventsData", "get failed with ", task.getException());
+//                }
+//            });
+//
+//        }
+//        callback.onDataFetched(myEventList);
+//
+//    }
+
+    // Citation: OpenAI, 04-06-2024,  ChatGPT, Had some synchronicity issues with the above
+    // commented function
+
+        /*
+            Asked Gpt to help fix the issues, cuz I'm getting myEvents list data on the app
+         */
+    private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
+        CollectionReference eventCol = db.collection("events");
+        myEventList.clear(); // Clear the old list
+
+        if (eventIds.isEmpty()) {
+            callback.onDataFetched(myEventList); // If no event IDs, callback immediately
+            return;
+        }
+
+        final int[] remainingFetches = {eventIds.size()}; // Track remaining fetches
+
+        for (String eventId : eventIds) {
+            eventCol.document(eventId).get().addOnCompleteListener(task -> {
+                synchronized (remainingFetches) {
+                    remainingFetches[0]--;
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            // Extract event data
+                            String eventTitle = document.getString("eventTitle");
+                            String eventDescription = document.getString("eventDescription");
+                            String eventLocation = document.getString("eventLocation");
+                            String deviceId = document.getString("deviceId");
+                            String eventImageUrl = document.getString("eventPosterURL");
+                            String eventStartDate = document.getString("eventStartDate");
+                            String eventStartTime = document.getString("eventStartTime");
+                            String eventEndDate = document.getString("eventEndDate");
+                            String eventEndTime = document.getString("eventEndTime");
+                            String eventMaxAttendees = document.getString("eventMaxAttendees");
+                            String eventCurrentAttendees = document.getString("eventCurrentAttendees");
+
+                            // Create the event object
+                            Event event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                            if (eventMaxAttendees != null && !eventMaxAttendees.equals("-1")) {
+                                event.setMaxAttendees(Integer.parseInt(eventMaxAttendees));
+                            }
+                            if (eventCurrentAttendees != null) {
+                                event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
+                            } else {
+                                event.setCurrentAttendees(0);
+                            }
+
+                            // Add event to list
+                            myEventList.add(event);
+                        } else {
+                            Log.d("fetchEventsData", "No such document");
+                        }
+                    } else {
+                        Log.d("fetchEventsData", "get failed with ", task.getException());
+                    }
+
+                    if (remainingFetches[0] == 0) { // All fetches completed
+                        callback.onDataFetched(myEventList);
+                    }
+                }
+            });
+        }
     }
 }
