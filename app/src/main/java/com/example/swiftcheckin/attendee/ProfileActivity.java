@@ -124,11 +124,20 @@ public class ProfileActivity extends AppCompatActivity {
                     if (savedPhone != null && !savedPhone.isEmpty()) {
                         phoneNumber.setText(savedPhone);
                     }
+                    else{
+                        phoneNumber.setText("Phone");
+                    }
                     if (savedEmail != null && !savedEmail.isEmpty()) {
                         email.setText(savedEmail);
                     }
+                    else{
+                        email.setText("Email");
+                    }
                     if (savedLocation != null && !savedLocation.isEmpty()) {
                         location.setText(savedLocation);
+                    }
+                    else{
+                        location.setText("Address");
                     }
                 }
             }
