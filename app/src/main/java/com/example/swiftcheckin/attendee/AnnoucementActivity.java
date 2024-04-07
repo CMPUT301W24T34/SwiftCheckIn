@@ -59,9 +59,6 @@ public class AnnoucementActivity extends AppCompatActivity {
     EventSignUp eventSignUp = new EventSignUp();
     private FirebaseAttendee fb;
 
-    private boolean eventCheckflag;
-
-
 
     /**
      * Initializes the activity and sets up necessary components.
@@ -107,8 +104,6 @@ public class AnnoucementActivity extends AppCompatActivity {
             sign_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    DocumentReference eventCheckRef = fb.getDb().collection("events").document(eventId);
-
                     if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
                         fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
                         eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
@@ -124,7 +119,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                                     }
                                 });
                     } else {
-                                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
 //                        sign_up.setBackgroundColor(Color.LTGRAY);
                     }
                 }
