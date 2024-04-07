@@ -42,6 +42,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
@@ -174,102 +175,122 @@ eventFound = true;
         });
 
 }
-//    /**
-//     * Test if a user can delete a profile
-//     */
-//    @Test
-//    public void testDeleteProfile(){
-//        onView(withId(R.id.profile_picture)).perform(click());
-//        onView(withId(R.id.profile)).check(matches(isDisplayed()));
-//        onView(withId(R.id.settings_button)).perform(click());
-//        onView(withId(R.id.settings)).check(matches(isDisplayed()));
-//        onView(withId(R.id.name)).perform(ViewActions.clearText(), ViewActions.typeText("DeleteProfileTest"));
-//        onView(withId(R.id.word_name)).perform(click());
-//        onView(withId(R.id.save_button)).perform(click());
-//        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to delay in a test
-//        try {
-//            Thread.sleep(5000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        pressBack();
-//        onView(withId(R.id.switch_modes)).perform(click());
-//        onView(withId(R.id.admin_button)).perform(click());
-//        onView(withId(R.id.editTextTextPassword)).perform(ViewActions.clearText(), ViewActions.typeText("SwiftCheckIn"));
-//        onView(withId(R.id.editTextTextPassword)).perform(closeSoftKeyboard());
-//        onView(withId(R.id.login_button )).perform(click());
-//        onView(withId(R.id.profile_button)).perform(click());
-//        try {
-//            Thread.sleep(7000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        ActivityScenario<AdminActivity> activity2 = ActivityScenario.launch(AdminActivity.class);
-//        activity2.onActivity(activity -> {
-//            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
-//
-//
-//            i = 0;
-//            boolean profileFound = false;
-//            for (Profile profile : profileList) {
-//                if (profile.getName().equals("DeleteProfileTest")) { // Assuming 'getName()' returns the event name
-//
-//                    profileFound = true;
-//                    break;
-//                }
-//                i++;
-//            }
-//
-//            assertTrue("Expected profile not found in the list", profileFound);
-//        });
-//
-//        // call the event list from admin activity and check to see if the event "Delete Event Test"
-//        // then get the index of the event
-//        // click the list at that index
-//        //then click remove_button
-//        //assert that the event is no longer in event list
-//        onData(anything())
-//                .inAdapterView(withId(R.id.listView))
-//                .atPosition(i)
-//                .onChildView(withId(R.id.name_text))
-//                .check(matches(withText("DeleteProfileTest")))
-//                .perform(click());
-//
-//        onView(withId(R.id.remove_tab_button))
-//                .check(matches(isDisplayed()))
-//                .perform(click());
-//
-//
-//        try {
-//            Thread.sleep(5000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        onView(withId(R.id.remove_tab_button)).perform(click());
-//
-//
-//
-//
-//        activity2.onActivity(activity -> {
-//            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
-//
-//            boolean profileFound = false;
-//            for (Profile profile : profileList) {
-//                if (profile.getName().equals("DeleteProfileTest")) { // Assuming 'getName()' returns the event name
-//
-//                    profileFound = true;
-//                    break;
-//                }
-//            }
-//
-//            assertFalse("Expected profile found in the event list",profileFound);
-//        });
-//
-//    }
+
+
+    @Test
+    public void testDeleteProfile(){
+        UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+
+        UiObject allowButton = uiDevice.findObject(new UiSelector().text("Allow").className("android.widget.Button"));
+        allowButton.waitForExists(30000); // Wait up to 30 seconds for the dialog to appear
+
+
+        try {
+            allowButton.click();
+        } catch (UiObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        onView(withId(R.id.profile_picture)).perform(click());
+        onView(withId(R.id.profile)).check(matches(isDisplayed()));
+        onView(withId(R.id.settings_button)).perform(click());
+        onView(withId(R.id.settings)).check(matches(isDisplayed()));
+        onView(withId(R.id.name)).perform(ViewActions.clearText(), ViewActions.typeText("DeleteProfileTest"));
+        onView(withId(R.id.word_name)).perform(click());
+        onView(withId(R.id.save_button)).perform(click());
+        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to delay in a test
+        try {
+            Thread.sleep(5000); // 1 second delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        pressBack();
+        onView(withId(R.id.switch_modes)).perform(click());
+        onView(withId(R.id.admin_button)).perform(click());
+        onView(withId(R.id.editTextTextPassword)).perform(ViewActions.clearText(), ViewActions.typeText("SwiftCheckIn"));
+        onView(withId(R.id.editTextTextPassword)).perform(closeSoftKeyboard());
+        onView(withId(R.id.login_button )).perform(click());
+        onView(withId(R.id.profile_button)).perform(click());
+        ActivityScenario<AdminActivity> activityScenario = ActivityScenario.launch(AdminActivity.class);
+        activityScenario.onActivity(activity -> {
+            // Wait until profile list is not empty
+            if (activity.getProfileList().isEmpty()) {
+                // If profile list is empty, wait for a short duration and check again
+                try {
+                    Thread.sleep(5000); // Adjust the duration as needed
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+        ActivityScenario<AdminActivity> activity2 = ActivityScenario.launch(AdminActivity.class);
+        activity2.onActivity(activity -> {
+            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
+
+
+            i = 0;
+            boolean profileFound = false;
+            for (Profile profile : profileList) {
+                Log.e("Profile Name", profile.getName());
+                if (profile.getName().equals("DeleteProfile Test")) { // Assuming 'getName()' returns the event name
+
+                    profileFound = true;
+                    break;
+                }
+                i++;
+            }
+
+            assertTrue("Expected profile not found in the list", profileFound);
+        });
+
+        // call the event list from admin activity and check to see if the event "Delete Event Test"
+        // then get the index of the event
+        // click the list at that index
+        //then click remove_button
+        //assert that the event is no longer in event list
+        onData(anything())
+                .inAdapterView(withId(R.id.listView))
+                .atPosition(i)
+                .onChildView(withId(R.id.name_text))
+                .check(matches(withText("DeleteProfileTest")))
+                .perform(click());
+
+        onView(withId(R.id.remove_tab_button))
+                .check(matches(isDisplayed()))
+                .perform(click());
+
+
+        try {
+            Thread.sleep(5000); // 1 second delay
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+
+        onView(withId(R.id.remove_tab_button)).perform(click());
+
+
+
+
+        activity2.onActivity(activity -> {
+            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
+
+            boolean profileFound = false;
+            for (Profile profile : profileList) {
+                if (profile.getName().equals("DeleteProfileTest")) { // Assuming 'getName()' returns the event name
+
+                    profileFound = true;
+                    break;
+                }
+            }
+
+            assertFalse("Expected profile found in the event list",profileFound);
+        });
+
+    }
+
 
 }
 
