@@ -132,13 +132,14 @@ public class AnnoucementActivity extends AppCompatActivity {
         TextView textViewEventStartTime = findViewById(R.id.annoucement_start_time);
         TextView textViewEventEndTime = findViewById(R.id.announcement_end_Time);
 
-        if (eventId != null) {
-            String eventName = EventUtils.convertEventIdToEventName(eventId);
-            textViewEventTitle.setText(eventName);
-        } else {
-            textViewEventTitle.setText(eventTitle);
-        }
+//        if (eventId != null) {
+//            String eventName = EventUtils.convertEventIdToEventName(eventId);
+//            textViewEventTitle.setText(eventName);
+//        } else {
+//            textViewEventTitle.setText(eventTitle);
+//        }
 
+        textViewEventTitle.setText(eventTitle);
         textViewEvenLocation.setText(eventLocation);
         textViewEventDescription.setText(eventDescription);
         textViewEvenStartDate.setText(eventStartDate);
