@@ -243,9 +243,10 @@ public class FirebaseOrganizer {
                                                 if (documentSnapshot.exists()) {
                                                     Map<String, Object> data = documentSnapshot.getData();
                                                     String locationPermission = (String) data.get("locationPermission");
-                                                    if (locationPermission != "False") {
+                                                    if (!locationPermission.equals("False")) {
                                                         String latitudeStr = (String) data.get("latitude");
                                                         String longitudeStr = (String) data.get("longitude");
+                                                        if (!latitudeStr.equals("Unknown") && !longitudeStr.equals("Unknown")){
 
                                                         Double latitude = Double.parseDouble(latitudeStr);
                                                         Double longitude = Double.parseDouble(longitudeStr);
@@ -255,6 +256,7 @@ public class FirebaseOrganizer {
                                                             float zoomLevel = 16.0f;
                                                             CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(location, zoomLevel);
                                                             myMap.moveCamera(cameraUpdate);
+                                                        }
                                                         }
                                                     }
                                                 }
