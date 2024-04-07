@@ -320,10 +320,20 @@ public class FirebaseAttendee {
             });
         }
     }
+
+    /**
+     * to get the profile from firebase
+     */
     public interface GetProfileCallback
     {
         public void onProfileFetched(Profile profile);
     }
+
+    /**
+     * getting profile from firebase
+     * @param deviceid - deviceid of user
+     * @param callback - callback
+     */
     public void getProfileData(String deviceid, GetProfileCallback callback) {
 
         DocumentReference profileRef = db.collection("profiles").document(deviceid);
@@ -351,10 +361,21 @@ public class FirebaseAttendee {
         });
 
     }
+
+    /**
+     * if user has location checkbox checked
+     */
     public interface IsLocationPermission
     {
         public void GetLocationCallback(boolean bool);
     }
+
+    /**
+     * to find out if user has location checkbox checked
+     * @param deviceId - device id of user
+     * @param context - context
+     * @param callback - using the callback method
+     */
 
     public void getLocation(String deviceId, Context context, IsLocationPermission callback) {
 
