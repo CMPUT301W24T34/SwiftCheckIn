@@ -42,9 +42,7 @@
         <activity
             android:name=".organizer.ViewAttendeesActivity"
             android:exported="false" />
-        <activity
-            android:name=".attendee.MyEventActivity"
-            android:exported="false" />
+
         <activity
             android:name=".attendee.QRCodeScannerActivity"
             android:screenOrientation="portrait"
@@ -67,6 +65,10 @@
             android:name=".organizer.AddEventActivity"
             android:exported="true"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".organizer.EventInfoPage"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".attendee.MainActivity"
             android:exported="true">
@@ -91,7 +93,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.swiftcheckin.fileprovider"
+            android:authorities="com.example.swiftcheckin"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

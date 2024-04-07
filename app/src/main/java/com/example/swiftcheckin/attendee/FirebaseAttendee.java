@@ -256,64 +256,6 @@ public class FirebaseAttendee {
      *
      * @param eventIds List of event IDs
      */
-//    private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
-//        CollectionReference eventCol = db.collection("events");
-//        myEventList.clear(); // Clear the old list
-//
-//        if (eventIds.isEmpty()) {
-//            callback.onDataFetched(myEventList); // Handle case with no event IDs immediately
-//            return;
-//        }
-//
-//        for (String eventId : eventIds) {
-//            eventCol.document(eventId).get().addOnCompleteListener(task -> {
-//                if (task.isSuccessful()) {
-//                    DocumentSnapshot document = task.getResult();
-//                    if (document.exists()) {
-//
-//                        String eventTitle = document.getString("eventTitle");
-//                        String eventDescription = document.getString("eventDescription");
-//                        String eventLocation = document.getString("eventLocation");
-//                        String deviceId = document.getString("deviceId");
-//                        String eventImageUrl = document.getString("eventPosterURL");
-//                        String eventStartDate = document.getString("eventStartDate");
-//                        String eventStartTime = document.getString("eventStartTime");
-//                        String eventEndDate = document.getString("eventEndDate");
-//                        String eventEndTime = document.getString("eventEndTime");
-//                        String eventMaxAttendees = document.getString("eventMaxAttendees");
-//                        String eventCurrentAttendees = document.getString("eventCurrentAttendees");
-//
-//                        Event event;
-//
-//                        if (eventMaxAttendees.equals("-1")) {
-//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-//                                    eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-//
-//                        } else {
-//                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId,
-//                                    eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-//                        }
-//
-//                        if (eventCurrentAttendees != null) {
-//                            event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
-//                        } else {
-//                            event.setCurrentAttendees(0);
-//                        }
-//
-//                        myEventList.add(event);
-//                    } else {
-//                        Log.d("fetchEventsData", "No such document");
-//                    }
-//                } else {
-//                    Log.d("fetchEventsData", "get failed with ", task.getException());
-//                }
-//            });
-//
-//        }
-//        callback.onDataFetched(myEventList);
-//
-//    }
-
     // Citation: OpenAI, 04-06-2024,  ChatGPT, Had some synchronicity issues with the above
     // commented function
 
@@ -378,4 +320,79 @@ public class FirebaseAttendee {
             });
         }
     }
+
+    /**
+     * to get the profile from firebase
+     */
+    public interface GetProfileCallback
+    {
+        public void onProfileFetched(Profile profile);
+    }
+
+    /**
+     * getting profile from firebase
+     * @param deviceid - deviceid of user
+     * @param callback - callback
+     */
+    public void getProfileData(String deviceid, GetProfileCallback callback) {
+
+        DocumentReference profileRef = db.collection("profiles").document(deviceid);
+
+        // Citation: OpenAI, 02-28-2024, ChatGPT, Asking what options i have for snapshots and if i need a query snapshot
+        // output was no i can use document snapshot as well, giving me addSnapshotListener(new EventListener<DocumentSnapshot>() and public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error)
+        // I also searched up on stack overflow to see if im on the right track, led me to the following citation
+        // Citation: Collecting a document from firebase, Stack Overflow, License: CC-BY-SA, user name Frank van Puffelen, "How to fix a null object reference on document snapshot", 2022-04-28, https://stackoverflow.com/questions/72042682/how-to-fix-a-null-object-reference-on-document-snapshot
+        profileRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (error != null) {
+                    Log.e("Firestore", error.toString());
+                    return;
+                }
+                if (value != null) {
+                    // Citation: OpenAI, 02-28-2024, ChatGPT, Asking if i should convert the document to a profile object
+                    // output was yes it can be done directly and told me about value.toObject.
+                    // I then searched this up further on stack overflow to see if I was on the right track and the following citation also helped me incorporate this idea
+                    // Citation: Converting document to class object, Stack Overflow, License: CC-BY-SA, user name Matheus Padovani (edited by Doug Stevenson), "How to directly convert Data Snapshot to object?", 2020-06-17 (edited 2020-06-17), https://stackoverflow.com/questions/62436421/how-to-directly-convert-data-snapshot-to-object
+                    Profile profile = value.toObject(Profile.class);
+                    callback.onProfileFetched(profile);
+                }
+            }
+        });
+
+    }
+
+    /**
+     * if user has location checkbox checked
+     */
+    public interface IsLocationPermission
+    {
+        public void GetLocationCallback(boolean bool);
+    }
+
+    /**
+     * to find out if user has location checkbox checked
+     * @param deviceId - device id of user
+     * @param context - context
+     * @param callback - using the callback method
+     */
+
+    public void getLocation(String deviceId, Context context, IsLocationPermission callback) {
+
+        DocumentReference profileRef = db.collection("profiles").document(deviceId);
+        profileRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String locationPermission = document.getString("locationPermission");
+                    if (locationPermission != null && locationPermission.equals("True")) {
+                        callback.GetLocationCallback(true);
+
+                    }
+                }
+            }
+        });
+
+    }
+
 }

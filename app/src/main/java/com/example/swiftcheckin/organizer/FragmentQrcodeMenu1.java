@@ -49,7 +49,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
 
     private ImageView qrImageSuccess;
     private String deviceId;
-    private Firebase_organizer db_organizer;
+    private FirebaseOrganizer db_organizer;
     private Qr_Code qrCodeGenerated;     // Qr_Code object
     private Qr_Code promoQrCode;
 
@@ -108,7 +108,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_qrcode_choice_menu1, null);
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
-        db_organizer = new Firebase_organizer(requireContext());    // citation: auto-suggested by android studio
+        db_organizer = new FirebaseOrganizer(requireContext());    // citation: auto-suggested by android studio
         deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
         // layout 1
@@ -220,7 +220,7 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
      * Populates the list of unused qr in the dialog fragment
      */
     private void populateReuseQr() {
-        db_organizer.getReuseQrData(qrDataList, new Firebase_organizer.ReuseQrDataCallback() {
+        db_organizer.getReuseQrData(qrDataList, new FirebaseOrganizer.ReuseQrDataCallback() {
             @Override
             public void onDataLoaded(ArrayList<Qr_Code> dataList) {
                 if(qrDataList.size() != 0)      // if no qr is available then button is hidden from the user
