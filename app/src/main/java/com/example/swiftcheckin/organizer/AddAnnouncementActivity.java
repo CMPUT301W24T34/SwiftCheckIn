@@ -60,7 +60,7 @@ public class AddAnnouncementActivity extends AppCompatActivity {
             public void onClick(View v) {
                 saveAnnouncementToFirebase();
                 sendAnnouncementToServer(editAnnouncementHeading.getText().toString(), editAnnouncementDes.getText().toString());
-               // Toast.makeText(getApplicationContext(), "To be continued", Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getApplicationContext(), "To be continued", Toast.LENGTH_SHORT).show();
                 finish();
             }
         });
@@ -119,8 +119,11 @@ public class AddAnnouncementActivity extends AppCompatActivity {
             JSONObject data = new JSONObject();
             data.put("eventId", eventId);
 
+            // Remove whitespace from eventId
+            String topicName = "event_" + eventId.replaceAll("\\s+", "_");
+
             JSONObject jsonPayload = new JSONObject();
-            jsonPayload.put("to", "/topics/event_" + eventId);
+            jsonPayload.put("to", "/topics/" + topicName); // Include the /topics/ prefix
             jsonPayload.put("notification", notification);
             jsonPayload.put("data", data);
 
