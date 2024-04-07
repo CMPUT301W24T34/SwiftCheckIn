@@ -2,24 +2,17 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-
-    <meta-data
-        android:name="com.google.android.geo.API_KEY"
-        android:value="AIzaSyAE2ZFQ1O7xaQW37bDO7X80S0MMWvRo_g4"/>
+    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
 
     <uses-feature
         android:name="android.hardware.camera"
         android:required="true" />
-
-    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -31,8 +24,6 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SwiftCheckIn"
         tools:targetApi="31">
-
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAE2ZFQ1O7xaQW37bDO7X80S0MMWvRo_g4" />
@@ -65,7 +56,7 @@
         <activity
             android:name=".organizer.OrganizerActivity"
             android:exported="false"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".attendee.SettingsActivity"
             android:exported="false" />
@@ -75,7 +66,7 @@
         <activity
             android:name=".organizer.AddEventActivity"
             android:exported="true"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".attendee.MainActivity"
             android:exported="true">
@@ -89,9 +80,18 @@
             android:name=".admin.AdminActivity"
             android:exported="true" />
 
+
+        <service
+            android:name=".organizer.MyFirebaseMessagingServices"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.swiftcheckin"
+            android:authorities="com.example.swiftcheckin.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

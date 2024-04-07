@@ -12,7 +12,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.admin.AdminActivity;
-
+/**
+ * This allows only those with a password to view admin
+ */
 public class AdminPassword extends AppCompatActivity {
 
     private EditText passwordEditText;
