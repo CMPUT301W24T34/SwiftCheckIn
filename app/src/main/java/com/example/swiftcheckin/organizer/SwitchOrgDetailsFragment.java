@@ -59,8 +59,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
 
         Button viewMap = view.findViewById(R.id.view_map_button);
 
-        Button viewCheckedIn = view.findViewById(R.id.view_check_in_attendees_button);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         TextView title = view.findViewById(R.id.eventExtras);
@@ -142,15 +140,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             }
         });
 
-        viewCheckedIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ViewCheckInActivity.class);
-                intent.putExtra("eventId", eventId);
-                dismiss();
-                startActivity(intent);
-            }
-        });
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
