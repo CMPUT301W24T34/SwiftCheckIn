@@ -81,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         fb = new FirebaseAttendee();
         db = fb.getDb();
+        locationReceiver = new LocationReceiver();
         getData();
         // Citation: OpenAI, 03-29-2024, ChatGPT, How to set a listener for the location checkbox
         // output was below, the onCheckedChangeListener and onCheckedChanged Method
@@ -208,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (locationPermission) {
             data.put("locationPermission", "True");
             fb.saveProfileToFirebase(deviceId, data);
+            locationReceiver.getLocation(deviceId, getApplicationContext());
 
         }
         else {

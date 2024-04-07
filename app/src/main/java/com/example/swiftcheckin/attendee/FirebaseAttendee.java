@@ -351,5 +351,27 @@ public class FirebaseAttendee {
         });
 
     }
+    public interface IsLocationPermission
+    {
+        public void GetLocationCallback(boolean bool);
+    }
+
+    public void getLocation(String deviceId, Context context, IsLocationPermission callback) {
+
+        DocumentReference profileRef = db.collection("profiles").document(deviceId);
+        profileRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    String locationPermission = document.getString("locationPermission");
+                    if (locationPermission != null && locationPermission.equals("True")) {
+                        callback.GetLocationCallback(true);
+
+                    }
+                }
+            }
+        });
+
+    }
 
 }
