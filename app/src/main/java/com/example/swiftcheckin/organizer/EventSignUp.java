@@ -89,7 +89,6 @@ public class EventSignUp {
             currentAttendees += 1;
 
             eventCurrentAttendees = Integer.toString(currentAttendees);
-
             DocumentReference updateEventDoc = db.collection("events").document(eventId);
             HashMap<String, String> data2 = new HashMap<>();
             data2.put("eventCurrentAttendees", eventCurrentAttendees);
