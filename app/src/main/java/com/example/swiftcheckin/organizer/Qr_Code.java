@@ -98,7 +98,7 @@ public class Qr_Code {
      */
     public void setEventToNull()
     {
-        this.eventID = null;
+        this.eventID = "null";
     }
 
     /**

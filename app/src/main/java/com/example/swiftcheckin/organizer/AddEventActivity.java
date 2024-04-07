@@ -2,6 +2,7 @@ package com.example.swiftcheckin.organizer;
 
 import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -18,6 +19,8 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -32,6 +35,7 @@ import com.google.firebase.storage.StorageReference;
 
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
+import java.util.Locale;
 
 /**
  * Activity meant to help create events for attendees to join. Starts from the organizer activity and
@@ -81,12 +85,18 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         initSaveButton(saveButton);
 
         // DatePicker dialog
-        EditText startDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
-        EditText endDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
+        TextView startDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        TextView endDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
 
         initDatePickerClick(startDateEditText);
         initDatePickerClick(endDateEditText);
 
+        // TimePicker
+        TextView startTime = findViewById(R.id.eventAddActivity_eventStartTime_EditText);
+        TextView endTime = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
+
+        initTimePickerClick(startTime);
+        initTimePickerClick(endTime);
 
     }
 
@@ -106,68 +116,17 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         }
     }
 
-
-    // Citation: OpenAI, Date: March 4, 2024. ChatGPT. Used to enforce the date format in the EditText
-    /*
-     I wanted to make the input more user friendly, so I searched a bit on google. After not finding good ways to enforce this format,
-     I asked ChatGPT to show me a way to enforce the format. It asked me to use TextChangedListener on the EditTexts.
-     Prompt: How to enforce a particular format for edittext
-
-     Answer: To enforce a specific format for an EditText in Android, you can use a combination of input type and input filters. Here's how you can enforce a format for an EditText:
-
-            Input Type: Use the android:inputType attribute to specify the type of input allowed. For example, if you want to enforce a numeric format, you can use number or numberDecimal. If you want to enforce an email format, you can use textEmailAddress.
-
-            Input Filters: Use input filters to restrict the characters that can be entered into the EditText. You can create custom input filters to enforce specific formats.
-
-            Here's an example of enforcing a phone number format for an EditText:
-                        <EditText
-                android:id="@+id/editText_phone"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Enter phone number"
-                android:inputType="phone"
-                android:digits="0123456789-() " />
-
-            In this example:
-
-            android:inputType="phone" enforces the EditText to accept phone numbers.
-            android:digits="0123456789-() " restricts input to only digits, hyphens, parentheses, and spaces.
-            You can also use a TextWatcher to validate the input format programmatically. Here's an example of how you can use a TextWatcher to enforce a specific format (e.g., date format "dd/MM/yyyy"):
-
-            editText.addTextChangedListener(new TextWatcher() {
+    private void initTimePickerClick(TextView timeView)
+    {
+        timeView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+            public void onClick(View v) {
+                initTimePicker(timeView);
+            }
+        });
+    }
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (s.length() == 2 || s.length() == 5) {
-                    s.append("/");
-                    }
-                }
-             });
-
-             This TextWatcher appends a "/" character after the second and fifth characters, effectively enforcing a "dd/MM/yyyy" format. You can adjust this logic according to your specific format requirements.
-
-            Follow-up prompt: What should I write in the XML to enforce input of date
-
-            Answer:
-            Here's an example of how you can enforce a "dd/MM/yyyy" date format for an EditText:
-            <EditText
-            android:id="@+id/editText_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Enter date (dd/MM/yyyy)"
-            android:inputType="date"
-            android:digits="0123456789/" />
-
-
-    */
-
-
-    private void initDatePickerClick(EditText editText)
+    private void initDatePickerClick(TextView editText)
     {
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -198,7 +157,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
     //Citation: Code with Cal, Youtube. Pop Up Date Picker Android Studio Tutorial. Accessed March 30, 2024.
     //Link: https://www.youtube.com/watch?v=qCoidM98zNk
-    private void initDatePicker(EditText editText)
+    private void initDatePicker(TextView editText)
     {
         String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
         DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
@@ -210,8 +169,25 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
             }
         }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
             Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
         datePicker.show();
+    }
+
+    private void initTimePicker(TextView timeView) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = calendar.get(Calendar.MINUTE);
+
+        TimePickerDialog timePicker = new TimePickerDialog(this, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                String selectedTime = String.format(Locale.getDefault(), "%02d:%02d", hourOfDay, minute);
+                timeView.setText(selectedTime);
+
+            }
+        }, hour, currentMinute, true);
+        timePicker.show();
     }
 
     /**
@@ -223,28 +199,28 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
         // Information entered by the user.
         EditText eventNameEditText = findViewById(R.id.eventName);
-        String eventName = eventNameEditText.getText().toString();
+        String eventName = eventNameEditText.getText().toString().trim();
 
         EditText addressEditText = findViewById(R.id.eventPageAddressEditText);
-        String eventAddress = addressEditText.getText().toString();
+        String eventAddress = addressEditText.getText().toString().trim();
 
         EditText descriptionEditText = findViewById(R.id.eventPageDescriptionEditText);
-        String eventDescription = descriptionEditText.getText().toString();
+        String eventDescription = descriptionEditText.getText().toString().trim();
 
-        EditText eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
+        TextView eventStartDateEditText = findViewById(R.id.eventAddActivity_StartDate_EditText);
         String eventStartDate = eventStartDateEditText.getText().toString();
 
-        EditText eventEndDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
+        TextView eventEndDateEditText = findViewById(R.id.eventAddActivity_eventEndDate_EditText);
         String eventEndDate = eventEndDateEditText.getText().toString();
 
-        EditText eventStartTimeEditText = findViewById(R.id.eventAddActivity_eventStartTime_EditText);
+        TextView eventStartTimeEditText = findViewById(R.id.eventAddActivity_eventStartTime_EditText);
         String eventStartTime = eventStartTimeEditText.getText().toString();
 
-        EditText eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
+        TextView eventEndTimeEditText = findViewById(R.id.eventAddActivity_eventEndTime_EditText);
         String eventEndTime = eventEndTimeEditText.getText().toString();
 
         EditText eventMaxAttendeesEditText = findViewById(R.id.editMaxAttendeeText);
-        String eventMaxAttendee = eventMaxAttendeesEditText.getText().toString();
+        String eventMaxAttendee = eventMaxAttendeesEditText.getText().toString().trim();
 
         broadcastIntent = new Intent("com.example.ADD_EVENT");
         // Puts all the information into broadcastIntent.
@@ -260,13 +236,12 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
         // Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);  // generates the QR code.
 
-        if (!eventName.equals("") && !eventStartDate.equals("") && !eventAddress.equals("")) {
+        if (!eventName.equals("") && !eventAddress.equals("") && !eventStartDate.equals("") && !eventEndDate.equals("") && !eventStartTime.equals("") && !eventEndTime.equals("") && !eventDescription.equals("")) {
             // starts the fragment for the QR code.
             new FragmentQrcodeMenu1(deviceId+eventName).show(getSupportFragmentManager(), "menu");
         } else {
             // an error message if QR code generation failed
             Toast.makeText(AddEventActivity.this, "Not all required fields are filled", Toast.LENGTH_SHORT).show();
-            finish();
         }
     }
 

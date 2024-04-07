@@ -56,6 +56,7 @@ public class EventSignUp {
                 // If currentAttendees is 0, add (Done)
                 // Check if deviceId is in the firebase
                 // If it is, ignore it. Otherwise, add the deviceId
+
             }
         });
 
@@ -89,7 +90,6 @@ public class EventSignUp {
             currentAttendees += 1;
 
             eventCurrentAttendees = Integer.toString(currentAttendees);
-
             DocumentReference updateEventDoc = db.collection("events").document(eventId);
             HashMap<String, String> data2 = new HashMap<>();
             data2.put("eventCurrentAttendees", eventCurrentAttendees);

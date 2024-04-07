@@ -68,6 +68,10 @@
             android:exported="true"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".organizer.EventInfoPage"
+            android:exported="true"
+            android:screenOrientation="portrait"/>
+        <activity
             android:name=".attendee.MainActivity"
             android:exported="true">
             <intent-filter>
@@ -91,7 +95,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.swiftcheckin.fileprovider"
+            android:authorities="com.example.swiftcheckin"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

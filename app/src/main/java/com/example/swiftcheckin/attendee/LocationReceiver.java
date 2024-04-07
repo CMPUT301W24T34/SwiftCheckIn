@@ -36,21 +36,14 @@ public class LocationReceiver {
      * @param context - context
      */
     public void getLocation(String deviceId, Context context) {
-
-        DocumentReference profileRef = fb.getDb().collection("profiles").document(deviceId);
-        profileRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    String locationPermission = document.getString("locationPermission");
-                    if (locationPermission != null && locationPermission.equals("True")) {
-                        saveLocation(deviceId, context);
-
-                    }
+        fb.getLocation(deviceId, context, new FirebaseAttendee.IsLocationPermission() {
+            @Override
+            public void GetLocationCallback(boolean bool) {
+                if (bool) {
+                    saveLocation(deviceId, context);
                 }
             }
         });
-
     }
 
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to obtain location of user
