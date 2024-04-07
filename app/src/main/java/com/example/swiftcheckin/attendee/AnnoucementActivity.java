@@ -25,6 +25,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -34,10 +35,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.ArrayList;
-
-
-
-
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+// Right now there is no way to unsign up for an event
 /**
  * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
  */
@@ -81,6 +83,16 @@ public class AnnoucementActivity extends AppCompatActivity {
         if (eventMaxAttendees.equals(eventCurrentAttendees)) {
             sign_up.setBackgroundColor(Color.LTGRAY);
         }
+        DocumentReference eventCheckRef = fb.getDb().collection("events").document(eventId);
+        eventCheckRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (!value.exists()){
+                    Toast.makeText(getApplicationContext(), "Event has been deleted by admin.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +119,57 @@ public class AnnoucementActivity extends AppCompatActivity {
                 }
             }
         });
+
+
+//            sign_up.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+//                        fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+//                        eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+//                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_" + eventId)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
+//                                        } else {
+//                                            Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
+//                                        }
+//                                    }
+//                                });
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+////                        sign_up.setBackgroundColor(Color.LTGRAY);
+//                    }
+//                }
+//
+//            });
+
+
+//        sign_up.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+//                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+//                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+//
+//                    FirebaseMessaging.getInstance().subscribeToTopic(eventId)
+//                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if (task.isSuccessful()) {
+//                                        Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
+//                                    } else {
+//                                        Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
+//                                    }
+//                                }
+//                            });
+//                } else {
+//                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//        });
 
         ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(v -> {
@@ -176,4 +239,6 @@ public class AnnoucementActivity extends AppCompatActivity {
             }
         });
     }
+
 }
+
