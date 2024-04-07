@@ -13,21 +13,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
-import com.example.swiftcheckin.organizer.Event;
-import com.example.swiftcheckin.organizer.EventArrayAdapter;
-import com.example.swiftcheckin.organizer.EventSignUp;
-
 import com.example.swiftcheckin.R;
+import com.example.swiftcheckin.organizer.EventSignUp;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
@@ -46,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 // Right now there is no way to unsign up for an event
+
 /**
  * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
  */
@@ -53,9 +48,9 @@ public class AnnoucementActivity extends AppCompatActivity {
 
     private Button sign_up;
     private FirebaseFirestore db;
-    private ArrayList<Announcement> dataList;   // Represents the list that will store all the events.
-    private ListView announcementList;  // List view in activity_organizer.
-    private AnnouncementArrayAdapter announceAdapter; // Adapter meant to keep track of changes in the number of events.
+    private ArrayList<Announcement> dataList;
+    private ListView announcementList;
+    private AnnouncementArrayAdapter announceAdapter;
     EventSignUp eventSignUp = new EventSignUp();
     private FirebaseAttendee fb;
 
@@ -76,7 +71,6 @@ public class AnnoucementActivity extends AppCompatActivity {
         announcementList.setAdapter(announceAdapter);
         fb = new FirebaseAttendee();
 
-
         String eventId = getIntent().getStringExtra("eventID");
         String deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
 
@@ -90,6 +84,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         if (eventMaxAttendees.equals(eventCurrentAttendees)) {
             sign_up.setBackgroundColor(Color.LTGRAY);
         }
+
         DocumentReference eventCheckRef = fb.getDb().collection("events").document(eventId);
         eventCheckRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -101,30 +96,57 @@ public class AnnoucementActivity extends AppCompatActivity {
             }
         });
 
-            sign_up.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-                        fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
-                        eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
-                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_" + eventId)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if (task.isSuccessful()) {
-                                            Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
-                                        } else {
-                                            Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
-                                        }
-                                    }
-                                });
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
-//                        sign_up.setBackgroundColor(Color.LTGRAY);
-                    }
-                }
+        sign_up.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
-            });
+                    // Remove whitespace from eventId
+                    String topicName = "event_" + eventId.replaceAll("\\s+", "_");
+
+                    FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + topicName)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (task.isSuccessful()) {
+                                        Log.d(TAG, "Subscribed to topic: /topics/" + topicName);
+                                    } else {
+                                        Log.e(TAG, "Failed to subscribe to topic: /topics/" + topicName);
+                                    }
+                                }
+                            });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+//            sign_up.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+//                        fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+//                        eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+//                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_" + eventId)
+//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<Void> task) {
+//                                        if (task.isSuccessful()) {
+//                                            Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
+//                                        } else {
+//                                            Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
+//                                        }
+//                                    }
+//                                });
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+////                        sign_up.setBackgroundColor(Color.LTGRAY);
+//                    }
+//                }
+//
+//            });
 
 
 //        sign_up.setOnClickListener(new View.OnClickListener() {
@@ -158,44 +180,40 @@ public class AnnoucementActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
 
-
         Intent intent = getIntent();
-        String eventID = intent.getStringExtra("eventID");
         String eventTitle = intent.getStringExtra("eventTitle");
         String eventLocation = intent.getStringExtra("eventLocation");
         String eventDescription = intent.getStringExtra("eventDescription");
-//        String eventImageUrl = intent.getStringExtra("eventImageUrl");
         String eventStartDate = intent.getStringExtra("eventStartDate");
         String eventStartTime = intent.getStringExtra("eventStartTime");
         String eventEndTime = intent.getStringExtra("eventEndTime");
 
-
-//        TextView textViewEventID = findViewById(R.id.ann);
         TextView textViewEventTitle = findViewById(R.id.announcement_event_name);
         TextView textViewEvenLocation = findViewById(R.id.announcement_location);
         TextView textViewEventDescription = findViewById(R.id.announcement_description);
-//        ImageView textViewEventImageURL = findViewById(R.id.announcement_event_poster1);
         TextView textViewEvenStartDate = findViewById(R.id.annoucement_event_date);
         TextView textViewEventStartTime = findViewById(R.id.annoucement_start_time);
         TextView textViewEventEndTime = findViewById(R.id.announcement_end_Time);
 
+//        if (eventId != null) {
+//            String eventName = EventUtils.convertEventIdToEventName(eventId);
+//            textViewEventTitle.setText(eventName);
+//        } else {
+//            textViewEventTitle.setText(eventTitle);
+//        }
 
-
-//        textViewEventID.setText(eventID);
         textViewEventTitle.setText(eventTitle);
         textViewEvenLocation.setText(eventLocation);
         textViewEventDescription.setText(eventDescription);
-//        textViewEventImageURL.setText(eventImageUrl);
         textViewEvenStartDate.setText(eventStartDate);
         textViewEventStartTime.setText(eventStartTime);
         textViewEventEndTime.setText(eventEndTime);
 
-        // OpenAI: ChatGPT Marc 4, 2024 - Added glide to save & fetch image from firebase
 
+        // OpenAI: ChatGPT Marc 4, 2024 - Added glide to save & fetch image from firebase
         ImageView imageViewEventPoster = findViewById(R.id.announcement_event_poster1);
         String eventImageUrl = intent.getStringExtra("eventImageUrl");
         Glide.with(this)
@@ -204,20 +222,19 @@ public class AnnoucementActivity extends AppCompatActivity {
     }
 
     // Need something to get data related to announcements, portraying data will be here.
-    private void getData(String eventId){
+    private void getData(String eventId) {
         CollectionReference announceCol = db.collection("Announcements");
 
         announceCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException error) {
                 dataList.clear();
-                for (QueryDocumentSnapshot doc : queryDocumentSnapshots){
-
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     String announcementTitleFrame = doc.getId();
-                    if (announcementTitleFrame.contains(eventId)){
-                        String announcementTitle= (String) doc.getData().get("announcementTitle");
+                    String eventName = EventUtils.convertEventIdToEventName(eventId);
+                    if (announcementTitleFrame.contains(eventName)) {
+                        String announcementTitle = (String) doc.getData().get("announcementTitle");
                         String announcementDes = (String) doc.getData().get("announcementDes");
-
                         dataList.add(new Announcement(announcementTitle, announcementDes));
                     }
                 }
@@ -226,6 +243,6 @@ public class AnnoucementActivity extends AppCompatActivity {
         });
     }
 
-
-
 }
+
+

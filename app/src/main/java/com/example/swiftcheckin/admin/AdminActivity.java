@@ -292,6 +292,13 @@ public class AdminActivity extends AppCompatActivity {
 
         }
 
+    public List<Event> getEventList() {
+        return eventList;
+    }
+    public List<Profile> getProfileList() {
+        return profileList;
+    }
+
 
 
 
