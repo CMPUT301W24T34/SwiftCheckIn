@@ -86,7 +86,7 @@
         android:layout_marginStart="44dp"
         android:layout_marginTop="10dp"
         android:background="@drawable/edit_text_border"
-        android:hint="Location"
+        android:hint="Address"
         android:padding="8dp"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
