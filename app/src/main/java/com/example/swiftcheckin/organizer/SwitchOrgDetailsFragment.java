@@ -1,14 +1,11 @@
 package com.example.swiftcheckin.organizer;
 
-import static android.content.ContentValues.TAG;
-
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -25,19 +22,11 @@ import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
 
 import com.example.swiftcheckin.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
 
 public class SwitchOrgDetailsFragment extends DialogFragment {
 
@@ -45,7 +34,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     Bitmap bitmap_qr;
 
     String eventTitle;
-    private Firebase_organizer firebase_organizer;
+    private FirebaseOrganizer firebase_organizer;
 
 //    public static SwitchOrgDetailsFragment newInstance(String extraData) {
 //        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
@@ -70,8 +59,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
 
         Button viewMap = view.findViewById(R.id.view_map_button);
 
-        Button viewCheckedIn = view.findViewById(R.id.view_check_in_attendees_button);
-
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
 
         TextView title = view.findViewById(R.id.eventExtras);
@@ -81,7 +68,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         qrImageView.setImageBitmap(bitmap_qr);
 
         LinearLayout shareLayout = view.findViewById(R.id.switch_details_ShareButtonLayout);
-        firebase_organizer = new Firebase_organizer(requireContext());
+        firebase_organizer = new FirebaseOrganizer(requireContext());
 
         shareLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -93,7 +80,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         viewSignedUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ViewAttendeesActivity.class);
+                Intent intent = new Intent(getContext(), EventInfoPage.class);
                 intent.putExtra("eventId", eventId);
                 dismiss();
                 startActivity(intent);
@@ -102,7 +89,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         firebase_organizer.addGeolocation(eventId);
         Switch geolocationSwitch = view.findViewById(R.id.geolocation_switch);
         //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
-        firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
+        firebase_organizer.geolocationEnabled(eventId, new FirebaseOrganizer.GeolocationCallback() {
             @Override
             public void onGeolocationStatus(boolean enabled) {
 
@@ -125,7 +112,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 ///Citation: For the following code line, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
-                firebase_organizer.geolocationEnabled(eventId, new Firebase_organizer.GeolocationCallback() {
+                firebase_organizer.geolocationEnabled(eventId, new FirebaseOrganizer.GeolocationCallback() {
                     @Override
                     public void onGeolocationStatus(boolean enabled) {
                         if (enabled) {
@@ -153,15 +140,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             }
         });
 
-        viewCheckedIn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), ViewCheckInActivity.class);
-                intent.putExtra("eventId", eventId);
-                dismiss();
-                startActivity(intent);
-            }
-        });
         return builder
                 .setView(view)
                 .setNegativeButton("Cancel", null)
