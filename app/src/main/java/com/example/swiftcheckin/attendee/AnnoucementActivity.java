@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 // Right now there is no way to unsign up for an event
+
 /**
  * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
  */
@@ -83,6 +84,7 @@ public class AnnoucementActivity extends AppCompatActivity {
         if (eventMaxAttendees.equals(eventCurrentAttendees)) {
             sign_up.setBackgroundColor(Color.LTGRAY);
         }
+
         DocumentReference eventCheckRef = fb.getDb().collection("events").document(eventId);
         eventCheckRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
             @Override
@@ -93,6 +95,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 }
             }
         });
+
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,7 +122,6 @@ public class AnnoucementActivity extends AppCompatActivity {
                 }
             }
         });
-
 
 //            sign_up.setOnClickListener(new View.OnClickListener() {
 //                @Override
@@ -170,6 +172,7 @@ public class AnnoucementActivity extends AppCompatActivity {
 //                }
 //            }
 //        });
+
 
         ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(v -> {
@@ -241,4 +244,5 @@ public class AnnoucementActivity extends AppCompatActivity {
     }
 
 }
+
 
