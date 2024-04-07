@@ -19,6 +19,14 @@ import androidx.test.espresso.Espresso;
 import androidx.test.espresso.ViewAction;
 import androidx.test.espresso.action.ViewActions;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.uiautomator.By;
+import androidx.test.uiautomator.UiDevice;
+import androidx.test.uiautomator.UiObject;
+import androidx.test.uiautomator.UiObject2;
+import androidx.test.uiautomator.UiObjectNotFoundException;
+import androidx.test.uiautomator.UiSelector;
+import androidx.test.uiautomator.Until;
 
 import org.hamcrest.Description;
 import org.junit.Rule;
@@ -51,6 +59,7 @@ public class AdminTest {
      */
 
     private int i;
+    private UiDevice device;
 
 
     @Rule
@@ -63,6 +72,19 @@ public class AdminTest {
      */
     @Test
     public void testDeleteEvent(){
+        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click allow to a pop up
+        UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
+
+
+        UiObject allowButton = uiDevice.findObject(new UiSelector().text("Allow").className("android.widget.Button"));
+        allowButton.waitForExists(30000); // Wait up to 30 seconds for the dialog to appear
+
+
+        try {
+            allowButton.click();
+        } catch (UiObjectNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         onView(withId(R.id.switch_modes)).perform(click());
         onView(withId(R.id.organizer_button)).perform(click());
         onView(withId(R.id.add_event_button)).perform(click());
