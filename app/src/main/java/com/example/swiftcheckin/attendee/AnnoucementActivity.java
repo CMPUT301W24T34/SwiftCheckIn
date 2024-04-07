@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 // Right now there is no way to unsign up for an event
 /**
  * This class deals with the announcement activity to show details and announcements of an event as well as allowing attendees to sign up for an event.
@@ -57,7 +58,6 @@ public class AnnoucementActivity extends AppCompatActivity {
     private AnnouncementArrayAdapter announceAdapter; // Adapter meant to keep track of changes in the number of events.
     EventSignUp eventSignUp = new EventSignUp();
     private FirebaseAttendee fb;
-
 
 
     /**
@@ -90,6 +90,17 @@ public class AnnoucementActivity extends AppCompatActivity {
         if (eventMaxAttendees.equals(eventCurrentAttendees)) {
             sign_up.setBackgroundColor(Color.LTGRAY);
         }
+        DocumentReference eventCheckRef = fb.getDb().collection("events").document(eventId);
+        eventCheckRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if (!value.exists()){
+                    Toast.makeText(getApplicationContext(), "Event has been deleted by admin.", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+        });
+
             sign_up.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -111,8 +122,8 @@ public class AnnoucementActivity extends AppCompatActivity {
                         Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
 //                        sign_up.setBackgroundColor(Color.LTGRAY);
                     }
-
                 }
+
             });
 
 
@@ -214,6 +225,7 @@ public class AnnoucementActivity extends AppCompatActivity {
             }
         });
     }
+
 
 
 }

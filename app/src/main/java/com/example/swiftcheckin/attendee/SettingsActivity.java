@@ -81,6 +81,7 @@ public class SettingsActivity extends AppCompatActivity {
         deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
         fb = new FirebaseAttendee();
         db = fb.getDb();
+        locationReceiver = new LocationReceiver();
         getData();
         // Citation: OpenAI, 03-29-2024, ChatGPT, How to set a listener for the location checkbox
         // output was below, the onCheckedChangeListener and onCheckedChanged Method
@@ -151,46 +152,36 @@ public class SettingsActivity extends AppCompatActivity {
      * This gets the profile data from firestore
      */
     private void getData() {
-        DocumentReference profileRef = db.collection("profiles").document(deviceId);
-
-        profileRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        fb.getProfileData(deviceId, new FirebaseAttendee.GetProfileCallback() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (value != null) {
-                    Profile profile = value.toObject(Profile.class);
-
-                    if (profile != null) {
-                        String savedName = profile.getName();
-                        String savedBirthday = profile.getBirthday();
-                        String savedPhone = profile.getPhoneNumber();
-                        String savedEmail = profile.getEmail();
-                        String savedWebsite = profile.getWebsite();
-                        String savedAddress = profile.getAddress();
-                        boolean savedLocationPermission = profile.isLocationPermission();
-                        if (savedName != null && !savedName.isEmpty()) {
-                            nameEditText.setText(savedName);
-                        }
-                        if (savedBirthday != null && !savedBirthday.isEmpty()) {
-                            birthdayEditText.setText(savedBirthday);
-                        }
-                        if (savedPhone != null && !savedPhone.isEmpty()) {
-                            phoneNumberEditText.setText(savedPhone);
-                        }
-                        if (savedEmail != null && !savedEmail.isEmpty()) {
-                            emailEditText.setText(savedEmail);
-                        }
-                        if (savedWebsite != null && !savedWebsite.isEmpty()){
-                            websiteEditText.setText(savedWebsite);
-                        }
-                        if (savedAddress != null && !savedAddress.isEmpty()){
-                            addressEditText.setText(savedAddress);
-                        }
-                        locationCheckBox.setChecked(savedLocationPermission);
+            public void onProfileFetched(Profile profile) {
+                if (profile != null) {
+                    String savedName = profile.getName();
+                    String savedBirthday = profile.getBirthday();
+                    String savedPhone = profile.getPhoneNumber();
+                    String savedEmail = profile.getEmail();
+                    String savedWebsite = profile.getWebsite();
+                    String savedAddress = profile.getAddress();
+                    boolean savedLocationPermission = profile.isLocationPermission();
+                    if (savedName != null && !savedName.isEmpty()) {
+                        nameEditText.setText(savedName);
                     }
+                    if (savedBirthday != null && !savedBirthday.isEmpty()) {
+                        birthdayEditText.setText(savedBirthday);
+                    }
+                    if (savedPhone != null && !savedPhone.isEmpty()) {
+                        phoneNumberEditText.setText(savedPhone);
+                    }
+                    if (savedEmail != null && !savedEmail.isEmpty()) {
+                        emailEditText.setText(savedEmail);
+                    }
+                    if (savedWebsite != null && !savedWebsite.isEmpty()) {
+                        websiteEditText.setText(savedWebsite);
+                    }
+                    if (savedAddress != null && !savedAddress.isEmpty()) {
+                        addressEditText.setText(savedAddress);
+                    }
+                    locationCheckBox.setChecked(savedLocationPermission);
                 }
             }
         });
@@ -218,6 +209,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (locationPermission) {
             data.put("locationPermission", "True");
             fb.saveProfileToFirebase(deviceId, data);
+            locationReceiver.getLocation(deviceId, getApplicationContext());
 
         }
         else {
