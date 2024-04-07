@@ -1,8 +1,5 @@
 package com.example.swiftcheckin.organizer;
 
-import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,17 +14,12 @@ import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.swiftcheckin.R;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -35,7 +27,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * This activity is meant to show the organizer's view of the app. They are able to view their own events, their posters,
@@ -49,7 +40,7 @@ public class OrganizerActivity extends AppCompatActivity {
     private String deviceId;  // Represents the current device Id
     private FirebaseFirestore db;  // Represents an instance of the Firestore database
 
-    private Firebase_organizer dbOrganizer;
+    private FirebaseOrganizer dbOrganizer;
 
     LinearLayout addEventButton; // Button to add events.
 
@@ -171,7 +162,7 @@ public class OrganizerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_organizer);
 
         db = FirebaseFirestore.getInstance();  // Instance of the Firestore database.
-        dbOrganizer = new Firebase_organizer(getApplicationContext());
+        dbOrganizer = new FirebaseOrganizer(getApplicationContext());
 
         // Id of the device that will go to the organizer mode.
         deviceId = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -301,7 +292,7 @@ public class OrganizerActivity extends AppCompatActivity {
 
     private Bitmap getAssociatedQrImage(String eventId, QrImageCallback callback)
     {
-        dbOrganizer.getAssociatedCodeID(eventId, new Firebase_organizer.QrIDCallback() {
+        dbOrganizer.getAssociatedCodeID(eventId, "qrID", new FirebaseOrganizer.QrIDCallback() {
             @Override
             public void onQrIDReceived(String qrID) {
                 if (qrID != null) {

@@ -38,7 +38,7 @@ public class ViewCheckInActivity extends AppCompatActivity {
         setContentView(R.layout.activity_view_check_in);
         back_button = findViewById(R.id.viewCheckInBackButton);
         bigEventTitle = findViewById(R.id.viewCheckInEventTitle);
-        checkInArrayAdapter = new CheckInArrayAdapter(this, profileList);
+        //checkInArrayAdapter = new CheckInArrayAdapter(this, profileList);
         dataList = findViewById(R.id.viewCheckInEventList);
         dataList.setAdapter(checkInArrayAdapter);
 

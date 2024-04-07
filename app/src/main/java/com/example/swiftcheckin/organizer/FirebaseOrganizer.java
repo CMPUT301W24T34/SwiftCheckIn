@@ -4,12 +4,12 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -25,7 +25,9 @@ import com.google.firebase.firestore.CollectionReference;
 
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.SetOptions;
@@ -34,11 +36,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
 
-public class Firebase_organizer {
+public class FirebaseOrganizer {
     private FirebaseFirestore db;
 
     private List<String> matchedProfiles = new ArrayList<>();
@@ -46,11 +45,11 @@ public class Firebase_organizer {
     String deviceID;
 
 
-    public Firebase_organizer(Context context) {
+    public FirebaseOrganizer(Context context) {
         this.db = FirebaseFirestore.getInstance();
         deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
-    public Firebase_organizer(){
+    public FirebaseOrganizer(){
         this.db = FirebaseFirestore.getInstance();
     }
 
@@ -121,7 +120,7 @@ public class Firebase_organizer {
         void onQrIDReceived(String qrID);
     }
 
-    public void getAssociatedCodeID(String eventId, QrIDCallback callback) {
+    public void getAssociatedCodeID(String eventId, String field, QrIDCallback callback) {
         // Citation: OpenAI, Date: 29 March, 2024. ChatGPT. Used to find a way to wait till db operation is complete.
         // gave the code without this and asked how to make the program not crash due to asynchronous behaviour of db.
         // ChatGPT suggested this
@@ -135,7 +134,7 @@ public class Firebase_organizer {
                         if (task.isSuccessful()) {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
-                                String qrID = document.getString("qrID");
+                                String qrID = document.getString(field);
                                 Log.e("Qr Code Id requested for fragment", qrID);
                                 callback.onQrIDReceived(qrID);
                             }
@@ -327,6 +326,59 @@ public class Firebase_organizer {
     }
 
 
+    // make callback interface
+
+    public interface EventCallback
+    {
+        void onCompleteFetch(Event event);
+        void onError(String errorMessage);
+    }
+    public void getEvent(String eventId, EventCallback eventCallback)
+    {
+        DocumentReference eventDoc = db.collection("events").document(eventId);
+
+        eventDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete())
+                {
+                    Event event;
+                    DocumentSnapshot result = task.getResult();
+                    if(result.exists())
+                    {
+                        String eventTitle = (String) result.getData().get("eventTitle");
+                        String eventLocation = (String) result.getData().get("eventLocation");
+                        String eventDescription = (String) result.getData().get("eventDescription");
+                        String deviceId = (String) result.getData().get("deviceId");
+
+                        String eventImageURL = (String) result.getData().get("eventPosterURL");
+                        String startDate = (String) result.getData().get("eventStartDate");
+                        String endDate = (String) result.getData().get("eventEndDate");
+                        String startTime = (String) result.getData().get("eventStartTime");
+                        String endTime = (String) result.getData().get("eventEndTime");
+                        String maxAttendees = (String) result.getData().get("eventMaxAttendees");
+
+                        String checkInQrId = (String) result.getData().get("qrID");
+                        String promoQrId = (String) result.getData().get("qrPromoID");
+
+                        if (maxAttendees == null || maxAttendees.equals("-1")) {   // Was meant to work in case there was no limit for max attendees.
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, startDate, endDate, startTime, endTime);
+                        } else {   // In case max attendees was specified.
+                            event = new Event(eventTitle, eventDescription, eventLocation, deviceId, eventImageURL, maxAttendees, startDate, endDate, startTime, endTime);
+                        }
+                        event.setQrID(checkInQrId);
+                        event.setQrPromoID(promoQrId);
+                        eventCallback.onCompleteFetch(event);
+                    }
+                }
+                else
+                {
+                    eventCallback.onError("Error fetching event information");
+                }
+            }
+        });
+
+    }
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);
         int currentAttendees = Integer.parseInt(eventCurrentAttendees);
@@ -463,4 +515,76 @@ public class Firebase_organizer {
     }
 
 
+    public interface getCheckInCallback
+    {
+        void onDataFetched(ArrayList<Pair<String, String>> dataList);
+        void onError(String errorMessage);
+    }
+
+    public void getCheckedInDetails(String eventId, String collection, ArrayList<Pair<String, String>> dataList, getCheckInCallback callback)
+    {
+        DocumentReference checkInDoc = db.collection(collection).document(eventId);
+
+        checkInDoc.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
+                if(error != null)
+                {
+                    callback.onError("Error in fetching check-in details");
+                    return;
+                }
+                dataList.clear();
+                if(value!= null && value.exists())
+                {
+                    Map<String, Object> data = value.getData();
+                    if(data != null)
+                    {
+                        for(Map.Entry<String, Object> entry: data.entrySet())
+                        {
+                            String device = entry.getKey();
+                            String count = entry.getValue().toString();
+                            if(collection.equals("eventsWithAttendees"))
+                            {
+                                dataList.add(new Pair<>(device, "None"));
+                            }
+                            else
+                            {
+                                dataList.add(new Pair<>(device, count));
+                            }
+
+                        }
+                    }
+                }
+                callback.onDataFetched(dataList);
+            }
+        });
+    }
+
+    interface getNameCallBack
+    {
+        public void onNameFetched(String name);
+    }
+
+    public void getUserName(String device, getNameCallBack callBack)
+    {
+        DocumentReference documentReference = db.collection("profiles").document(device);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isComplete())
+                {
+                    DocumentSnapshot result = task.getResult();
+                    if(result.exists())
+                    {
+                        String name = (String) result.get("name");
+                        if(name.equals(""))
+                        {
+                            callBack.onNameFetched("No Name");
+                        }
+                        callBack.onNameFetched(name);
+                    }
+                }
+            }
+        });
+    }
 }
