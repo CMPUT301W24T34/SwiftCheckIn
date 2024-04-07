@@ -46,6 +46,7 @@ public class ProfileActivity extends AppCompatActivity {
     private FirebaseFirestore db;
 
     private ImageView avatarImage;
+    private FirebaseAttendee fb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,10 +55,16 @@ public class ProfileActivity extends AppCompatActivity {
         avatarImage = findViewById(R.id.avatarImage);
         Button settingsButton = findViewById(R.id.settings_button);
         Button backButton = findViewById(R.id.back_button);
-        db = FirebaseFirestore.getInstance();
+        fb = new FirebaseAttendee();
+        db = fb.getDb();
         Button editPhotoButton = findViewById(R.id.edit_photo_button);
         editPhotoButton.setOnClickListener(v -> showImagePickerOptions());
+        nameText = findViewById(R.id.nameText);
+        phoneNumber = findViewById(R.id.phoneNumberText);
+        email = findViewById(R.id.emailText);
+        location = findViewById(R.id.locationText);
         getData();
+
 
         Button removeButton = findViewById(R.id.removeButton);
         removeButton.setOnClickListener(v -> removePhoto());
@@ -99,57 +106,35 @@ public class ProfileActivity extends AppCompatActivity {
     /**
      * This gets the profile data from firestore
      */
-
     private void getData() {
         // Citation: Getting unique device id, Stack Overflow, License: CC-BY-SA, user name Chintan Rathod, "How to get unique device hardware id in Android? [duplicate]", 2013-06-01, https://stackoverflow.com/questions/16869482/how-to-get-unique-device-hardware-id-in-android
         String deviceId = Secure.getString(this.getContentResolver(), Secure.ANDROID_ID);
-
-        nameText = findViewById(R.id.nameText);
-        phoneNumber = findViewById(R.id.phoneNumberText);
-        email = findViewById(R.id.emailText);
-        location = findViewById(R.id.locationText);
-        DocumentReference userRef = db.collection("profiles").document(deviceId);
-        // Citation: OpenAI, 02-28-2024, ChatGPT, Asking what options i have for snapshots and if i need a query snapshot
-        // output was no i can use document snapshot as well, giving me addSnapshotListener(new EventListener<DocumentSnapshot>() and public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error)
-        // I also searched up on stack overflow to see if im on the right track, led me to the following citation
-        // Citation: Collecting a document from firebase, Stack Overflow, License: CC-BY-SA, user name Frank van Puffelen, "How to fix a null object reference on document snapshot", 2022-04-28, https://stackoverflow.com/questions/72042682/how-to-fix-a-null-object-reference-on-document-snapshot
-        userRef.addSnapshotListener(new EventListener<DocumentSnapshot>() {
+        fb.getProfileData(deviceId, new FirebaseAttendee.GetProfileCallback() {
             @Override
-            public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                if (error != null) {
-                    Log.e("Firestore", error.toString());
-                    return;
-                }
-                if (value != null) {
-                    // Citation: OpenAI, 02-28-2024, ChatGPT, Asking if i should convert the document to a profile object
-                    // output was yes it can be done directly and told me about value.toObject.
-                    // I then searched this up further on stack overflow to see if I was on the right track and the following citation also helped me incorporate this idea
-                    // Citation: Converting document to class object, Stack Overflow, License: CC-BY-SA, user name Matheus Padovani (edited by Doug Stevenson), "How to directly convert Data Snapshot to object?", 2020-06-17 (edited 2020-06-17), https://stackoverflow.com/questions/62436421/how-to-directly-convert-data-snapshot-to-object
-                    Profile profile = value.toObject(Profile.class);
-
-                    if (profile != null) {
-                        updateUIWithProfileData(profile);
-                        String savedName = profile.getName();
-                        String savedPhone = profile.getPhoneNumber();
-                        String savedEmail = profile.getEmail();
-                        String savedLocation = profile.getAddress();
-                        if (savedName != null && !savedName.isEmpty()) {
-                            nameText.setText(savedName);
-                        }
-                        if (savedPhone != null && !savedPhone.isEmpty()) {
-                            phoneNumber.setText(savedPhone);
-                        }
-                        if (savedEmail != null && !savedEmail.isEmpty()) {
-                            email.setText(savedEmail);
-                        }
-                        if (savedLocation != null && !savedLocation.isEmpty()) {
-                            location.setText(savedLocation);
-                        }
+            public void onProfileFetched(Profile profile) {
+                if (profile != null) {
+                    updateUIWithProfileData(profile);
+                    String savedName = profile.getName();
+                    String savedPhone = profile.getPhoneNumber();
+                    String savedEmail = profile.getEmail();
+                    String savedLocation = profile.getAddress();
+                    if (savedName != null && !savedName.isEmpty()) {
+                        nameText.setText(savedName);
+                    }
+                    if (savedPhone != null && !savedPhone.isEmpty()) {
+                        phoneNumber.setText(savedPhone);
+                    }
+                    if (savedEmail != null && !savedEmail.isEmpty()) {
+                        email.setText(savedEmail);
+                    }
+                    if (savedLocation != null && !savedLocation.isEmpty()) {
+                        location.setText(savedLocation);
                     }
                 }
             }
         });
     }
+
 
     /**
      * This shows the options to choose from gallery or take a photo
