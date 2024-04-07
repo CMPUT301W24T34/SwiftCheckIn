@@ -203,7 +203,6 @@ public class AnnoucementActivity extends AppCompatActivity {
                 .into(imageViewEventPoster);
     }
 
-
     // Need something to get data related to announcements, portraying data will be here.
     private void getData(String eventId){
         CollectionReference announceCol = db.collection("Announcements");
