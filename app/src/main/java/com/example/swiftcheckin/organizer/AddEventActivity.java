@@ -236,13 +236,12 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
         // Bitmap qr = QrCodeManager.generateQRCode(deviceId + eventName);  // generates the QR code.
 
-        if (!eventName.equals("") && !eventStartDate.equals("") && !eventAddress.equals("")) {
+        if (!eventName.equals("") && !eventAddress.equals("") && !eventStartDate.equals("") && !eventEndDate.equals("") && !eventStartTime.equals("") && !eventEndTime.equals("") && !eventDescription.equals("")) {
             // starts the fragment for the QR code.
             new FragmentQrcodeMenu1(deviceId+eventName).show(getSupportFragmentManager(), "menu");
         } else {
             // an error message if QR code generation failed
             Toast.makeText(AddEventActivity.this, "Not all required fields are filled", Toast.LENGTH_SHORT).show();
-            finish();
         }
     }
 
