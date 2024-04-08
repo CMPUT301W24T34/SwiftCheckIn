@@ -38,6 +38,8 @@ public class SwitchModeFragment extends DialogFragment {
         organizer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Citation: Dismissing the popup, Stack Overflow, License: CC-BY-SA, user name Shiva Tiwari, "How to correctly dismiss a DialogFragment?", 03-14-2019, https://stackoverflow.com/questions/11201022/how-to-correctly-dismiss-a-dialogfragment
+                dismiss();
                 Intent intent = new Intent(getContext(), OrganizerActivity.class);
                 startActivity(intent);
             }
@@ -46,6 +48,7 @@ public class SwitchModeFragment extends DialogFragment {
         admin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
                 Intent intent;
                 intent = new Intent(getActivity(), AdminPassword.class);
                 startActivity(intent);

@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,10 +28,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 
 import android.Manifest;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.swiftcheckin.R;
@@ -42,6 +45,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -52,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private EditText nameEditText;
-    private EditText birthdayEditText;
+    private TextView birthdayEditText;
     private EditText emailEditText;
     private EditText phoneNumberEditText;
     private EditText websiteEditText;
@@ -94,6 +98,41 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+
+        birthdayEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDatePicker(birthdayEditText);
+            }
+        });
+
+        // Citation: OpenAI, 04-07-2024, ChatGPT, How to change view to front of text when focus is gone
+        // output is functions below
+        emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    emailEditText.setSelection(0);
+                }
+            }
+        });
+        addressEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    addressEditText.setSelection(0);
+                }
+            }
+        });
+        websiteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    websiteEditText.setSelection(0);
+                }
+            }
+        });
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,14 +144,16 @@ public class SettingsActivity extends AppCompatActivity {
                 String website = websiteEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 boolean locationPermission = locationCheckBox.isChecked();
-                if (!name.equals("") && isValid(birthday)) {
+                if (!name.equals("") && isValid(phoneNumber)) {
                     saveData(name, birthday, phoneNumber, email, website, address, locationPermission);
+                    finish();
                 }
-                if (!name.equals("") && !isValid(birthday)) {
-                    saveData(name, "", phoneNumber, email, website, address, locationPermission);
+                else if (!name.equals("") && !isValid(phoneNumber)){
+                    invalidPhoneDialog();
                 }
-
-                finish();
+                else if (name.equals("")){
+                    invalidNameDialog();
+                }
             }
         });
         // Citation: How to clear focus, Stack Overflow, License: CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-05-25, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
@@ -129,6 +170,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    // Citation: How to hide a keyboard, Stack Overflow, License: CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+
+    /**
+     * This hides the built in keyboard
+     * @param activity - the activity
+     */
     private void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View v = activity.getCurrentFocus();
@@ -138,12 +185,20 @@ public class SettingsActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
-    private boolean isValid(String birthday) {
-        if (birthday.equals("")) {
+    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if phone string matches pattern
+    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, phone);
+    /**
+     * This checks if the inputted phone number is of valid format
+     * @param phone - string to check
+     * @return
+     * returns boolean of whether its valid
+     */
+    private boolean isValid(String phone) {
+        if (phone.equals("")) {
             return true;
         } else {
-            String pattern = "\\d{2}/\\d{2}/\\d{4}";
-            return Pattern.matches(pattern, birthday);
+            String pattern = "\\d{3}-\\d{3}-\\d{4}";
+            return Pattern.matches(pattern, phone);
         }
     }
 
@@ -222,12 +277,26 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to ask user for location permission
     // output is getLocationPermission and onRequestPermissionsResult functions below
+
+    /**
+     * gets location permission
+     */
     private void getLocationPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                 LOCATION_PERMISSION);
     }
 
+    /**
+     * calls on the settings dialog if permission is denied
+     * @param requestCode The request code passed in {@link # requestPermissions(
+     * android.app.Activity, String[], int)}
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -243,7 +312,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to transfer user to settings
-    // output is this function below, creating the dialog, and setting the buttons
+    // output is this function below, also creating the dialog, and setting the buttons
 
     /**
      * If a user denies location permission, they are prompted to go to settings to enable it
@@ -282,5 +351,64 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog dialog = popup.create();
         dialog.show();
     }
+
+    /**
+     * dialog for when phone number doesn't follow format
+     */
+    private void invalidPhoneDialog() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Invalid Phone Number");
+        popup.setMessage("Phone Number must be in the format XXX-XXX-XXXX");
+
+        popup.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = popup.create();
+        dialog.show();
+    }
+
+    /**
+     * dialog for when name is not entered
+     */
+    private void invalidNameDialog() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Invalid Name");
+        popup.setMessage("Please enter your name to proceed.");
+
+        popup.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = popup.create();
+        dialog.show();
+    }
+
+    /**
+     * Gets a calendar for birthday and sets user choice to the field
+     * @param editText - the birthday textview that gets updated
+     */
+    private void initDatePicker(TextView editText)
+    {
+        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String monthWord = monthNames[month];
+                String selectedDate = monthWord +" " + dayOfMonth + " " + year;
+                editText.setText(selectedDate);
+            }
+        }, 2000, 0,
+                1);
+        datePicker.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
+
+        datePicker.show();
+    }
+
+
 
 }

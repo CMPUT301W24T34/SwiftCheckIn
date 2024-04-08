@@ -223,7 +223,7 @@ public class AnnoucementActivity extends AppCompatActivity {
 
     // Need something to get data related to announcements, portraying data will be here.
     private void getData(String eventId) {
-        CollectionReference announceCol = db.collection("Announcements");
+        CollectionReference announceCol = db.collection("Announcements@");
 
         announceCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -232,7 +232,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     String announcementTitleFrame = doc.getId();
                     String eventName = EventUtils.convertEventIdToEventName(eventId);
-                    if (announcementTitleFrame.contains(eventName)) {
+                    if (announcementTitleFrame.contains(eventName + "@")) {
                         String announcementTitle = (String) doc.getData().get("announcementTitle");
                         String announcementDes = (String) doc.getData().get("announcementDes");
                         dataList.add(new Announcement(announcementTitle, announcementDes));
