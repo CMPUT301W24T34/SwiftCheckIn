@@ -267,6 +267,7 @@ public class EventInfoPage extends AppCompatActivity {
     {
         Intent intent = new Intent(getApplicationContext(), AddAnnouncementActivity.class);
         intent.putExtra("eventId", eventId);
+        intent.putExtra("eventName", finalEvent.getEventTitle());
         startActivity(intent);
     }
 
