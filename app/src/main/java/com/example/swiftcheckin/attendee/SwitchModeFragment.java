@@ -38,6 +38,7 @@ public class SwitchModeFragment extends DialogFragment {
         organizer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
                 Intent intent = new Intent(getContext(), OrganizerActivity.class);
                 startActivity(intent);
             }
@@ -46,6 +47,7 @@ public class SwitchModeFragment extends DialogFragment {
         admin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                dismiss();
                 Intent intent;
                 intent = new Intent(getActivity(), AdminPassword.class);
                 startActivity(intent);
