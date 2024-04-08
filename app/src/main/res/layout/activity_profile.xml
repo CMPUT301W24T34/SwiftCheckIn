@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/profile"
+    android:background="@color/white"
     tools:context=".attendee.ProfileActivity">
 
 
@@ -108,8 +109,8 @@
 
     <Button
         android:id="@+id/removeButton"
-        android:layout_width="148dp"
-        android:layout_height="46dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
         android:layout_marginBottom="120dp"
         android:backgroundTint="@color/black"

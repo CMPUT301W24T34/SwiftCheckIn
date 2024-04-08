@@ -5,37 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settings"
+    android:background="@color/white"
     tools:context=".attendee.SettingsActivity">
     <!--Citation: OpenAI, 2024-02-28, ChatGPT, How to use drawables -->
     <!-- output is that you call the drawable file with android:background-->
 
-    <EditText
+    <TextView
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
-        android:hint="DD/MM/YYYY"
-        android:maxLength="10"
+        android:hint="Birth Date"
         android:textSize="18sp"
-        android:inputType="date"
-        android:digits="0123456789/"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.779"
         app:layout_constraintStart_toEndOf="@+id/word_birthday"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
         android:id="@+id/name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="25dp"
         android:layout_marginTop="108dp"
         android:background="@drawable/edit_text_display"
         android:hint="Name"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
-        android:maxLength="30"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.706"
+        app:layout_constraintHorizontal_bias="0.245"
         app:layout_constraintStart_toEndOf="@+id/word_name"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -45,37 +44,46 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
-        android:hint="Number"
         android:digits="0123456789+- "
+        android:hint="XXX-XXX-XXXX"
+        android:inputType="phone"
+        android:maxLength="12"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.629"
+        app:layout_constraintHorizontal_bias="0.656"
         app:layout_constraintStart_toEndOf="@+id/word_number"
         app:layout_constraintTop_toBottomOf="@+id/birthday" />
 
     <EditText
         android:id="@+id/email"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="250dp"
+        android:layout_height="25dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
         android:hint="Email"
+        android:textAlignment="textEnd"
+        android:singleLine="true"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.716"
+        app:layout_constraintHorizontal_bias="0.369"
         app:layout_constraintStart_toEndOf="@+id/word_email"
         app:layout_constraintTop_toBottomOf="@+id/phonenumber" />
+<!--     Citation: OpenAI, 04-07-2024, ChatGPT, How to make text on a single line-->
+<!--    output was android:singleLine="true" -->
 
     <EditText
         android:id="@+id/website"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_width="250dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="18dp"
         android:background="@drawable/edit_text_display"
         android:hint="Website"
+        android:singleLine="true"
+        android:textAlignment="textEnd"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.716"
+        app:layout_constraintHorizontal_bias="0.188"
         app:layout_constraintStart_toEndOf="@+id/word_website"
         app:layout_constraintTop_toBottomOf="@+id/email" />
 
@@ -88,6 +96,7 @@
         android:background="@drawable/edit_text_border"
         android:hint="Address"
         android:padding="8dp"
+        android:singleLine="true"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/word_address" />

@@ -180,12 +180,28 @@ public class FirebaseAttendee {
                 });
     }
 
+    /**
+     * Callback interface used to notify when event data has been fetched.
+     */
     interface EventListCallback
     {
+        /**
+         * Called when event data has been fetched successfully.
+         *
+         * @param eventList The list of events fetched.
+         */
         public void onDataFetched(ArrayList<Event> eventList);
     }
 
-    public void getEventList(ArrayList<Event> eventList, EventListCallback callback) {
+
+    /**
+     * Retrieves the list of events from the database and invokes the callback when data is fetched.
+     *
+     * @param eventList The list to store the fetched events.
+     * @param callback  The callback to notify when event data is fetched.
+     */
+    public void getEventList(ArrayList<Event> eventList, EventListCallback callback)
+    {
         CollectionReference eventCol = db.collection("events");
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -230,7 +246,12 @@ public class FirebaseAttendee {
     }
 
     /**
-     * Fetches the data of events that the user has signed up for from Firestore.
+     * Fetches the event IDs of events that the user has signed up for from Firestore,
+     * then fetches the corresponding event data and invokes the callback when data is fetched.
+     *
+     * @param myEventList The list to store the fetched events.
+     * @param context     The context to access device-related information.
+     * @param callback    The callback to notify when event data is fetched.
      */
     public void getMyEventIds(ArrayList<Event> myEventList, Context context,
                               EventListCallback callback) {
@@ -255,16 +276,19 @@ public class FirebaseAttendee {
 
 
     /**
-     * Fetches event data from Firestore based on event IDs.
+     * Fetches event data from Firestore based on event IDs and populates the provided list with the fetched events.
      *
-     * @param eventIds List of event IDs
+     * @param eventIds     List of event IDs to fetch data for.
+     * @param myEventList  The list to populate with fetched event data.
+     * @param callback     The callback to notify when data fetching is complete.
      */
-    // Citation: OpenAI, 04-06-2024,  ChatGPT, Had some synchronicity issues with the above
-    // commented function
 
-        /*
-            Asked Gpt to help fix the issues, cuz I'm getting myEvents list data on the app
-         */
+    // Citation: OpenAI, 04-06-2024,  ChatGPT, Had some synchronicity issues with the
+    // fetchMyEventsData funtion.
+
+    // So I had asked GPT if it could fix the potential issues - I'm getting myEvents list data on the app
+    // with my already written functions. Below is the refactored function with the help of GPT
+
     private void fetchMyEventsData(List<String> eventIds, ArrayList<Event> myEventList, EventListCallback callback) {
         CollectionReference eventCol = db.collection("events");
         myEventList.clear(); // Clear the old list
@@ -323,6 +347,7 @@ public class FirebaseAttendee {
             });
         }
     }
+
 
     /**
      * to get the profile from firebase
