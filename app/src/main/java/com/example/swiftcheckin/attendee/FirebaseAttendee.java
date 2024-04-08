@@ -38,27 +38,40 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+// This class has the firebase related methods on the attendee side
 
 public class FirebaseAttendee {
     private FirebaseFirestore db;
     private CollectionReference profilesCollectionRef;
     private String deviceId;
 
+    /**
+     * Constructs the FirebaseAttendee object
+     */
     public FirebaseAttendee() {
         db = FirebaseFirestore.getInstance();
         profilesCollectionRef = db.collection("profiles");
 
     }
 
+    /**
+     * Returns the database
+     * @return db
+     */
     public FirebaseFirestore getDb() {
         return db;
     }
 
+    /**
+     * Returns the profile collection reference
+     * @return - profile collection reference
+     */
     public CollectionReference getProfilesCollectionRef() {
         return profilesCollectionRef;
     }
 
-
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to update without overwriting a document
+    // told me to use HashMap with a string and object and then use .update()
     /**
      * update the firebase collection with the location data
      * @param deviceId - deviceid of users phone
@@ -398,6 +411,11 @@ public class FirebaseAttendee {
         public void GetLocationCallback(boolean bool);
     }
 
+    // Citation: OpenAI, 04-04-2024, ChatGPT, How to find out if locationPermission is on by getting a document
+    // gave me .addOnCompleteListener(task -> {
+    //            if (task.isSuccessful()) {
+    //                DocumentSnapshot document = task.getResult();
+    //                if (document.exists()) {
     /**
      * to find out if user has location checkbox checked
      * @param deviceId - device id of user
