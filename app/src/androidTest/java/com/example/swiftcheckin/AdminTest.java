@@ -78,26 +78,28 @@ public class AdminTest {
         UiObject allowButton = uiDevice.findObject(new UiSelector().text("Allow").className("android.widget.Button"));
 
 
-        if (allowButton.waitForExists(30000)) {
+        if (allowButton.waitForExists(9000)) {
             try {
                 allowButton.click();
+
 
             } catch (UiObjectNotFoundException e) {
 
                 e.printStackTrace();
             }
-        } else {
-
 
             onView(withId(R.id.switch_modes)).perform(click());
             onView(withId(R.id.organizer_button)).perform(click());
             onView(withId(R.id.add_event_button)).perform(click());
             onView(withId(R.id.eventName)).perform(ViewActions.clearText(), ViewActions.typeText("Delete Event Test"));
-            onView(withId(R.id.eventPageAddressEditText)).perform(ViewActions.clearText(), ViewActions.typeText("10000 1000"));
-            onView(withId(R.id.eventAddActivity_StartDate_EditText)).perform(ViewActions.clearText(), replaceText("Apr 5 2024"));
-            onView(withId(R.id.eventAddActivity_eventStartTime_EditText)).perform(ViewActions.clearText(), ViewActions.typeText("7:00"));
-            onView(withId(R.id.eventAddActivity_eventEndDate_EditText)).perform(ViewActions.clearText(), replaceText("Apr 5 2024"));
-            onView(withId(R.id.eventAddActivity_eventEndTime_EditText)).perform(ViewActions.clearText(), ViewActions.typeText("9:00"));
+            onView(withId(R.id.eventPageAddressEditText)).perform(ViewActions.clearText(), ViewActions.typeText("10000 1000"));onView(withId(R.id.eventAddActivity_StartDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventStartTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventEndDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventEndTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
             onView(withId(R.id.editMaxAttendeeText)).perform(ViewActions.clearText(), ViewActions.typeText("9"));
             onView(withId(R.id.editMaxAttendeeText)).perform(closeSoftKeyboard());
             onView(withId(R.id.eventPageDescriptionEditText)).perform(ViewActions.clearText(), ViewActions.typeText("This is to be tested."));
@@ -106,6 +108,96 @@ public class AdminTest {
             onView(withId(R.id.fragmentQrCodeMenu1NewButton)).perform(click());
             onView(withId(R.id.qrCodeSelectionSuccessLayout_saveButton)).perform(click());
             pressBack();
+            onView(withId(R.id.switch_modes)).perform(click());
+            onView(withId(R.id.admin_button)).perform(click());
+
+            onView(withId(R.id.editTextTextPassword)).perform(ViewActions.clearText(), ViewActions.typeText("SwiftCheckIn"));
+            onView(withId(R.id.editTextTextPassword)).perform(closeSoftKeyboard());
+            onView(withId(R.id.login_button)).perform(click());
+
+            //Citation: For the following activity lines, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get a list from another activity
+            ActivityScenario<AdminActivity> activityScenario = ActivityScenario.launch(AdminActivity.class);
+            activityScenario.onActivity(activity -> {
+                List<Event> eventList = activity.getEventList();
+                assertNotNull(eventList);
+
+
+                i = 0;
+                boolean eventFound = false;
+                for (Event event : eventList) {
+                    if (event.getEventTitle().equals("Delete Event Test")) {
+                        eventFound = true;
+                        break;
+                    }
+                    i++;
+                }
+
+                assertTrue("Expected event not found in the event list", eventFound);
+            });
+
+            //Citation: For the following data lines, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click a list at a certain index
+            onData(anything())
+                    .inAdapterView(withId(R.id.listView))
+                    .atPosition(i)
+                    .onChildView(withId(R.id.event_name))
+                    .check(matches(withText("Delete Event Test")))
+                    .perform(click());
+
+            onView(withId(R.id.remove_tab_button))
+                    .check(matches(isDisplayed()))
+                    .perform(click());
+
+
+            try {
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+            onView(withId(R.id.remove_tab_button)).perform(click());
+
+
+            activityScenario.onActivity(activity -> {
+                List<Event> eventList = activity.getEventList();
+                assertNotNull(eventList);
+
+                boolean eventFound = false;
+                for (Event event : eventList) {
+                    if (event.getEventTitle().equals("Delete Event Test")) {
+
+                        eventFound = true;
+                        break;
+                    }
+                }
+
+                assertFalse("Expected event found in the event list", eventFound);
+            });
+
+        }else{
+
+            onView(withId(R.id.switch_modes)).perform(click());
+            onView(withId(R.id.organizer_button)).perform(click());
+            onView(withId(R.id.add_event_button)).perform(click());
+            onView(withId(R.id.eventName)).perform(ViewActions.clearText(), ViewActions.typeText("Delete Event Test"));
+            onView(withId(R.id.eventPageAddressEditText)).perform(ViewActions.clearText(), ViewActions.typeText("10000 1000"));
+            onView(withId(R.id.eventAddActivity_StartDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventStartTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventEndDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventEndTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.editMaxAttendeeText)).perform(ViewActions.clearText(), ViewActions.typeText("9"));
+            onView(withId(R.id.editMaxAttendeeText)).perform(closeSoftKeyboard());
+            onView(withId(R.id.eventPageDescriptionEditText)).perform(ViewActions.clearText(), ViewActions.typeText("This is to be tested."));
+            onView(withId(R.id.eventPageDescriptionEditText)).perform(closeSoftKeyboard());
+            onView(withId(R.id.eventPageSaveButton)).perform(click());
+            onView(withId(R.id.fragmentQrCodeMenu1NewButton)).perform(click());
+            onView(withId(R.id.qrCodeSelectionSuccessLayout_saveButton)).perform(click());
+            pressBack();
+            onView(withId(R.id.switch_modes)).perform(click());
             onView(withId(R.id.admin_button)).perform(click());
 
             onView(withId(R.id.editTextTextPassword)).perform(ViewActions.clearText(), ViewActions.typeText("SwiftCheckIn"));
@@ -171,7 +263,6 @@ public class AdminTest {
                 assertFalse("Expected event found in the event list", eventFound);
             });
         }
-
     }
 
 }

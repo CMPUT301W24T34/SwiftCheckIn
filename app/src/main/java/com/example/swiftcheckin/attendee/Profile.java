@@ -129,10 +129,18 @@ public class Profile {
         this.locationPermission = Boolean.parseBoolean(locationPermission);
     }
 
+    /**
+     * gets the check in count
+     * @return checkInCount
+     */
     public int getCheckInCount() {
         return checkInCount;
     }
 
+    /**
+     * Sets the check in count to given parameter
+     * @param checkInCount
+     */
     public void setCheckInCount(int checkInCount) {
         this.checkInCount = checkInCount;
     }
