@@ -97,29 +97,41 @@ public class AnnoucementActivity extends AppCompatActivity {
         });
 
         sign_up.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
-                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+                DocumentReference profileDoc = db.collection("profiles").document(deviceId);
+                profileDoc.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+                                fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+                                eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
-                    // Remove whitespace from eventId
-                    String topicName = "event_" + eventId.replaceAll("\\s+", "_");
+                                // Remove whitespace from eventId
+                                String topicName = "event_" + eventId.replaceAll("\\s+", "_");
 
-                    FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + topicName)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "Subscribed to topic: /topics/" + topicName);
-                                    } else {
-                                        Log.e(TAG, "Failed to subscribe to topic: /topics/" + topicName);
-                                    }
-                                }
-                            });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
-                }
+                                FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + topicName)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "Subscribed to topic: /topics/" + topicName);
+                                                } else {
+                                                    Log.e(TAG, "Failed to subscribe to topic: /topics/" + topicName);
+                                                }
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "You must create a profile before you can sign up for events", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 
