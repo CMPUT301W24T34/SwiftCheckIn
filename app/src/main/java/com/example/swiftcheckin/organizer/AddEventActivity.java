@@ -116,6 +116,10 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         }
     }
 
+    /**
+     * Initializes trigger for launching TimePicker Dialog
+     * @param timeView TextView which acts as a trigger on click
+     */
     private void initTimePickerClick(TextView timeView)
     {
         timeView.setOnClickListener(new View.OnClickListener() {
@@ -125,6 +129,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
             }
         });
     }
+
 
     private void initDatePickerClick(TextView editText)
     {
