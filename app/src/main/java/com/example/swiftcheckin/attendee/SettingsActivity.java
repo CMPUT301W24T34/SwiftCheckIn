@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,10 +28,12 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 
 
 import android.Manifest;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.swiftcheckin.R;
@@ -42,6 +45,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -52,7 +56,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private EditText nameEditText;
-    private EditText birthdayEditText;
+    private TextView birthdayEditText;
     private EditText emailEditText;
     private EditText phoneNumberEditText;
     private EditText websiteEditText;
@@ -91,6 +95,13 @@ public class SettingsActivity extends AppCompatActivity {
                 if (isChecked) {
                     getLocationPermission();
                 }
+            }
+        });
+
+        birthdayEditText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initDatePicker(birthdayEditText);
             }
         });
 
@@ -281,6 +292,22 @@ public class SettingsActivity extends AppCompatActivity {
         });
         AlertDialog dialog = popup.create();
         dialog.show();
+    }
+    private void initDatePicker(TextView editText)
+    {
+        String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+        DatePickerDialog datePicker = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String monthWord = monthNames[month];
+                String selectedDate = monthWord +" " + dayOfMonth + " " + year;
+                editText.setText(selectedDate);
+            }
+        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
+        datePicker.show();
     }
 
 }

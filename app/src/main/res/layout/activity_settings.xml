@@ -10,17 +10,15 @@
     <!--Citation: OpenAI, 2024-02-28, ChatGPT, How to use drawables -->
     <!-- output is that you call the drawable file with android:background-->
 
-    <EditText
+    <TextView
         android:id="@+id/birthday"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit_text_display"
-        android:hint="DD/MM/YYYY"
-        android:maxLength="10"
-        android:textSize="18sp"
+        android:hint="Birth Date"
         android:inputType="date"
-        android:digits="0123456789/"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.706"
         app:layout_constraintStart_toEndOf="@+id/word_birthday"
