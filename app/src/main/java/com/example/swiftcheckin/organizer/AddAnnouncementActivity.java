@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +34,7 @@ import java.lang.ref.Reference;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AddAnnouncementActivity extends AppCompatActivity {
 
     private String eventId;
@@ -43,10 +45,16 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_announcement);
 
         eventId = getIntent().getStringExtra("eventId");
+
+        String eventNameString = getIntent().getStringExtra("eventName");
+        Log.d("Event Name - Add Announcement", eventNameString);
+        TextView eventName = findViewById(R.id.addAnnouncementEventName);
         Button cancelAnnouncement = findViewById(R.id.addAnnouncementCancelButton);
         Button saveAnnouncement = findViewById(R.id.addAnnouncementSaveButton);
         EditText editAnnouncementHeading = findViewById((R.id.announcementEditHeading));
         EditText editAnnouncementDes = findViewById(R.id.announcementEditDes);
+
+        eventName.setText(eventNameString);
 
         cancelAnnouncement.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -107,7 +107,16 @@ public class EventSignUp {
 
     }
 
-
+    /**
+     * Updates the event information including the number of attendees.
+     *
+     * @param eventId           The ID of the event.
+     * @param maxAttendees      The maximum number of attendees allowed for the event.
+     * @param currentAttendees  The current number of attendees registered for the event.
+     * @param attendeeDeviceId  The ID of the device of the attendee.
+     * @param eventDoc          The reference to the Firestore document for the event.
+     * @param eventCurrentAttendees  The current number of attendees as a string.
+     */
     public void updateEvent(String eventId, int maxAttendees, int currentAttendees, String attendeeDeviceId, DocumentReference eventDoc, String eventCurrentAttendees){
         if (currentAttendees != maxAttendees) {
             HashMap<String, String> data = new HashMap<>();
@@ -151,7 +160,12 @@ public class EventSignUp {
     }
 
 
-
+    /**
+     * Adds a new checked-in attendee to the Firestore database.
+     *
+     * @param eventId          The ID of the event.
+     * @param attendeeDeviceId The ID of the device of the attendee.
+     */
     public void addCheckedIn(String eventId, String attendeeDeviceId){
         db = FirebaseFirestore.getInstance();
         DocumentReference checkedInDoc = db.collection("checkedIn").document(eventId);
@@ -179,6 +193,12 @@ public class EventSignUp {
     }
 
 
+    /**
+     * Updates the checked-in attendee information in the Firestore database.
+     *
+     * @param attendeeDeviceId The ID of the device of the attendee.
+     * @param checkedInDoc      The reference to the Firestore document for checked-in attendees.
+     */
     public void updateCheckedIn(String attendeeDeviceId, DocumentReference checkedInDoc){
         HashMap<String, String> data = new HashMap<>();
         checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {

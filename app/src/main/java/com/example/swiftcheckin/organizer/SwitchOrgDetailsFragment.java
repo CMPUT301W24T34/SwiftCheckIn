@@ -28,6 +28,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * A dialog fragment for displaying organization details and a QR code.
+ */
 public class SwitchOrgDetailsFragment extends DialogFragment {
 
     String eventId;
@@ -36,14 +39,13 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     String eventTitle;
     private FirebaseOrganizer firebase_organizer;
 
-//    public static SwitchOrgDetailsFragment newInstance(String extraData) {
-//        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
-//        Bundle args = new Bundle();
-//        args.putString("eventId", extraData);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
+    /**
+     * Constructs a new SwitchOrgDetailsFragment with the provided event details.
+     *
+     * @param eventId    The ID of the event.
+     * @param bitmap     The QR code bitmap.
+     * @param eventTitle The title of the event.
+     */
     public SwitchOrgDetailsFragment(String eventId, Bitmap bitmap, String eventTitle)
     {
         this.eventId = eventId;
@@ -55,7 +57,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.org_switch_details_fragment, null);
         Button viewSignedUp = view.findViewById(R.id.view_sign_up_attendees_button);
-        Button sendNotifs = view.findViewById(R.id.send_notifications_button);
 
         Button viewMap = view.findViewById(R.id.view_map_button);
 
@@ -129,16 +130,6 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
             }
         });
 
-
-        sendNotifs.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getContext(), AddAnnouncementActivity.class);
-                intent.putExtra("eventId", eventId);
-                dismiss();
-                startActivity(intent);
-            }
-        });
 
         return builder
                 .setView(view)
