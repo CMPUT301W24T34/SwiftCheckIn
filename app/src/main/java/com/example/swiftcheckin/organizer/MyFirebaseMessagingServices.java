@@ -20,11 +20,22 @@ import com.example.swiftcheckin.attendee.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+/**
+ * Service for handling Firebase Cloud Messaging.
+ * Citations: https://firebase.google.com/docs/cloud-messaging/android/client
+ * https://developer.android.com/develop/ui/views/notifications (and further in this link)
+ * OpenAI | April 3 , 2024 | ChatGPT | Assist me in implementing the Firebase Cloud Messaging service for sending notifications to the app
+ */
 public class MyFirebaseMessagingServices extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMessagingServices";
     private static final String FOREGROUND_CHANNEL_ID = "com.example.swiftcheckin.foreground";
 
+    /**
+     * Called when a message is received.
+     *
+     * @param remoteMessage the message received from Firebase Cloud Messaging
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "Received message: " + remoteMessage);
@@ -38,6 +49,9 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * Called when the token is refreshed.
+     */
     private void sendNotification(String title, String body) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -63,12 +77,18 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
         notificationManager.notify(0, builder.build());
     }
 
+    /**
+     * Called when the token is refreshed.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
     }
 
+    /**
+     * Creates a notification channel for the app.
+     */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("default", "Default Channel", NotificationManager.IMPORTANCE_HIGH);

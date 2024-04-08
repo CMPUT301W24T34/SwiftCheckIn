@@ -4,13 +4,20 @@ import static androidx.constraintlayout.helper.widget.MotionEffect.TAG;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.bumptech.glide.Glide;
+import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +31,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -176,8 +185,7 @@ public class FirebaseAttendee {
         public void onDataFetched(ArrayList<Event> eventList);
     }
 
-    public void getEventList(ArrayList<Event> eventList, EventListCallback callback)
-    {
+    public void getEventList(ArrayList<Event> eventList, EventListCallback callback) {
         CollectionReference eventCol = db.collection("events");
         eventCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -187,7 +195,7 @@ public class FirebaseAttendee {
                 }
 
                 eventList.clear();
-                for(QueryDocumentSnapshot doc: queryDocumentSnapshots) {
+                for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     String eventTitle = (String) doc.getData().get("eventTitle");
                     String eventDescription = (String) doc.getData().get("eventDescription");
                     String eventLocation = (String) doc.getData().get("eventLocation");
@@ -202,24 +210,19 @@ public class FirebaseAttendee {
 
                     com.example.swiftcheckin.organizer.Event event;
 
-                    if (eventMaxAttendees.equals("-1")) {
+                    if (eventMaxAttendees != null && eventMaxAttendees.equals("-1")) {
                         event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
                                 eventImageUrl, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
-
                     } else {
+                        int maxAttendees = eventMaxAttendees != null ? Integer.parseInt(eventMaxAttendees) : 0;
                         event = new com.example.swiftcheckin.organizer.Event(eventTitle, eventDescription, eventLocation, deviceId,
-                                eventImageUrl, eventMaxAttendees, eventStartDate, eventEndDate, eventStartTime, eventEndTime);
+                                eventImageUrl, String.valueOf(maxAttendees), eventStartDate, eventEndDate, eventStartTime, eventEndTime);
                     }
 
-                    if (eventCurrentAttendees != null) {
-                        event.setCurrentAttendees(Integer.parseInt(eventCurrentAttendees));
-                    } else {
-                        event.setCurrentAttendees(0);
-                    }
-
+                    int currentAttendees = eventCurrentAttendees != null ? Integer.parseInt(eventCurrentAttendees) : 0;
+                    event.setCurrentAttendees(currentAttendees);
 
                     eventList.add(event);
-
                 }
                 callback.onDataFetched(eventList);
             }
@@ -394,5 +397,220 @@ public class FirebaseAttendee {
         });
 
     }
+
+    /**
+     * This method handles the scanned QR code's logic and redirects the user to either
+     * PromoQR or checks them in depending on its type.
+     * @param scannedQRCode
+     * @param activity
+     */
+    public void handleScannedQRCode(String scannedQRCode, QRCodeScannerActivity activity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference qrCodeRef = db.collection("qrcodes").document(scannedQRCode);
+
+        qrCodeRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot qrDocument = task.getResult();
+                if (qrDocument.exists()) {
+                    String isPromoString = qrDocument.getString("isPromo");
+                    boolean isPromo = "true".equalsIgnoreCase(isPromoString);
+
+                    String eventId = qrDocument.getString("eventID");
+                    if (eventId != null) {
+                        if (isPromo) {
+                            fetchEventDetailsAndRedirect(eventId, activity);
+                        } else {
+                            checkInAttendee(eventId, activity);
+                        }
+                    } else {
+                        Log.e("QRCodeScannerActivity", "Event ID is missing in the QR code document.");
+                        activity.showDialog("Error", "Event details cannot be found.");
+                    }
+                } else {
+                    activity.showDialog("Error", "QR Code is not valid.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching QR code document: ", task.getException());
+                activity.showDialog("Error", "Failed to retrieve QR code information. Please try again.");
+            }
+        });
+    }
+
+    /**
+     * Fetches event details from Firestore and redirects to the event details page.
+     *
+     * @param eventId  the ID of the event to fetch details for
+     * @param activity the activity that initiated the fetch
+     */
+    private void fetchEventDetailsAndRedirect(String eventId, QRCodeScannerActivity activity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        DocumentReference eventRef = db.collection("events").document(eventId);
+
+        eventRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot eventSnapshot = task.getResult();
+                if (eventSnapshot.exists()) {
+                    Intent intent = new Intent(activity, AnnoucementActivity.class);
+                    intent.putExtra("eventID", eventId);
+                    intent.putExtra("eventTitle", eventSnapshot.getString("eventTitle"));
+                    intent.putExtra("eventDescription", eventSnapshot.getString("eventDescription"));
+                    intent.putExtra("eventLocation", eventSnapshot.getString("eventLocation"));
+                    intent.putExtra("eventStartDate", eventSnapshot.getString("eventStartDate"));
+                    intent.putExtra("eventEndDate", eventSnapshot.getString("eventEndDate"));
+                    intent.putExtra("eventStartTime", eventSnapshot.getString("eventStartTime"));
+                    intent.putExtra("eventEndTime", eventSnapshot.getString("eventEndTime"));
+                    intent.putExtra("eventPosterURL", eventSnapshot.getString("eventPosterURL"));
+                    intent.putExtra("eventMaxAttendees", eventSnapshot.getString("eventMaxAttendees"));
+                    intent.putExtra("eventCurrentAttendees", eventSnapshot.getString("eventCurrentAttendees"));
+                    activity.startActivity(intent);
+
+                } else {
+                    Log.e("QRCodeScannerActivity", "Event document does not exist.");
+                    activity.showDialog("Error", "Event details cannot be found.");
+                }
+            } else {
+                Log.e("FirestoreError", "Error fetching event details: ", task.getException());
+                activity.showDialog("Error", "Failed to retrieve event details. Please try again.");
+            }
+        });
+
+    }
+
+
+    /**
+     * Checks in an attendee to an event.
+     *
+     * @param scannedEventId the ID of the event to check in to
+     * @param activity       the activity that initiated the check-in
+     */
+    public void checkInAttendee(String scannedEventId, QRCodeScannerActivity activity) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String deviceId = activity.retrieveDeviceId();
+
+        DocumentReference deviceRef = db.collection("SignedUpEvents").document(deviceId);
+        deviceRef.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful() && task.getResult() != null) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    List<String> eventIds = (List<String>) document.get("eventIds");
+                    if (eventIds != null && eventIds.contains(scannedEventId)) {
+                        activity.eventSignUp.addCheckedIn(scannedEventId, deviceId);
+                        activity.locationReceiver.getLocation(deviceId, activity);
+                        activity.showDialog("Check-in Successful", "You have been checked in successfully!");
+                    } else {
+                        activity.showDialog("Check-in Failed", "You did not sign up for this event");
+                    }
+                } else {
+                    activity.showDialog("Check-in Failed", "You did not sign up for this event");
+                }
+            }
+            else if (task.getException() != null) {
+                Log.e("FirestoreError", "Error fetching document: ", task.getException());
+                activity.showDialog("Error", "No event exists");
+            }
+            else {
+                Log.e("FirestoreError", "Error fetching document: ", task.getException());
+                activity.showDialog("Error", "Failed to retrieve event information. Please try again.");
+            }
+        });
+    }
+
+    /**
+     * Uploads an image to Firebase Storage under the path 'profileImages/{userId}.jpg'.
+     * This method first retrieves the user's unique ID to use as part of the storage path.
+     * Upon successful upload, it retrieves the download URL of the uploaded image and saves this URL in Firestore.
+     * If the upload fails, it logs an error message.
+     *
+     * @param imageUri The URI of the image to be uploaded. This should not be null and must
+     *                 point to a valid image file.
+     * @param context  The context of the calling activity.
+     */
+    public void uploadImageToFirebaseStorage(Uri imageUri, Context context) {
+        String userId = getUserId(context);
+
+        StorageReference profileImageRef = FirebaseStorage.getInstance()
+                .getReference("profileImages/" + userId + ".jpg");
+
+        profileImageRef.putFile(imageUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    profileImageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
+                        saveProfileImageUrlToFirestore(downloadUri.toString(), context);
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseAttendee", "Image upload failed", e);
+                });
+    }
+
+    /**
+     * Saves the profile image URL to Firestore.
+     *
+     * @param imageUrl The URL of the uploaded image.
+     * @param context  The context of the calling activity.
+     */
+    private void saveProfileImageUrlToFirestore(String imageUrl, Context context) {
+        String deviceId = getUserId(context);
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("profiles").document(deviceId)
+                .update("profileImageUrl", imageUrl)
+                .addOnSuccessListener(aVoid -> {
+                    // Image URL saved to Firestore, now load it into the ImageView
+                    ImageView avatarImage = ((ProfileActivity) context).findViewById(R.id.avatarImage);
+                    Glide.with(context)
+                            .load(imageUrl)
+                            .into(avatarImage);
+                })
+                .addOnFailureListener(e -> {
+                    Log.e("FirebaseAttendee", "Error saving image URL to Firestore", e);
+                });
+    }
+
+    /**
+     * Retrieves the user's unique ID.
+     *
+     * @param context The context of the calling activity.
+     * @return The user's unique ID.
+     */
+    private String getUserId(Context context) {
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+    /**
+     * Removes the profile image from Firebase Storage and updates the Firestore document.
+     *
+     * @param context The context of the calling activity.
+     */
+    public void removePhoto(Context context) {
+        String userId = getUserId(context);
+        StorageReference profileImageRef = FirebaseStorage.getInstance()
+                .getReference("profileImages/" + userId + ".jpg");
+        profileImageRef.delete().addOnSuccessListener(aVoid -> {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            db.collection("profiles").document(userId)
+                    .update("profileImageUrl", "")
+                    .addOnSuccessListener(aVoid1 -> {
+                        // Generate the avatar image
+                        TextView nameText = ((ProfileActivity) context).findViewById(R.id.nameText);
+                        String profileName = nameText.getText().toString();
+                        if (profileName != null && !profileName.isEmpty()) {
+                            AvatarGenerator.generateAvatar(profileName, new AvatarGenerator.AvatarImageCallback() {
+                                @Override
+                                public void onAvatarLoaded(Bitmap avatar) {
+                                    ((ProfileActivity) context).runOnUiThread(() -> {
+                                        ImageView avatarImage = ((ProfileActivity) context).findViewById(R.id.avatarImage);
+                                        avatarImage.setImageBitmap(avatar);
+                                    });
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("FirebaseAttendee", "Error removing image URL from Firestore", e);
+                    });
+        }).addOnFailureListener(e -> {
+            Log.e("FirebaseAttendee", "Error removing image from Storage", e);
+        });
+    }
+
 
 }
