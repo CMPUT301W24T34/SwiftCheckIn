@@ -99,6 +99,11 @@ public class AnnoucementActivity extends AppCompatActivity {
         sign_up.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                try {
+                    Thread.sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
                     fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
                     eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
