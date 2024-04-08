@@ -16,7 +16,7 @@ import androidx.fragment.app.DialogFragment;
 import com.example.swiftcheckin.organizer.OrganizerActivity;
 
 import com.example.swiftcheckin.R;
-import com.example.swiftcheckin.admin.AdminActivity;
+
 /**
  * This deals with the fragment to switch to organizer and admin mode
  */
@@ -46,9 +46,8 @@ public class SwitchModeFragment extends DialogFragment {
         admin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Switched to admin", Toast.LENGTH_SHORT).show();
                 Intent intent;
-                intent = new Intent(getActivity(), AdminActivity.class);
+                intent = new Intent(getActivity(), AdminPassword.class);
                 startActivity(intent);
 
             }
