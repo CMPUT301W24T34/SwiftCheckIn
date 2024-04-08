@@ -73,6 +73,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         }
         else
         {
+            
             timeString = event.getStartTime() + "  + 1 Day";
         }
         eventTime.setText(timeString);
