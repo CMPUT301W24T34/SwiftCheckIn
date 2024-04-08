@@ -104,6 +104,9 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -111,8 +114,8 @@
 
         <ListView
             android:id="@+id/attendee_other_events_list"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_marginTop="104dp"
             android:cacheColorHint="#000000"
             android:divider="@null"
@@ -128,8 +131,8 @@
 
         <ListView
             android:id="@+id/attendee_my_events_list"
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
             android:layout_marginTop="104dp"
             android:cacheColorHint="#000000"
             android:divider="@null"
