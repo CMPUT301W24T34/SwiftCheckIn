@@ -67,6 +67,10 @@ public class OrganizerTest {
         onView(withId(R.id.switch_modes)).perform(click());
         onView(withId(R.id.organizer_button)).perform(click());
         onView(withId(R.id.organizer)).check(matches(isDisplayed()));
+        // Citation: OpenAI, 03-07-2024, ChatGPT, How to get items in a listview
+        // output was onView(withId(R.id.list_view_id)).check(matches(hasChildCount(0)));
+
+//        onView(withId(R.id.event_list)).check(matches(hasChildCount(1)));
 
 
         onView(withId(R.id.add_event_button)).perform(click());
