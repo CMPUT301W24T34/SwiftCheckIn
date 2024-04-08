@@ -41,6 +41,7 @@ public class EventSignUp {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
+                    checkEventWithAttendees(eventId, attendeeDeviceId, eventMaxAttendees, eventCurrentAttendees);
                     // Event exists in the "events" collection
                     System.out.println("Event with ID " + eventId + " exists in the events collection.");
                     // Perform additional operations here if needed
@@ -51,10 +52,11 @@ public class EventSignUp {
                 }
             } else {
                 System.out.println("Error querying event document: " + task.getException());
-            }
 
-            // Now, check if the event exists in the "eventsWithAttendees" collection
-            checkEventWithAttendees(eventId, attendeeDeviceId, eventMaxAttendees, eventCurrentAttendees);
+
+                // Now, check if the event exists in the "eventsWithAttendees" collection
+
+            }
         });
     }
     public void checkEventWithAttendees(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
