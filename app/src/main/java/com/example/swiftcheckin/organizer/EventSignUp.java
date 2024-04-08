@@ -24,15 +24,18 @@ public class EventSignUp {
     // Store attendee device ids as fields in that document to help with memory.
 
     /**
-     * This methods helps associate an attendee to an event.
+     * This methods checks events to check an event exists before sign up
      *
-     * @param eventId          - The Id of the event the attendee wants to sign up for.
-     * @param attendeeDeviceId - The id of the attendee who wants to signs up
+     * @param eventId           The ID of the event.
+     * @param eventMaxAttendees      The maximum number of attendees allowed for the event.
+     * @param eventCurrentAttendees  The current number of attendees registered for the event.
+     * @param attendeeDeviceId  The ID of the device of the attendee.
+     * @param eventCurrentAttendees  The current number of attendees as a string.
      */
+
     // Instead of the eventId, why don't I pass an event entirely?
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
-        // Citation: OpenAI,  ChatGPT, how to query events before event sign up
-
+//Citation: For the following code line to query the events collection, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to ensure an event exists by querying for events
         db = FirebaseFirestore.getInstance();
 
         try {
@@ -42,25 +45,19 @@ public class EventSignUp {
         }
         DocumentReference eventDoc = db.collection("events").document(eventId);
 
-        // Check if the event exists in the "events" collection
         eventDoc.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     checkEventWithAttendees(eventId, attendeeDeviceId, eventMaxAttendees, eventCurrentAttendees);
-                    // Event exists in the "events" collection
                     System.out.println("Event with ID " + eventId + " exists in the events collection.");
-                    // Perform additional operations here if needed
                 } else {
-                    // Event does not exist in the "events" collection
                     System.out.println("Event with ID " + eventId + " does not exist in the events collection.");
-                    // Stop further processing here if needed
                 }
             } else {
                 System.out.println("Error querying event document: " + task.getException());
 
 
-                // Now, check if the event exists in the "eventsWithAttendees" collection
 
             }
         });
@@ -68,8 +65,11 @@ public class EventSignUp {
     /**
      * This methods helps associate an attendee to an event.
      *
-     * @param eventId          - The Id of the event the attendee wants to sign up for.
-     * @param attendeeDeviceId - The id of the attendee who wants to signs up
+     * @param eventId           The ID of the event.
+     * @param eventMaxAttendees      The maximum number of attendees allowed for the event.
+     * @param eventCurrentAttendees  The current number of attendees registered for the event.
+     * @param attendeeDeviceId  The ID of the device of the attendee.
+     * @param eventCurrentAttendees  The current number of attendees as a string.
      */
     public void checkEventWithAttendees(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);
