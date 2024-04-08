@@ -105,6 +105,32 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    emailEditText.setSelection(0);
+                }
+            }
+        });
+        addressEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    addressEditText.setSelection(0);
+                }
+            }
+        });
+        websiteEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    websiteEditText.setSelection(0);
+                }
+            }
+        });
+
+
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -341,5 +367,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         datePicker.show();
     }
+
+
 
 }
