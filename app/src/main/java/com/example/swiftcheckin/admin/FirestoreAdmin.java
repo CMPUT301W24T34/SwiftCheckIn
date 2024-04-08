@@ -561,10 +561,8 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                // first check if the field ispromo true
-                                boolean isPromo = document.getBoolean("isPromo");
-                                if (isPromo) {
-                                    // if yes delete
+                                String isPromo = document.getString("isPromo");
+                                if ("true".equals(isPromo)) {
                                     qrcodesCollectionRef.document(documentId)
                                             .delete()
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -580,7 +578,6 @@ public class FirestoreAdmin {
                                                 }
                                             });
                                 } else {
-                                    //if not set device id to null
                                     qrcodesCollectionRef.document(documentId)
                                             .update("eventID", "null")
                                             .addOnSuccessListener(new OnSuccessListener<Void>() {
