@@ -97,29 +97,42 @@ public class AnnoucementActivity extends AppCompatActivity {
         });
 
         sign_up.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
-                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
+                DocumentReference profileDoc = db.collection("profiles").document(deviceId);
+                profileDoc.get().addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+                                Toast.makeText(AnnoucementActivity.this, "Please wait a moment to get signed up", Toast.LENGTH_LONG).show();
+                                fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
+                                eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
-                    // Remove whitespace from eventId
-                    String topicName = "event_" + eventId.replaceAll("\\s+", "_");
+                                // Remove whitespace from eventId
+                                String topicName = "event_" + eventId.replaceAll("\\s+", "_");
 
-                    FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + topicName)
-                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
-                                        Log.d(TAG, "Subscribed to topic: /topics/" + topicName);
-                                    } else {
-                                        Log.e(TAG, "Failed to subscribe to topic: /topics/" + topicName);
-                                    }
-                                }
-                            });
-                } else {
-                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
-                }
+                                FirebaseMessaging.getInstance().subscribeToTopic("/topics/" + topicName)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                if (task.isSuccessful()) {
+                                                    Log.d(TAG, "Subscribed to topic: /topics/" + topicName);
+                                                } else {
+                                                    Log.e(TAG, "Failed to subscribe to topic: /topics/" + topicName);
+                                                }
+                                            }
+                                        });
+                            } else {
+                                Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                        else{
+                            Toast.makeText(getApplicationContext(), "You must create a profile before you can sign up for events", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
             }
         });
 
@@ -223,7 +236,7 @@ public class AnnoucementActivity extends AppCompatActivity {
 
     // Need something to get data related to announcements, portraying data will be here.
     private void getData(String eventId) {
-        CollectionReference announceCol = db.collection("Announcements");
+        CollectionReference announceCol = db.collection("Announcements@");
 
         announceCol.addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
@@ -232,7 +245,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                 for (QueryDocumentSnapshot doc : queryDocumentSnapshots) {
                     String announcementTitleFrame = doc.getId();
                     String eventName = EventUtils.convertEventIdToEventName(eventId);
-                    if (announcementTitleFrame.contains(eventName)) {
+                    if (announcementTitleFrame.contains(eventName + "@")) {
                         String announcementTitle = (String) doc.getData().get("announcementTitle");
                         String announcementDes = (String) doc.getData().get("announcementDes");
                         dataList.add(new Announcement(announcementTitle, announcementDes));

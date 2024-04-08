@@ -24,11 +24,21 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * A DialogFragment to display event QR codes for check-in and promo.
+ */
 public class EventFragmentQrs extends DialogFragment {
 
     String eventId;
     Bitmap checkInQr;
     Bitmap promoQr;
+
+    /**
+     * Constructor for EventFragmentQrs.
+     * @param eventId The ID of the event.
+     * @param checkInQr The check-in QR code Bitmap.
+     * @param promoQr The promo QR code Bitmap.
+     */
     public EventFragmentQrs(String eventId, Bitmap checkInQr, Bitmap promoQr)
     {
         this.eventId = eventId;
@@ -36,6 +46,12 @@ public class EventFragmentQrs extends DialogFragment {
         this.promoQr = promoQr;
     }
 
+    /**
+     * Called to create the dialog shown by this fragment. This method creates and configures an AlertDialog
+     * containing the layout for displaying QR codes and share options.
+     * @param savedInstanceState The previously saved state of the fragment (unused in this implementation).
+     * @return The dialog created for this fragment.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
@@ -57,6 +73,11 @@ public class EventFragmentQrs extends DialogFragment {
         return builder.setView(view).setCancelable(true).create();
     }
 
+    /**
+     * Initialize click listener for share layouts.
+     * @param button The layout to initialize the click listener on.
+     * @param qrImage The QR code image to share.
+     */
     private void initializeLayoutClick(LinearLayout button, Bitmap qrImage)
     {
         button.setOnClickListener(new View.OnClickListener() {
@@ -67,6 +88,10 @@ public class EventFragmentQrs extends DialogFragment {
         });
     }
 
+    /**
+     * Share the QR code image along with text.
+     * @param bitmap The QR code image to share.
+     */
     private void shareImageAndText(Bitmap bitmap) {
         Uri uri = getImageToShare(bitmap);
         Intent intent = new Intent(Intent.ACTION_SEND);
@@ -77,6 +102,11 @@ public class EventFragmentQrs extends DialogFragment {
         startActivity(Intent.createChooser(intent, "Share via"));
     }
 
+    /**
+     * Get URI of the image to share.
+     * @param bitmap The QR code image.
+     * @return The URI of the image.
+     */
     private Uri getImageToShare(@NonNull Bitmap bitmap) {
         File folder = new File(requireContext().getCacheDir(), "images");
         Uri uri = null;

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -33,6 +34,7 @@ import java.lang.ref.Reference;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class AddAnnouncementActivity extends AppCompatActivity {
 
     private String eventId;
@@ -43,10 +45,16 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_announcement);
 
         eventId = getIntent().getStringExtra("eventId");
+
+        String eventNameString = getIntent().getStringExtra("eventName");
+        Log.d("Event Name - Add Announcement", eventNameString);
+        TextView eventName = findViewById(R.id.addAnnouncementEventName);
         Button cancelAnnouncement = findViewById(R.id.addAnnouncementCancelButton);
         Button saveAnnouncement = findViewById(R.id.addAnnouncementSaveButton);
         EditText editAnnouncementHeading = findViewById((R.id.announcementEditHeading));
         EditText editAnnouncementDes = findViewById(R.id.announcementEditDes);
+
+        eventName.setText(eventNameString);
 
         cancelAnnouncement.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,6 +89,7 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         // 3. Create a collection and create announcement object.
 
         DocumentReference eventWithAnnounce = db.collection("Announcements").document(eventId + announcementHeading);
+        DocumentReference newAnnouncements = db.collection("Announcements@").document(eventId + "@" + announcementHeading);
 
         HashMap<String, String> data = new HashMap<>();
         data.put("announcementTitle", announcementHeading);
@@ -89,6 +98,21 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         eventWithAnnounce
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {   // In the event, the event is added.
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Announcement Added Successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener(){ // In the event, the event fails to be added to Firebase.
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Announcement could not be added.");
+                    }
+                });
+
+        newAnnouncements
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Announcement Added Successfully");
