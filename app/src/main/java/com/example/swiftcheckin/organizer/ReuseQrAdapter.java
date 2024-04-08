@@ -15,10 +15,21 @@ import com.example.swiftcheckin.R;
 
 import java.util.ArrayList;
 
+/**
+ * Adapter class for displaying reusable QR codes in a ListView or GridView.
+ */
 public class ReuseQrAdapter extends ArrayAdapter<Qr_Code> {
+
+    /**
+     * Constructs a new ReuseQrAdapter.
+     *
+     * @param context         The context.
+     * @param reusableQrList  The list of reusable QR codes.
+     */
     public ReuseQrAdapter(@NonNull Context context, ArrayList<Qr_Code> reusableQrList) {
         super(context, 0, reusableQrList);
     }
+
 
     @NonNull
     @Override

@@ -37,6 +37,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Class for managing Firebase interactions related to event organization.
+ */
 public class FirebaseOrganizer {
     private FirebaseFirestore db;
 
@@ -45,14 +49,30 @@ public class FirebaseOrganizer {
     String deviceID;
 
 
+    /**
+     * Constructor for FirebaseOrganizer class.
+     * Initializes Firestore database instance and retrieves device ID.
+     *
+     * @param context The context of the application/activity.
+     */
     public FirebaseOrganizer(Context context) {
         this.db = FirebaseFirestore.getInstance();
         deviceID = Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
+
+    /**
+     * Empty constructor for FirebaseOrganizer class.
+     * Initializes Firestore database instance.
+     */
     public FirebaseOrganizer(){
         this.db = FirebaseFirestore.getInstance();
     }
 
+    /**
+     * Adds a QR code entry to the Firestore database.
+     *
+     * @param qrcode The QR code object containing information about the QR code.
+     */
     public void addQrCode(Qr_Code qrcode) {
         DocumentReference deviceRef = db.collection("qrcodes").document(qrcode.getQrID());
         HashMap<String, String> data = new HashMap<>();
@@ -76,6 +96,11 @@ public class FirebaseOrganizer {
                 });
     }
 
+    /**
+     * Saves an event to the Firestore database.
+     *
+     * @param event The event object containing information about the event.
+     */
     public void saveEvent(Event event) {
         // Ensure we have 3 columns in firestore for simple reference.
         // This is to ensure admin will be able to delete any events much more conveniently.
@@ -116,10 +141,25 @@ public class FirebaseOrganizer {
                 });
     }
 
+    /**
+     * Interface for handling the retrieval of QR code IDs.
+     */
     public interface QrIDCallback {
+        /**
+         * Callback method invoked when the QR code ID is received.
+         *
+         * @param qrID The QR code ID received.
+         */
         void onQrIDReceived(String qrID);
     }
 
+    /**
+     * Retrieves the associated QR code ID for a given event ID from the Firestore database.
+     *
+     * @param eventId The ID of the event for which to retrieve the QR code ID.
+     * @param field The field in the Firestore document containing the QR code ID.
+     * @param callback The callback interface to handle the retrieved QR code ID.
+     */
     public void getAssociatedCodeID(String eventId, String field, QrIDCallback callback) {
         // Citation: OpenAI, Date: 29 March, 2024. ChatGPT. Used to find a way to wait till db operation is complete.
         // gave the code without this and asked how to make the program not crash due to asynchronous behaviour of db.
@@ -329,12 +369,32 @@ public class FirebaseOrganizer {
 
 
     // make callback interface
-
+    /**
+     * Interface for handling the completion or error of fetching event data.
+     */
     public interface EventCallback
     {
+        /**
+         * Callback method invoked when event data is successfully fetched.
+         *
+         * @param event The event object containing the fetched data.
+         */
         void onCompleteFetch(Event event);
+
+        /**
+         * Callback method invoked when an error occurs during event data fetching.
+         *
+         * @param errorMessage The error message describing the encountered error.
+         */
         void onError(String errorMessage);
     }
+
+    /**
+     * Retrieves event data from Firestore based on the provided event ID and invokes appropriate callbacks.
+     *
+     * @param eventId         The ID of the event to retrieve.
+     * @param eventCallback   The callback interface for handling the completion or error of fetching event data.
+     */
     public void getEvent(String eventId, EventCallback eventCallback)
     {
         DocumentReference eventDoc = db.collection("events").document(eventId);
@@ -517,12 +577,34 @@ public class FirebaseOrganizer {
     }
 
 
+    /**
+     * Callback interface for handling the completion or error of fetching check-in data.
+     */
     public interface getCheckInCallback
     {
+        /**
+         * Invoked when check-in data is successfully fetched.
+         *
+         * @param dataList The list of pairs containing check-in data (e.g., attendee ID and check-in count).
+         */
         void onDataFetched(ArrayList<Pair<String, String>> dataList);
+
+        /**
+         * Invoked when an error occurs while fetching check-in data.
+         *
+         * @param errorMessage The error message describing the encountered error.
+         */
         void onError(String errorMessage);
     }
 
+    /**
+     * Fetches the checked-in details for a specific event.
+     *
+     * @param eventId  The ID of the event for which checked-in details are to be fetched.
+     * @param collection  The collection from which to fetch the checked-in details.
+     * @param dataList  The list to populate with checked-in data pairs (e.g., attendee ID and check-in count).
+     * @param callback  The callback to handle the completion or error of fetching checked-in details.
+     */
     public void getCheckedInDetails(String eventId, String collection, ArrayList<Pair<String, String>> dataList, getCheckInCallback callback)
     {
         DocumentReference checkInDoc = db.collection(collection).document(eventId);
@@ -562,11 +644,25 @@ public class FirebaseOrganizer {
         });
     }
 
+    /**
+     * Callback interface used to retrieve a user's name asynchronously.
+     */
     interface getNameCallBack
     {
+        /**
+         * Called when the user's name is successfully fetched.
+         *
+         * @param name The name of the user.
+         */
         public void onNameFetched(String name);
     }
 
+    /**
+     * Retrieves the user's name associated with the given device ID asynchronously.
+     *
+     * @param device   The device ID of the user.
+     * @param callBack The callback to be invoked when the user's name is fetched.
+     */
     public void getUserName(String device, getNameCallBack callBack)
     {
         DocumentReference documentReference = db.collection("profiles").document(device);

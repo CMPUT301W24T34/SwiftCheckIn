@@ -11,8 +11,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -116,6 +114,10 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         }
     }
 
+    /**
+     * Initializes trigger for launching TimePicker Dialog
+     * @param timeView TextView which acts as a trigger on click
+     */
     private void initTimePickerClick(TextView timeView)
     {
         timeView.setOnClickListener(new View.OnClickListener() {
@@ -126,16 +128,26 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         });
     }
 
-    private void initDatePickerClick(TextView editText)
+
+    /**
+     * Initializes trigger for launching DatePicker Dialog
+     * @param textView TextView which acts as a trigger on click
+     */
+    private void initDatePickerClick(TextView textView)
     {
-        editText.setOnClickListener(new View.OnClickListener() {
+        textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                initDatePicker(editText);
+                initDatePicker(textView);
             }
         });
 
     }
+
+    /**
+     * Initializes save button
+     * @param button triggers event save procedure on click
+     */
     private void initSaveButton(Button button)
     {
         button.setOnClickListener(new View.OnClickListener() {
@@ -145,6 +157,11 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
             }
         });
     }
+
+    /**
+     * Initializes Cancel Button
+     * @param button Cancels the event on click
+     */
     private void initCancelButton(Button button)
     {
         button.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +174,11 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
     //Citation: Code with Cal, Youtube. Pop Up Date Picker Android Studio Tutorial. Accessed March 30, 2024.
     //Link: https://www.youtube.com/watch?v=qCoidM98zNk
+
+    /**
+     * Creates a DatePicker Dialog
+     * @param editText Trigger for the creation of DatePicker Dialog
+     */
     private void initDatePicker(TextView editText)
     {
         String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
@@ -174,6 +196,10 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         datePicker.show();
     }
 
+    /**
+     * Creates a TimePicker Dialog
+     * @param timeView Trigger for the creation of TimePicker Dialog
+     */
     private void initTimePicker(TextView timeView) {
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);

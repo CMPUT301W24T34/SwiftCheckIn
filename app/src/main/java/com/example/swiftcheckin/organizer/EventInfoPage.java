@@ -1,12 +1,12 @@
 package com.example.swiftcheckin.organizer;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -17,10 +17,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.example.swiftcheckin.R;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 
+
+/**
+ * This activity displays information about an event, including event title, start date, start time, description, and poster image.
+ * It also allows organizers to view and manage the list of attendees who have checked in and signed up for the event.
+ * Additionally, organizers can view QR codes for event check-in and promotional purposes, and access functionality to send announcements and view milestones.
+ */
 public class EventInfoPage extends AppCompatActivity {
 
 
@@ -72,6 +76,10 @@ public class EventInfoPage extends AppCompatActivity {
 
         // button initializations
         Button showQrButton = findViewById(R.id.organizerEventInfo_qrButton);
+        Button showPushNotif = findViewById(R.id.organizerEventInfo_pushButton);
+
+        // milestone image
+        ImageView milestone = findViewById(R.id.organizerEventInfo_milestoneImage);
         
         fetchCheckedInDetails();
         fetchSignUpDetails();
@@ -79,9 +87,16 @@ public class EventInfoPage extends AppCompatActivity {
         initializeListButton(checkedInButton);
         initializeSignedListButton(signedUpButton);
         initializeShowQrButton(showQrButton);
+        initializeAnnouncementButton(showPushNotif);
+        initializeMileStoneButton(milestone);
 
     }
 
+    /**
+     * Initializes a click listener for the checked-in list button.
+     *
+     * @param view1 The TextView representing the checked-in list button.
+     */
     private void initializeListButton(TextView view1)
     {
         view1.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +108,11 @@ public class EventInfoPage extends AppCompatActivity {
 
     }
 
+    /**
+     * Initializes a click listener for the signed-up list button.
+     *
+     * @param view1 The TextView representing the signed-up list button.
+     */
     private void initializeSignedListButton(TextView view1)
     {
         view1.setOnClickListener(new View.OnClickListener() {
@@ -104,6 +124,9 @@ public class EventInfoPage extends AppCompatActivity {
 
     }
 
+    /**
+     * Shows the signed-up list view and hides the checked-in list view.
+     */
     private void showSignedUpList()
     {
         if(signedUpList.getVisibility() == View.INVISIBLE)
@@ -114,6 +137,40 @@ public class EventInfoPage extends AppCompatActivity {
             signedUpButton.setBackgroundResource(R.drawable.grey_circle_background);
         }
     }
+
+    /**
+     * Initializes a click listener for the milestone image button.
+     *
+     * @param milestoneImage The ImageView representing the milestone image button.
+     */
+    private void initializeMileStoneButton(ImageView milestoneImage)
+    {
+        milestoneImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchMilestone();
+            }
+        });
+    }
+
+    /**
+     * Initializes a click listener for the announcement button.
+     *
+     * @param button The Button representing the announcement button.
+     */
+    private void initializeAnnouncementButton(Button button)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAnnouncementPage();
+            }
+        });
+    }
+
+    /**
+     * Displays the checked-in list view and hides the signed-up list view.
+     */
     private void showList()
     {
         if(checkedInList.getVisibility() == View.INVISIBLE)
@@ -125,6 +182,12 @@ public class EventInfoPage extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Fetches event information from Firebase and updates the UI elements accordingly.
+     *
+     * @param view The root view of the activity.
+     */
     private void getEventInformation(View view)
     {
         dbOrganizer.getEvent(eventId, new FirebaseOrganizer.EventCallback() {
@@ -137,7 +200,7 @@ public class EventInfoPage extends AppCompatActivity {
                 TextView description = view.findViewById(R.id.organizerEventInfo_eventDescription);
                 ImageView poster = view.findViewById(R.id.organizerEventInfo_eventPoster);
 
-                title.setText(event.getEventTitle() + " - Details");
+                title.setText(event.getEventTitle());
                 date.setText(event.getStartDate());
                 time.setText(event.getStartTime());
                 description.setText(event.getDescription());
@@ -159,6 +222,11 @@ public class EventInfoPage extends AppCompatActivity {
         });
     }
 
+
+    /**
+     * Fetches details of checked-in attendees for the event from Firebase Firestore.
+     * Updates the checked-in data list with attendee names obtained by querying user names.
+     */
     private void fetchCheckedInDetails()
     {
         dbOrganizer.getCheckedInDetails(eventId, "checkedIn", checkedInDataList, new FirebaseOrganizer.getCheckInCallback() {
@@ -190,6 +258,10 @@ public class EventInfoPage extends AppCompatActivity {
         });
     }
 
+    /**
+     * Fetches details of signed-up attendees for the event from Firebase Firestore.
+     * Updates the signed-up data list with attendee names obtained by querying user names.
+     */
     private void fetchSignUpDetails()
     {
         dbOrganizer.getCheckedInDetails(eventId, "eventsWithAttendees", signedUpDataList, new FirebaseOrganizer.getCheckInCallback() {
@@ -220,6 +292,11 @@ public class EventInfoPage extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the button to show QR codes for the event.
+     *
+     * @param button The button to initialize.
+     */
     private void initializeShowQrButton(Button button)
     {
         button.setOnClickListener(new View.OnClickListener() {
@@ -230,6 +307,9 @@ public class EventInfoPage extends AppCompatActivity {
         });
     }
 
+    /**
+     * Shows the QR code fragment for the event.
+     */
     private void showQrFragment()
     {
         Bitmap checkInImage = QrCodeManager.generateQRCode(finalEvent.getQrID());
@@ -239,12 +319,24 @@ public class EventInfoPage extends AppCompatActivity {
         fragmentQrs.show(getSupportFragmentManager(), "Event Information Qr options");
     }
 
+    /**
+     * Launches the announcement page for the event.
+     */
     private void launchAnnouncementPage()
     {
         Intent intent = new Intent(getApplicationContext(), AddAnnouncementActivity.class);
         intent.putExtra("eventId", eventId);
+        intent.putExtra("eventName", finalEvent.getEventTitle());
         startActivity(intent);
     }
 
+    /**
+     * Launches the milestone fragment for the event.
+     */
+    private void launchMilestone()
+    {
+        FragmentMilestone fragmentMilestone = new FragmentMilestone(this.checkedInDataList, this.signedUpDataList);
+        fragmentMilestone.show(getSupportFragmentManager(), "Milestone");
+    }
 }
 
