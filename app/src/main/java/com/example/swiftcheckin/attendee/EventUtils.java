@@ -1,7 +1,10 @@
 package com.example.swiftcheckin.attendee;
 
 
+/**
+ *  A utility class for formatting event names to use FCM
 
+ */
 public class EventUtils {
     public static String convertEventNameToEventId(String eventName) {
         return eventName.replaceAll("\\s+", "_");
