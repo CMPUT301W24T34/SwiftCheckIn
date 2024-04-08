@@ -268,6 +268,7 @@
             android:layout_height="23dp"
             android:layout_marginStart="50dp"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/location_icon" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -301,10 +302,12 @@
 
         <ListView
             android:id="@+id/announcementList"
-            android:layout_width="330dp"
+            android:layout_width="326dp"
             android:layout_height="267dp"
             android:layout_marginStart="50dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="45dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -326,11 +329,13 @@
             android:layout_marginStart="50dp"
             android:layout_marginTop="1dp"
             android:text="Announcements"
+            android:layout_marginEnd="35dp"
             android:textAlignment="center"
             android:textColor="#040404"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
