@@ -187,7 +187,7 @@ public class FirebaseOrganizer {
     }
     /**
      * Creates a default geolocation for an event
-     * @return eventId: the id of the event, String
+     * @param  eventId: the id of the event, String
      */
 
     public void addGeolocation(String eventId) {
@@ -195,7 +195,7 @@ public class FirebaseOrganizer {
         geolocationRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to set a default geolocation setting to false
+                //Citation: For the following code query, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to set a default geolocation setting to false
                 if (!documentSnapshot.exists()) {
                     geolocationRef.set(new HashMap<String, Object>() {{
                                 put("geolocation", false);
@@ -219,15 +219,15 @@ public class FirebaseOrganizer {
     }
     /**
      * Checks if geolocation is enabled
-     * @return eventId: the id of the event, String
-     * @return callback: the callback to asynchronously set the switch, GeolocationCallback
+     * @param eventId: the id of the event, String
+     * @param callback: the callback to asynchronously set the switch, GeolocationCallback
      */
 
-    //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to return a boolean with a firebase query asynchronously
     public void geolocationEnabled(String eventId, GeolocationCallback callback) {
         db.collection("geolocation").document(eventId).get()
                 .addOnSuccessListener(documentSnapshot -> {
                     if (documentSnapshot.exists()) {
+                        //Citation: For the following code to check geolocation enabled, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to return a boolean with a firebase query asynchronously
                         Boolean enabled = documentSnapshot.getBoolean("geolocation");
                         callback.onGeolocationStatus(enabled);
                     } else {
@@ -243,26 +243,27 @@ public class FirebaseOrganizer {
      * The callback for the geolocation boolean
      */
     public interface GeolocationCallback {
+        //Citation: For the following code to use a callback to return the boolean, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to return a boolean with a firebase query asynchronously
+
         void onGeolocationStatus(boolean enabled);
     }
     /**
      * Updates the geolocation when the switch is clicked
-     * @return eventId: the id of the event, String
-     * @return isChecked: sees if the switch is enabled, Boolean
+     * @param eventId: the id of the event, String
+     * @param isChecked: sees if the switch is enabled, Boolean
      */
-    //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to update firebase geolocation with the switch state
     public void updateGeolocation(String eventId, Boolean isChecked) {
         DocumentReference geolocationRef = db.collection("geolocation").document(eventId);
+        //Citation: For the following code query to update the field, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to update firebase geolocation with the switch state
         geolocationRef.update("geolocation", isChecked);
     }
 
     /**
      * Gets the checked in location of the checked in profiles and displays the locations on a map
-     * @return eventId: the id of the event, String
-     * @return myMap: The map with the profiles, GoogleMap
+     * @param eventId: the id of the event, String
+     * @param myMap: The map with the profiles, GoogleMap
      */
     public void getCheckedIn(String eventId, GoogleMap myMap) {
-        //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get the field names and add them to a list
         matchedProfiles.clear();
         db.collection("checkedIn")
                 .document(eventId)
@@ -271,8 +272,9 @@ public class FirebaseOrganizer {
                     if (documentSnapshot.exists()) {
                         Map<String, Object> checkedInData = documentSnapshot.getData();
                         if (checkedInData != null) {
+                            //Citation: For the following code to get the field names and add them to a list, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get the field names and add them to a list
                             matchedProfiles.addAll(checkedInData.keySet());
-                            //Citation: For the following code query ideas, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make a nested query to query twice based on the results of the first query
+                            //Citation: For the following code idea to query each profile in a list, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to make a query for each element of a list
                             for (String id : matchedProfiles) {
 
                                 db.collection("profiles").document(id)
@@ -284,13 +286,17 @@ public class FirebaseOrganizer {
                                                     Map<String, Object> data = documentSnapshot.getData();
                                                     String locationPermission = (String) data.get("locationPermission");
                                                     if (!locationPermission.equals("False")) {
+
                                                         String latitudeStr = (String) data.get("latitude");
                                                         String longitudeStr = (String) data.get("longitude");
                                                         if (!latitudeStr.equals("Unknown") && !longitudeStr.equals("Unknown")){
+                                                            //Citation: For the following code to convert string to double, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to turn a list into a double
 
-                                                        Double latitude = Double.parseDouble(latitudeStr);
+                                                            Double latitude = Double.parseDouble(latitudeStr);
                                                         Double longitude = Double.parseDouble(longitudeStr);
                                                         if (latitude != null && longitude != null) {
+                                                            //Citation: The following code for creating google map and adding markers, 2024, Youtube, "Step by Step Google Maps Implementation in Android App | Google Maps in Android: Step-by-Step Guide", Codingzest, https://www.youtube.com/watch?v=pOKPQ8rYe6g
+
                                                             LatLng location = new LatLng(latitude, longitude);
                                                             myMap.addMarker(new MarkerOptions().position(location).title((String) data.get("name")));
                                                             float zoomLevel = 16.0f;

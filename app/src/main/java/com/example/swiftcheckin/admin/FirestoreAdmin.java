@@ -151,13 +151,12 @@ public class FirestoreAdmin {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                            //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to delete all items with a certain device ID
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
                                 deleteEventsWithAttendeesProfile(documentId);
                                 deleteCheckedInProfile(documentId);
                                 deleteSignedUpProfile(documentId);
-
+//Citation: For the following code for firebase document deletion, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to delete all items with a certain device ID
                                 profilesCollectionRef.document(documentId)
                                         .delete()
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -284,7 +283,6 @@ public class FirestoreAdmin {
                                                 @Override
                                                 public void onSuccess(Void unused) {
                                                     Log.d(TAG, "Event data has been deleted successfully!");
-                                                    // Now you can delete related data or update UI as needed
                                                     eventArrayAdapter.notifyDataSetChanged();
                                                     imageArrayAdapter.notifyDataSetChanged();
                                                     profileArrayAdapter.notifyDataSetChanged();
@@ -317,12 +315,14 @@ public class FirestoreAdmin {
 
     public void deleteFirebaseImage(List<Event> eventList, Integer selectedPosition, ImageArrayAdapter imageArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         String nameToUpdate = "filler";
-
+        String deviceIdImage = "filler";
         if (selectedPosition >= 0 && selectedPosition < eventList.size()) {
             nameToUpdate = eventList.get(selectedPosition).getEventTitle();
+            Event selectedEvent = eventList.get(selectedPosition);
+            deviceIdImage = selectedEvent.getDeviceId();
         }
-
         eventsCollectionRef.whereEqualTo("eventTitle", nameToUpdate)
+                .whereEqualTo("deviceId", deviceIdImage)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -330,14 +330,14 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                //Citation: For the following code idea, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to set something to null in firebase
+                                //Citation: For the following code to set a firebase field to null, OpenAI, 2024, Licensing: Creative Commons, ChatGPT, Prompt: How to set something to null in firebase
                                 eventsCollectionRef.document(documentId)
                                         .update("eventPosterURL", null)
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void unused) {
                                                 Log.d(TAG, "Event poster URL has been set to null successfully!");
-                                                // Notify adapter of the change
+
                                                 imageArrayAdapter.notifyDataSetChanged();
                                                 profileArrayAdapter.notifyDataSetChanged();
                                                 eventArrayAdapter.notifyDataSetChanged();
@@ -440,7 +440,6 @@ public class FirestoreAdmin {
                             if (task.isSuccessful()) {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
                                     Event event = document.toObject(Event.class);
-                                    // Add the profile if not already in the list
                                     if (!imageList.contains(event)) {
                                         imageList.add(event);
                                     }
@@ -497,7 +496,6 @@ public class FirestoreAdmin {
                                         profileList.add(profile);
                                     }
                                 }
-                                // Notify adapter after querying all matching profiles
                                 profileArrayAdapter.notifyDataSetChanged();
                                 imageArrayAdapter.notifyDataSetChanged();
                                 eventArrayAdapter.notifyDataSetChanged();
@@ -614,7 +612,6 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                // Check if the document ID matches the eventId
                                 if (documentId.equals(eventId)) {
                                     eventsWithAttendeesCollectionRef.document(documentId)
                                             .delete()
@@ -644,7 +641,6 @@ public class FirestoreAdmin {
      */
 
     //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
-
     public void deleteCheckedIn(String eventId) {
         checkedInCollectionRef
                 .get()
@@ -684,7 +680,6 @@ public class FirestoreAdmin {
      * @param eventId, String: the id of the event
      */
     //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to query for documents that match a string and remove the document if so
-
     public void deleteAnnouncement(String eventId) {
         announcementCollectionRef
                 .get()
@@ -862,7 +857,7 @@ public class FirestoreAdmin {
                                                     Log.d(TAG, "Failed to delete document with matching ID from signedUpEventsCollectionRef: " + e.toString());
                                                 }
                                             });
-                                    break; // Break the loop if a match is found
+                                    break;
                                 }
                             }
                         } else {

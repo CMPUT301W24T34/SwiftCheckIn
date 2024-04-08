@@ -249,13 +249,13 @@ public class AdminActivity extends AppCompatActivity {
     private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayEventsTab(eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterFirebaseEvents(eventList,query, eventArrayAdapter, imageArrayAdapter,profileArrayAdapter);
 
         }
     /**
-     * This filters through the events using search
+     * This filters through the images using search
      *@param query the searched word - String
      *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
@@ -265,7 +265,7 @@ public class AdminActivity extends AppCompatActivity {
     private void filterImageList(String query, ImageArrayAdapter imageArrayAdapter, AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayImagesTab(imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterFirebaseImageList( imageList, query,  imageArrayAdapter,  eventArrayAdapter, profileArrayAdapter);
 
@@ -286,7 +286,7 @@ public class AdminActivity extends AppCompatActivity {
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayProfilesTab(profileArrayAdapter, eventArrayAdapter, imageArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterProfileList(profileList,query,  profileArrayAdapter,  eventArrayAdapter,  imageArrayAdapter);
 
