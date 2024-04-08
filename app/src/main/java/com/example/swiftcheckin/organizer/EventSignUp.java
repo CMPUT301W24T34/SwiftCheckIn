@@ -31,8 +31,8 @@ public class EventSignUp {
      */
     // Instead of the eventId, why don't I pass an event entirely?
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
-        int maxAttendees = Integer.parseInt(eventMaxAttendees);
-        int currentAttendees = Integer.parseInt(eventCurrentAttendees);
+        // Citation: OpenAI,  ChatGPT, how to query events before event sign up
+
         db = FirebaseFirestore.getInstance();
 
         try {
@@ -65,6 +65,12 @@ public class EventSignUp {
             }
         });
     }
+    /**
+     * This methods helps associate an attendee to an event.
+     *
+     * @param eventId          - The Id of the event the attendee wants to sign up for.
+     * @param attendeeDeviceId - The id of the attendee who wants to signs up
+     */
     public void checkEventWithAttendees(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);
         int currentAttendees = Integer.parseInt(eventCurrentAttendees);
