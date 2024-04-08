@@ -28,9 +28,6 @@ import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.EventSignUp;
 import com.google.android.gms.tasks.Task;
 import com.google.common.util.concurrent.ListenableFuture;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
@@ -41,19 +38,26 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import com.google.mlkit.vision.barcode.BarcodeScannerOptions;
-import com.google.mlkit.vision.barcode.BarcodeScanning;
-import com.google.mlkit.vision.barcode.common.Barcode;
 
-
+/*
+ * This class deals with everything related to scanning QR codes using the device's camera.
+ * OpenAI | April 1 , 2024 | ChatGPT | Assist in the implementation of the QR code scanning feature using CameraX library
+ * https://developer.android.com/codelabs/camerax-getting-started#0
+ */
 public class QRCodeScannerActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CAMERA = 1;
     private PreviewView previewView;
     private ExecutorService cameraExecutor;
-    private EventSignUp eventSignUp = new EventSignUp();
-    private LocationReceiver locationReceiver;
+    public EventSignUp eventSignUp = new EventSignUp();
+    public LocationReceiver locationReceiver;
+    private FirebaseAttendee firebaseAttendee;
 
+    /**
+     * Initializes the activity.
+     *
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +66,7 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         previewView = findViewById(R.id.previewView);
         cameraExecutor = Executors.newSingleThreadExecutor();
         locationReceiver = new LocationReceiver();
+        firebaseAttendee = new FirebaseAttendee();
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera();
@@ -70,6 +75,9 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Starts the camera to scan QR codes.
+     */
     private void startCamera() {
         ListenableFuture<ProcessCameraProvider> cameraProviderFuture = ProcessCameraProvider.getInstance(this);
 
@@ -83,6 +91,11 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    /**
+     * Binds the camera preview to the activity.
+     *
+     * @param cameraProvider the camera provider
+     */
     private void bindPreview(@NonNull ProcessCameraProvider cameraProvider) {
         Preview preview = new Preview.Builder().build();
         CameraSelector cameraSelector = new CameraSelector.Builder()
@@ -101,8 +114,14 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         Camera camera = cameraProvider.bindToLifecycle(this, cameraSelector, preview, imageAnalysis);
     }
 
+
     private boolean isScanning = true;
 
+    /**
+     * Analyzes the image to scan for QR codes.
+     *
+     * @param imageProxy the image proxy
+     */
     private void analyzeImage(ImageProxy imageProxy) {
         if (!isScanning) {
             imageProxy.close();
@@ -146,6 +165,13 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Handles the permissions request result.
+     * @param requestCode the request code
+     * @param permissions the permissions
+     * @param grantResults the grant results
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -159,107 +185,30 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Handles the scanned QR code.
+     * @param scannedQRCode the scanned QR code
+     */
     private void handleScannedQRCode(String scannedQRCode) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference qrCodeRef = db.collection("qrcodes").document(scannedQRCode);
-
-        qrCodeRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                DocumentSnapshot qrDocument = task.getResult();
-                if (qrDocument.exists()) {
-                    String isPromoString = qrDocument.getString("isPromo");
-                    boolean isPromo = "true".equalsIgnoreCase(isPromoString); // Handle 'isPromo' as a string
-
-                    String eventId = qrDocument.getString("eventID");
-                    if (eventId != null) {
-                        if (isPromo) {
-                            fetchEventDetailsAndRedirect(eventId); // Fetch details before redirecting
-                        } else {
-                            // If 'isPromo' is false, continue with the normal check-in process
-                            checkInAttendee(eventId);
-                        }
-                    } else {
-                        // Handle case where 'eventId' is not retrieved properly
-                        Log.e("QRCodeScannerActivity", "Event ID is missing in the QR code document.");
-                        showDialog("Error", "Event details cannot be found.");
-                    }
-                } else {
-                    showDialog("Error", "QR Code is not valid.");
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching QR code document: ", task.getException());
-                showDialog("Error", "Failed to retrieve QR code information. Please try again.");
-            }
-        });
+        firebaseAttendee.handleScannedQRCode(scannedQRCode, this);
     }
 
-    private void fetchEventDetailsAndRedirect(String eventId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        DocumentReference eventRef = db.collection("events").document(eventId);
-
-        eventRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                DocumentSnapshot eventSnapshot = task.getResult();
-                if (eventSnapshot.exists()) {
-                    // Create intent and pass all the necessary data to AnnouncementActivity
-                    Intent intent = new Intent(QRCodeScannerActivity.this, AnnoucementActivity.class);
-                    intent.putExtra("eventID", eventId);
-                    intent.putExtra("eventTitle", eventSnapshot.getString("eventTitle"));
-                    intent.putExtra("eventDescription", eventSnapshot.getString("eventDescription"));
-                    intent.putExtra("eventLocation", eventSnapshot.getString("eventLocation"));
-                    intent.putExtra("eventStartDate", eventSnapshot.getString("eventStartDate"));
-                    intent.putExtra("eventEndDate", eventSnapshot.getString("eventEndDate"));
-                    intent.putExtra("eventStartTime", eventSnapshot.getString("eventStartTime"));
-                    intent.putExtra("eventEndTime", eventSnapshot.getString("eventEndTime"));
-                    intent.putExtra("eventPosterURL", eventSnapshot.getString("eventPosterURL"));
-                    intent.putExtra("eventMaxAttendees", eventSnapshot.getString("eventMaxAttendees"));
-                    intent.putExtra("eventCurrentAttendees", eventSnapshot.getString("eventCurrentAttendees"));
-                    startActivity(intent);
-                } else {
-                    Log.e("QRCodeScannerActivity", "Event document does not exist.");
-                    showDialog("Error", "Event details cannot be found.");
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching event details: ", task.getException());
-                showDialog("Error", "Failed to retrieve event details. Please try again.");
-            }
-        });
-    }
-
-    private String retrieveDeviceId() {
+    /**
+     * Retrieves the device ID.
+     * @return the device ID
+     */
+    public String retrieveDeviceId() {
         return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-    }
-
-    private void checkInAttendee(String scannedEventId) {
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        String deviceId = retrieveDeviceId(); // Retrieve device ID
-
-        DocumentReference deviceRef = db.collection("SignedUpEvents").document(deviceId);
-        deviceRef.get().addOnCompleteListener(task -> {
-            if (task.isSuccessful() && task.getResult() != null) {
-                DocumentSnapshot document = task.getResult();
-                if (document.exists()) {
-                    List<String> eventIds = (List<String>) document.get("eventIds");
-                    if (eventIds != null && eventIds.contains(scannedEventId)) {
-                        eventSignUp.addCheckedIn(scannedEventId, deviceId);
-                        locationReceiver.getLocation(deviceId, QRCodeScannerActivity.this);
-                        showDialog("Check-in Successful", "You have been checked in successfully!");
-                    } else {
-                        showDialog("Check-in Failed", "You did not sign up for this event");
-                    }
-                } else {
-                    showDialog("Error", "No events found ");
-                }
-            } else {
-                Log.e("FirestoreError", "Error fetching document: ", task.getException());
-                showDialog("Error", "Failed to retrieve event information. Please try again.");
-            }
-        });
     }
 
     private AlertDialog currentDialog = null; // Class level variable to hold the dialog
 
-    private void showDialog(String title, String message) {
+    /**
+     * Shows a dialog.
+     * @param title the title of the dialog
+     * @param message the message of the dialog
+     */
+    public void showDialog(String title, String message) {
         runOnUiThread(() -> {
             AlertDialog.Builder builder = new AlertDialog.Builder(QRCodeScannerActivity.this);
             builder.setTitle(title);
@@ -273,6 +222,9 @@ public class QRCodeScannerActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Handles the activity being destroyed.
+     */
     @Override
     protected void onDestroy() {
         if (currentDialog != null && currentDialog.isShowing()) {

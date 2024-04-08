@@ -39,6 +39,11 @@ public class AddAnnouncementActivity extends AppCompatActivity {
 
     private String eventId;
 
+    /**
+     * Creates the AddAnnouncementActivity.
+     *
+     * @param savedInstanceState the saved instance state
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +82,9 @@ public class AddAnnouncementActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Saves an announcement to Firebase Firestore.
+     */
     public void saveAnnouncementToFirebase(){
         // 1. Get the edittexts here
         EditText editAnnouncementHeading = findViewById((R.id.announcementEditHeading));
@@ -129,6 +137,13 @@ public class AddAnnouncementActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Sends an announcement to the server using Firebase Cloud Messaging (FCM).
+     * This method constructs a JSON payload and sends it via HTTP POST request to FCM server.
+     * @param title       the title of the announcement
+     * @param description the description of the announcement
+     * Citation: OpenAI | April 3 , 2024 | ChatGPT | Help in sending an announcement to the server
+     */
     public void sendAnnouncementToServer(String title, String description) {
         HashMap<String, String> announcementDetails = new HashMap<>();
         announcementDetails.put("title", title);
