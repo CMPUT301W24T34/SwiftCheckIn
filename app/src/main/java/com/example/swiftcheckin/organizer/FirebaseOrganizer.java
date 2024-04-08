@@ -520,69 +520,6 @@ public class FirebaseOrganizer {
     }
 
 
-    public void addCheckedIn(String eventId, String attendeeDeviceId){
-        DocumentReference checkedInDoc = db.collection("checkedIn").document(eventId);
-
-        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    HashMap<String, String> data = new HashMap<>();
-
-                    if (document.exists()){
-                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
-
-                    }
-                    else {
-                        updateCheckedIn(attendeeDeviceId, checkedInDoc);
-                    }
-                }
-
-            }
-        });
-
-
-    }
-
-    public void updateCheckedIn(String attendeeDeviceId, DocumentReference checkedInDoc){
-        HashMap<String, String> data = new HashMap<>();
-        checkedInDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-
-                    if (document.exists()){
-                        if (document.contains(attendeeDeviceId)){
-                            String checkInCountStr = (String) document.get(attendeeDeviceId);
-                            if (checkInCountStr != null) {
-                                int checkInCount = Integer.parseInt(checkInCountStr) + 1;
-                                checkInCountStr = Integer.toString(checkInCount);
-                                // Try document .set
-                                data.put(attendeeDeviceId, checkInCountStr);
-                            }
-                        } else {
-                            data.put(attendeeDeviceId, "1");
-                        }
-                    } else {
-                        data.put(attendeeDeviceId, "1");
-                    }
-                    checkedInDoc.set(data, SetOptions.merge())
-                            .addOnSuccessListener(aVoid -> {
-                                System.out.println("Attendee added to event successfully.");  // Checks if attendee is added here
-                            })
-                            .addOnFailureListener(e -> {
-                                System.out.println("Error adding attendee to event: " + e.getMessage());  // In case attendee is not added.
-                            });
-
-                }
-
-            }
-        });
-    }
-
-
     /**
      * Callback interface for handling the completion or error of fetching check-in data.
      */
