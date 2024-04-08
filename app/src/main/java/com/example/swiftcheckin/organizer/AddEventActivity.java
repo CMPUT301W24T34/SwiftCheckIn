@@ -36,6 +36,7 @@ import com.google.firebase.storage.StorageReference;
 import java.io.ByteArrayOutputStream;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Activity meant to help create events for attendees to join. Starts from the organizer activity and
@@ -273,7 +274,7 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
         CharSequence[] options = {"Choose from Gallery", "Take Photo"};
 
         androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(this);
-        builder.setTitle("Change Profile Photo");
+        builder.setTitle("Change Event Image Photo");
         builder.setItems(options, (dialog, item) -> {
             // Displayed the options
             if (options[item].equals("Choose from Gallery")) {
@@ -341,8 +342,10 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
 
         // Create a reference to 'eventImages/userId.jpg'
         // Need a way to uniquely determine the event image.
+        // Generate random code.
+        String imageId = generateImageId();
         StorageReference eventImageRef = FirebaseStorage.getInstance()
-                .getReference("eventImages/" + userId + ".jpg");   // Need to add event identifier or some placeholder.
+                .getReference("eventImages/" + imageId + ".jpg");   // Need to add event identifier or some placeholder.
 
         // Upload file to Firebase Storage
         eventImageRef.putFile(imageUri)
@@ -367,5 +370,16 @@ public class AddEventActivity extends AppCompatActivity implements FragmentQrcod
      */
     private String getUserId() {
         return Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
+
+
+    private String generateImageId(){
+        int length_image_id = 32;
+        // random qr id
+        String uuid = UUID.randomUUID().toString();
+        uuid = uuid.replace("-", "");
+        uuid = uuid.substring(0, length_image_id);
+
+        return uuid;
     }
 }

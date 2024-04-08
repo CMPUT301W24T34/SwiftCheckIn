@@ -63,7 +63,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         }
         else
         {
-            eventPoster.setImageResource(R.drawable.test_rect);
+            eventPoster.setImageResource(R.drawable.event_poster);
         }
 
         String timeString;
