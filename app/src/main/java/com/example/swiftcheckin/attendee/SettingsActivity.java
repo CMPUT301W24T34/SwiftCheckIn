@@ -303,9 +303,9 @@ public class SettingsActivity extends AppCompatActivity {
                 String selectedDate = monthWord +" " + dayOfMonth + " " + year;
                 editText.setText(selectedDate);
             }
-        }, Calendar.getInstance().get(Calendar.YEAR), Calendar.getInstance().get(Calendar.MONTH),
-                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-        datePicker.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+        }, 2000, 0,
+                1);
+        datePicker.getDatePicker().setMaxDate(System.currentTimeMillis() - 1000);
 
         datePicker.show();
     }
