@@ -34,6 +34,12 @@ public class EventSignUp {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);
         int currentAttendees = Integer.parseInt(eventCurrentAttendees);
         db = FirebaseFirestore.getInstance();
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         DocumentReference eventDoc = db.collection("events").document(eventId);
 
         // Check if the event exists in the "events" collection
