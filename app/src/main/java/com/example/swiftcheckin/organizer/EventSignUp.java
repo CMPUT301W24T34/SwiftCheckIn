@@ -36,7 +36,7 @@ public class EventSignUp {
         db = FirebaseFirestore.getInstance();
 
         try {
-            Thread.sleep(7000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

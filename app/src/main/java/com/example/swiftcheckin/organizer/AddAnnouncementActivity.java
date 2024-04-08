@@ -89,6 +89,7 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         // 3. Create a collection and create announcement object.
 
         DocumentReference eventWithAnnounce = db.collection("Announcements").document(eventId + announcementHeading);
+        DocumentReference newAnnouncements = db.collection("Announcements@").document(eventId + "@" + announcementHeading);
 
         HashMap<String, String> data = new HashMap<>();
         data.put("announcementTitle", announcementHeading);
@@ -97,6 +98,21 @@ public class AddAnnouncementActivity extends AppCompatActivity {
         eventWithAnnounce
                 .set(data)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {   // In the event, the event is added.
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "Announcement Added Successfully");
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener(){ // In the event, the event fails to be added to Firebase.
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d(TAG, "Announcement could not be added.");
+                    }
+                });
+
+        newAnnouncements
+                .set(data)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void unused) {
                         Log.d(TAG, "Announcement Added Successfully");

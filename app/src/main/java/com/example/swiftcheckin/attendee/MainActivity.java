@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         // SignedUp Event Details
         listViewMyEvent.setOnItemClickListener((parent, view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
-            String eventID = myEventList.get(position).getDeviceId() + eventList.get(position).getEventTitle();
+            String eventID = myEventList.get(position).getDeviceId() + myEventList.get(position).getEventTitle();
 
             String eventTitle = myEventList.get(position).getEventTitle();
             String eventLocation = myEventList.get(position).getLocation();
