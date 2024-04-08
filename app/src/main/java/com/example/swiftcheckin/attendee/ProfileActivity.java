@@ -172,7 +172,17 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-
+    /**
+     *
+     * @param requestCode The integer request code originally supplied to
+     *                    startActivityForResult(), allowing you to identify who this
+     *                    result came from.
+     * @param resultCode The integer result code returned by the child activity
+     *                   through its setResult().
+     * @param data An Intent, which can return result data to the caller
+     *               (various data can be attached to Intent "extras").
+     *
+     */
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -187,7 +197,7 @@ public class ProfileActivity extends AppCompatActivity {
             }
 
             if (imageUri != null) {
-                uploadImageToFirebaseStorage(imageUri);
+                fb.uploadImageToFirebaseStorage(imageUri, this);
             }
         }
     }
@@ -203,57 +213,6 @@ public class ProfileActivity extends AppCompatActivity {
         inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
         String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
         return Uri.parse(path);
-    }
-
-
-    /** Uploads an image to Firebase Storage under the path 'profileImages/{userId}.jpg'.
-     * This method first retrieves the user's unique ID to use as part of the storage path.
-     * Upon successful upload, it retrieves the download URL of the uploaded image and save this URL in Firestore.
-     * If the upload fails, it logs an error message.
-     *
-     * @param imageUri The URI of the image to be uploaded. This should not be null and must
-     *                 point to a valid image file.
-     */
-    private void uploadImageToFirebaseStorage(Uri imageUri) {
-        String userId = getUserId(); // Implement this method to retrieve the user's ID.
-
-       // Create a storage reference from our app
-        StorageReference profileImageRef = FirebaseStorage.getInstance()
-                .getReference("profileImages/" + userId + ".jpg");
-
-        // Upload file to Firebase Storage
-        profileImageRef.putFile(imageUri)
-                .addOnSuccessListener(taskSnapshot -> {
-                    // When the image has successfully uploaded, get its download URL
-                    profileImageRef.getDownloadUrl().addOnSuccessListener(downloadUri -> {
-                        saveProfileImageUrlToFirestore(downloadUri.toString());
-                    });
-                })
-                .addOnFailureListener(e -> {
-                    // Handle unsuccessful uploads
-                    Log.e("ProfileActivity", "Image upload failed", e);
-                });
-    }
-
-    /**
-     * This saves the profile image url to firestore
-     * @param imageUrl
-     */
-    private void saveProfileImageUrlToFirestore(String imageUrl) {
-        String deviceId = getUserId(); // Retrieve device/user ID
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("profiles").document(deviceId)
-                .update("profileImageUrl", imageUrl)
-                .addOnSuccessListener(aVoid -> {
-                    // Image URL saved to Firestore, now load it into the ImageView
-                    // Citation : https://www.youtube.com/watch?v=xrVD7LcQ5nY
-                    Glide.with(ProfileActivity.this)
-                            .load(imageUrl)
-                            .into(avatarImage);
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("ProfileActivity", "Error saving image URL to Firestore", e);
-                });
     }
 
 
@@ -289,6 +248,12 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * This removes the photo
+     */
+    private void removePhoto() {
+        fb.removePhoto(this);
+    }
 
 
     /**
@@ -316,37 +281,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
 
-    /**
-     * This method is used for removing profile image from the storage as well as the app
-     */
-    private void removePhoto() {
-        String userId = getUserId();
-        StorageReference profileImageRef = FirebaseStorage.getInstance()
-                .getReference("profileImages/" + userId + ".jpg");
-        profileImageRef.delete().addOnSuccessListener(aVoid -> {
-            // File deleted successfully
-            FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("profiles").document(userId)
-                    .update("profileImageUrl", "")
-                    .addOnSuccessListener(aVoid1 -> {
-                        // Now as no profile image is there, generate the avatar image.
-                        String profileName = nameText.getText().toString();
-                        if (profileName != null && !profileName.isEmpty()) {
-                            AvatarGenerator.generateAvatar(profileName, new AvatarGenerator.AvatarImageCallback() {
-                                @Override
-                                public void onAvatarLoaded(Bitmap avatar) {
-                                    runOnUiThread(() -> avatarImage.setImageBitmap(avatar));
-                                }
-                            });
-                        }
-                    })
-                    .addOnFailureListener(e -> {
-                        Log.e("ProfileActivity", "Error removing image URL from Firestore", e);
-                    });
-        }).addOnFailureListener(e -> {
-            Log.e("ProfileActivity", "Error removing image from Storage", e);
-        });
-    }
+
 
 
 

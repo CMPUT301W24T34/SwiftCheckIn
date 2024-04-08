@@ -132,7 +132,6 @@ public class OrganizerTest {
 
             assertThat(counts[0], greaterThan(0));
         }
-
     }
 
 }

@@ -1,15 +1,14 @@
 package com.example.swiftcheckin.admin;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.Image;
+
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -20,17 +19,9 @@ import com.example.swiftcheckin.organizer.Event;
 
 import com.example.swiftcheckin.attendee.Profile;
 import com.example.swiftcheckin.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
+
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,9 +42,7 @@ public class AdminActivity extends AppCompatActivity {
     ArrayList<Event> imageList;
     private int selectedPosition = -1;
 
-    final String TAG = "Sample";
-    private FirebaseFirestore db;
-    private CollectionReference collectionReference;
+
     String tab;
     SearchView searchView;
 
@@ -67,7 +56,6 @@ public class AdminActivity extends AppCompatActivity {
         profileButton = findViewById(R.id.profile_button);
         imageButton = findViewById(R.id.images_button);
         dataList = findViewById(R.id.listView);
-        db = FirebaseFirestore.getInstance();
         firebaseHelper = new FirestoreAdmin();
         profileList = new ArrayList<>();
         eventList = new ArrayList<>();
@@ -92,24 +80,24 @@ public class AdminActivity extends AppCompatActivity {
         //Citation: For the following code idea to use the search bar and filter searches, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to use a search bar to filter profile and event queries
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-         public boolean onQueryTextSubmit(String query) {
-               return false;
-           }
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
 
-           @Override
-           public boolean onQueryTextChange(String newText) {
-               if (tab.equals("Event")) {
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (tab.equals("Event")) {
 
-                   filterEventList(newText, eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
-               } if (tab.equals("Profile")) {
+                    filterEventList(newText, eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
+                } if (tab.equals("Profile")) {
 
-                   filterProfileList(newText, profileArrayAdapter,eventArrayAdapter,imageArrayAdapter);
+                    filterProfileList(newText, profileArrayAdapter,eventArrayAdapter,imageArrayAdapter);
                 }
-               if (tab.equals("Image")) {
+                if (tab.equals("Image")) {
 
-                   filterImageList(newText, imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
-               }
-               return true;
+                    filterImageList(newText, imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
+                }
+                return true;
             }
         });
 
@@ -146,13 +134,13 @@ public class AdminActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (selectedPosition != -1) {
-                    if (tab == "Event") {
+                    if (tab.equals("Event")) {
                         deleteEvent(eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
 
-                    } if (tab == "Profile") {
+                    } if (tab.equals("Profile")) {
                         deleteProfile(profileArrayAdapter,eventArrayAdapter,imageArrayAdapter);
                     }
-                    if (tab == "Image") {
+                    if (tab.equals("Image")) {
                         deleteImage(imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
                     }
 
@@ -170,7 +158,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private void displayEventsTab(AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         tab = "Event";
-        collectionReference = db.collection("events");
         dataList.setAdapter(eventArrayAdapter);
         firebaseHelper.queryEvents(eventList, eventArrayAdapter, imageArrayAdapter, profileArrayAdapter);
     }
@@ -183,7 +170,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private void displayProfilesTab(ProfileArrayAdapter profileArrayAdapter,AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         tab = "Profile";
-        collectionReference = db.collection("profiles");
         dataList.setAdapter(profileArrayAdapter);
         firebaseHelper.queryProfiles(profileList,profileArrayAdapter,eventArrayAdapter,  imageArrayAdapter);
     }
@@ -196,7 +182,6 @@ public class AdminActivity extends AppCompatActivity {
 
     private void displayImagesTab(ImageArrayAdapter imageArrayAdapter,AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         tab = "Image";
-        collectionReference = db.collection("events");
         dataList.setAdapter(imageArrayAdapter);
         firebaseHelper.queryImages(imageList,  imageArrayAdapter,eventArrayAdapter, profileArrayAdapter);
     }
@@ -213,7 +198,7 @@ public class AdminActivity extends AppCompatActivity {
         String nameToDelete = profileList.get(selectedPosition).getName();
         firebaseHelper.deleteFirebaseProfile( eventList, nameToDelete, profileList,  selectedPosition, profileArrayAdapter,eventArrayAdapter, imageArrayAdapter);
         selectedPosition = -1;
-        }
+    }
 
     /**
      * This deletes the events
@@ -237,7 +222,7 @@ public class AdminActivity extends AppCompatActivity {
         tab = "Image";
         firebaseHelper.deleteFirebaseImage(eventList, selectedPosition, imageArrayAdapter, eventArrayAdapter,profileArrayAdapter);
         selectedPosition = -1;
-        }
+    }
 
     /**
      * This filters through the events using search
@@ -249,13 +234,13 @@ public class AdminActivity extends AppCompatActivity {
     private void filterEventList(String query, AdminEventArrayAdapter eventArrayAdapter,ImageArrayAdapter imageArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayEventsTab(eventArrayAdapter,imageArrayAdapter,profileArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterFirebaseEvents(eventList,query, eventArrayAdapter, imageArrayAdapter,profileArrayAdapter);
 
-        }
+    }
     /**
-     * This filters through the events using search
+     * This filters through the images using search
      *@param query the searched word - String
      *   @param eventArrayAdapter the event array adapter - AdminEventArrayAdapter
      *   @param imageArrayAdapter the image array adapter - ImageArrayAdapter
@@ -265,11 +250,11 @@ public class AdminActivity extends AppCompatActivity {
     private void filterImageList(String query, ImageArrayAdapter imageArrayAdapter, AdminEventArrayAdapter eventArrayAdapter,ProfileArrayAdapter profileArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayImagesTab(imageArrayAdapter,eventArrayAdapter,profileArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterFirebaseImageList( imageList, query,  imageArrayAdapter,  eventArrayAdapter, profileArrayAdapter);
 
-        }
+    }
 
 
 
@@ -286,11 +271,11 @@ public class AdminActivity extends AppCompatActivity {
     private void filterProfileList(String query, ProfileArrayAdapter profileArrayAdapter, AdminEventArrayAdapter eventArrayAdapter, ImageArrayAdapter imageArrayAdapter) {
         if (query == null || query.isEmpty()) {
             displayProfilesTab(profileArrayAdapter, eventArrayAdapter, imageArrayAdapter);
-            return; // Exit the method early
+            return;
         }
         firebaseHelper.filterProfileList(profileList,query,  profileArrayAdapter,  eventArrayAdapter,  imageArrayAdapter);
 
-        }
+    }
 
     /**
      * Return the event list
