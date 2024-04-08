@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
-        android:layout_marginTop="18dp"
+        android:layout_marginTop="25dp"
         android:text="Description"
         android:textColor="#040404"
         android:textSize="18dp"
@@ -42,9 +42,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout4"
         android:layout_width="match_parent"
-
         android:layout_height="wrap_content"
-        android:layout_marginTop="140dp"
+
+
+        android:layout_marginTop="160dp"
+        app:flow_horizontalAlign="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -196,7 +198,7 @@
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="75dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -252,7 +254,7 @@
             android:id="@+id/announcement_location"
             android:layout_width="200sp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="8dp"
             android:text="India"
             android:textColor="#000000"
             app:layout_constraintBottom_toBottomOf="parent"
