@@ -62,6 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText websiteEditText;
     private EditText addressEditText;
     private CheckBox locationCheckBox;
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to get location of user
+    // said to use the following 3 lines
     private static final int LOCATION_PERMISSION = 1001;
     private LocationManager locationManager;
     private LocationListener locationListener;
@@ -107,7 +109,7 @@ public class SettingsActivity extends AppCompatActivity {
         });
 
         // Citation: OpenAI, 04-07-2024, ChatGPT, How to change view to front of text when focus is gone
-        // output is functions below
+        // output is functions below, the setOnFocusChangeListener and onFocusChange method
         emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -185,8 +187,9 @@ public class SettingsActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
-    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if phone string matches pattern
-    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, phone);
+    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if string matches pattern
+    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, birthday);
+    // (birthday has been changed to phone for this method)
     /**
      * This checks if the inputted phone number is of valid format
      * @param phone - string to check
@@ -264,6 +267,8 @@ public class SettingsActivity extends AppCompatActivity {
         if (locationPermission) {
             data.put("locationPermission", "True");
             fb.saveProfileToFirebase(deviceId, data);
+            // Citation: OpenAI, 04-06-2024, ChatGPT, How to get context to use in this call
+            // gave me getApplicationContext()
             locationReceiver.getLocation(deviceId, getApplicationContext());
 
         }
