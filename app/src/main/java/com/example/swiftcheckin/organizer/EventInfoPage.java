@@ -72,6 +72,7 @@ public class EventInfoPage extends AppCompatActivity {
 
         // button initializations
         Button showQrButton = findViewById(R.id.organizerEventInfo_qrButton);
+        Button showPushNotif = findViewById(R.id.organizerEventInfo_pushButton);
         
         fetchCheckedInDetails();
         fetchSignUpDetails();
@@ -79,6 +80,7 @@ public class EventInfoPage extends AppCompatActivity {
         initializeListButton(checkedInButton);
         initializeSignedListButton(signedUpButton);
         initializeShowQrButton(showQrButton);
+        initializeAnnuncementButton(showPushNotif);
 
     }
 
@@ -114,6 +116,17 @@ public class EventInfoPage extends AppCompatActivity {
             signedUpButton.setBackgroundResource(R.drawable.grey_circle_background);
         }
     }
+
+    private void initializeAnnuncementButton(Button button)
+    {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchAnnouncementPage();
+            }
+        });
+    }
+
     private void showList()
     {
         if(checkedInList.getVisibility() == View.INVISIBLE)
@@ -137,7 +150,7 @@ public class EventInfoPage extends AppCompatActivity {
                 TextView description = view.findViewById(R.id.organizerEventInfo_eventDescription);
                 ImageView poster = view.findViewById(R.id.organizerEventInfo_eventPoster);
 
-                title.setText(event.getEventTitle() + " - Details");
+                title.setText(event.getEventTitle());
                 date.setText(event.getStartDate());
                 time.setText(event.getStartTime());
                 description.setText(event.getDescription());
