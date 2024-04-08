@@ -106,6 +106,7 @@ public class AnnoucementActivity extends AppCompatActivity {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
+                                Toast.makeText(AnnoucementActivity.this, "Please wait a moment to get signed up", Toast.LENGTH_LONG).show();
                                 fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
                                 eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
 
