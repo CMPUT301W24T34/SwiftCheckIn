@@ -136,56 +136,6 @@ public class AnnoucementActivity extends AppCompatActivity {
             }
         });
 
-//            sign_up.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-//                        fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
-//                        eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
-//                        FirebaseMessaging.getInstance().subscribeToTopic("/topics/event_" + eventId)
-//                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<Void> task) {
-//                                        if (task.isSuccessful()) {
-//                                            Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
-//                                        } else {
-//                                            Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
-//                                        }
-//                                    }
-//                                });
-//                    } else {
-//                        Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
-////                        sign_up.setBackgroundColor(Color.LTGRAY);
-//                    }
-//                }
-//
-//            });
-
-
-//        sign_up.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (!eventMaxAttendees.equals(eventCurrentAttendees)) {
-//                    fb.saveSignUpData(deviceId, eventId, AnnoucementActivity.this);
-//                    eventSignUp.addAttendeeToEvent(eventId, deviceId, eventMaxAttendees, eventCurrentAttendees);
-//
-//                    FirebaseMessaging.getInstance().subscribeToTopic(eventId)
-//                            .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if (task.isSuccessful()) {
-//                                        Log.d(TAG, "Subscribed to topic: /topics/event_" + eventId);
-//                                    } else {
-//                                        Log.e(TAG, "Failed to subscribe to topic: /topics/event_" + eventId);
-//                                    }
-//                                }
-//                            });
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Event is full", Toast.LENGTH_SHORT).show();
-//                }
-//            }
-//        });
-
 
         ImageView profileButton = findViewById(R.id.profile_picture);
         profileButton.setOnClickListener(v -> {
@@ -211,13 +161,6 @@ public class AnnoucementActivity extends AppCompatActivity {
         TextView textViewEventStartTime = findViewById(R.id.annoucement_start_time);
         TextView textViewEventEndTime = findViewById(R.id.announcement_end_Time);
 
-//        if (eventId != null) {
-//            String eventName = EventUtils.convertEventIdToEventName(eventId);
-//            textViewEventTitle.setText(eventName);
-//        } else {
-//            textViewEventTitle.setText(eventTitle);
-//        }
-
         textViewEventTitle.setText(eventTitle);
         textViewEvenLocation.setText(eventLocation);
         textViewEventDescription.setText(eventDescription);
@@ -229,9 +172,11 @@ public class AnnoucementActivity extends AppCompatActivity {
         // OpenAI: ChatGPT Marc 4, 2024 - Added glide to save & fetch image from firebase
         ImageView imageViewEventPoster = findViewById(R.id.announcement_event_poster1);
         String eventImageUrl = intent.getStringExtra("eventImageUrl");
-        Glide.with(this)
-                .load(eventImageUrl)
-                .into(imageViewEventPoster);
+        if (eventImageUrl != null && !eventImageUrl.isEmpty()) {
+            Glide.with(this)
+                    .load(eventImageUrl)
+                    .into(imageViewEventPoster);
+        }
     }
 
     // Need something to get data related to announcements, portraying data will be here.
@@ -257,5 +202,3 @@ public class AnnoucementActivity extends AppCompatActivity {
     }
 
 }
-
-
