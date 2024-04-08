@@ -69,6 +69,8 @@
         app:layout_constraintHorizontal_bias="0.369"
         app:layout_constraintStart_toEndOf="@+id/word_email"
         app:layout_constraintTop_toBottomOf="@+id/phonenumber" />
+<!--     Citation: OpenAI, 04-07-2024, ChatGPT, How to make text on a single line-->
+<!--    output was android:singleLine="true" -->
 
     <EditText
         android:id="@+id/website"

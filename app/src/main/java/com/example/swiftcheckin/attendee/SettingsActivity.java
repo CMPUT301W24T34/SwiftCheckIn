@@ -98,6 +98,7 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+
         birthdayEditText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +106,8 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        // Citation: OpenAI, 04-07-2024, ChatGPT, How to change view to front of text when focus is gone
+        // output is functions below
         emailEditText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -129,7 +132,6 @@ public class SettingsActivity extends AppCompatActivity {
                 }
             }
         });
-
 
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -168,6 +170,12 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
     }
+    // Citation: How to hide a keyboard, Stack Overflow, License: CC-BY-SA, community wiki, "How can I close/hide the Android soft keyboard programmatically?", 2021-03-12, https://stackoverflow.com/questions/1109022/how-can-i-close-hide-the-android-soft-keyboard-programmatically
+
+    /**
+     * This hides the built in keyboard
+     * @param activity - the activity
+     */
     private void hideKeyboard(Activity activity) {
         InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View v = activity.getCurrentFocus();
@@ -177,6 +185,14 @@ public class SettingsActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
+    // Citation: OpenAI, 03-05-2024, ChatGPT, Checking if phone string matches pattern
+    // gave me output of this "\\d{2}/\\d{2}/\\d{4}" and told me to use Pattern.matches(pattern, phone);
+    /**
+     * This checks if the inputted phone number is of valid format
+     * @param phone - string to check
+     * @return
+     * returns boolean of whether its valid
+     */
     private boolean isValid(String phone) {
         if (phone.equals("")) {
             return true;
@@ -282,7 +298,7 @@ public class SettingsActivity extends AppCompatActivity {
         }
     }
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to transfer user to settings
-    // output is this function below, creating the dialog, and setting the buttons
+    // output is this function below, also creating the dialog, and setting the buttons
 
     /**
      * If a user denies location permission, they are prompted to go to settings to enable it
