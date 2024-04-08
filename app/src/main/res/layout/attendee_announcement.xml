@@ -7,7 +7,9 @@
     android:background="#FFFDFD">
 
     <!--    Canva’s licensing explained:  https://www.canva.com/licensing-explained/-->
-    <!--    Used Canva Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon, EmailIcon etc.-->
+    <!--    Used Canva's Free Icons like AddressIcon, CalendarIcon, CameraIcon, ClockIcon,
+    EmailIcon etc.-->
+
 
 
     <TextView
