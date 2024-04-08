@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/settings"
+    android:background="@color/white"
     tools:context=".attendee.SettingsActivity">
     <!--Citation: OpenAI, 2024-02-28, ChatGPT, How to use drawables -->
     <!-- output is that you call the drawable file with android:background-->
