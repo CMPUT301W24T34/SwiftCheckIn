@@ -40,13 +40,14 @@ public class AdminPassword extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Citation: For the following code for edit text, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to format password and ignore casing
                 String password = passwordEditText.getText().toString().trim();
 
                 if (password.equalsIgnoreCase("SwiftCheckIn")) {
                     Toast.makeText(AdminPassword.this, "Switched to admin", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(AdminPassword.this, AdminActivity.class);
                     startActivity(intent);
-                    finish(); // Finish the login activity after starting AdminActivity
+                    finish();
                 } else {
                     Toast.makeText(AdminPassword.this, "Incorrect password", Toast.LENGTH_SHORT).show();
                 }

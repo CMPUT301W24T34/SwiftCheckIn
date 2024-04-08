@@ -36,14 +36,9 @@
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity android:name=".attendee.AdminPassword" />
-        <activity
-            android:name=".organizer.ViewCheckInActivity"
-            android:exported="false" />
+
         <activity
             android:name=".organizer.AddAnnouncementActivity"
-            android:exported="false" />
-        <activity
-            android:name=".organizer.ViewAttendeesActivity"
             android:exported="false" />
 
         <activity

@@ -14,7 +14,7 @@ import com.example.swiftcheckin.R;
 
 import java.util.ArrayList;
 /**
- * This is the profile array adapter
+ * This is the profile array adapter for admin
  */
 public class ProfileArrayAdapter extends ArrayAdapter<Profile>{
     private ArrayList<Profile> profiles;

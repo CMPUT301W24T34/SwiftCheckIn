@@ -89,7 +89,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         });
         firebase_organizer.addGeolocation(eventId);
         Switch geolocationSwitch = view.findViewById(R.id.geolocation_switch);
-        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+        //Citation: For the following code to get the geolocation status boolean, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
         firebase_organizer.geolocationEnabled(eventId, new FirebaseOrganizer.GeolocationCallback() {
             @Override
             public void onGeolocationStatus(boolean enabled) {
@@ -112,7 +112,7 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
         viewMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ///Citation: For the following code line, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
+                ///Citation: For the following code to asynchronously check the geolocation status, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to call a query boolean function asynchronously
                 firebase_organizer.geolocationEnabled(eventId, new FirebaseOrganizer.GeolocationCallback() {
                     @Override
                     public void onGeolocationStatus(boolean enabled) {

@@ -18,7 +18,9 @@ import com.example.swiftcheckin.R;
 import com.example.swiftcheckin.organizer.Event;
 
 import java.util.ArrayList;
-
+/**
+ * This is the image array adapter for admin
+ */
 public class ImageArrayAdapter extends ArrayAdapter<Event> {
     public ImageArrayAdapter(Context context, ArrayList<Event> events){
         super(context, 0, events);
