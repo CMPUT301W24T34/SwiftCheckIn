@@ -89,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Fetches event data from Firestore.
+     * Retrieves event data from the Firebase database and updates the event view adapter to reflect
+     * any changes in the event list.
      */
     private void getEventData() {
         db_attendee.getEventList(eventList, new FirebaseAttendee.EventListCallback() {
@@ -99,6 +100,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * Retrieves signed up event data from the Firebase database and updates the event view adapter
+     * to reflect any changes in the event list.
+     */
     private void getMyEventData() {
 
         db_attendee.getMyEventIds(myEventList, getApplicationContext(),
@@ -111,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Sets up UI elements and listeners.
+     * Sets up the user interface by initializing various UI elements and their listeners.
      */
     private void setupUI() {
         // Profile Picture Button
@@ -122,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-//         Switch Mode Button
+//      Switch Mode Button
         FloatingActionButton fab = findViewById(R.id.switch_modes);
         fab.setOnClickListener(v -> new SwitchModeFragment().show(getSupportFragmentManager(), "Switch Modes"));
 
@@ -167,6 +173,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(annoucementIntent);
 
         });
+
+        // SignedUp Event Details
         listViewMyEvent.setOnItemClickListener((parent, view, position, id) -> {
             Intent annoucementIntent = new Intent(MainActivity.this, AnnoucementActivity.class);
             String eventID = myEventList.get(position).getDeviceId() + eventList.get(position).getEventTitle();
@@ -199,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the event list button with a click listener to show the event list.
+     *
+     * @param view1 The TextView representing the event list button.
+     */
     protected void intializeEventListButton(TextView view1) {
 
         view1.setOnClickListener(new View.OnClickListener() {
@@ -210,6 +223,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Initializes the myEvent list button with a click listener to show the myEvent list.
+     *
+     * @param view1 The TextView representing the myEvent list button.
+     */
     protected void intializeSignedUpEventListButton(TextView view1) {
 
         view1.setOnClickListener(new View.OnClickListener() {
@@ -222,6 +240,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Shows the list of signed-up events by making the "My Events" list visible and hiding the "All Events" list.
+     * Updates the background of the "My Events" button to indicate selection.
+     */
     private void showSignedUpEventList() {
          if (listViewMyEvent.getVisibility() == View.INVISIBLE) {
              listViewMyEvent.setVisibility(View.VISIBLE);
@@ -233,6 +255,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Shows the list of all available events by making the "All Events" list visible and hiding the "My Events" list.
+     * Updates the background of the "All Events" button to indicate selection.
+     */
     private void showEventList() {
         if(listViewEvents.getVisibility() == View.INVISIBLE) {
             listViewEvents.setVisibility(View.VISIBLE);
