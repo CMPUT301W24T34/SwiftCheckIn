@@ -9,6 +9,7 @@ import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.CoreMatchers.anything;
 
 import androidx.test.espresso.action.ViewActions;
@@ -43,16 +44,23 @@ public class OrgCheckInTest {
 
                 e.printStackTrace();
             }
-        } else {
+        }
             onView(withId(R.id.switch_modes)).perform(click());
             onView(withId(R.id.organizer_button)).perform(click());
             onView(withId(R.id.add_event_button)).perform(click());
             onView(withId(R.id.eventName)).perform(ViewActions.clearText(), ViewActions.typeText("Espresso Test For Event Creation"));
             onView(withId(R.id.eventPageAddressEditText)).perform(ViewActions.clearText(), ViewActions.typeText("10000 1000"));
-            onView(withId(R.id.eventAddActivity_StartDate_EditText)).perform(ViewActions.clearText(), replaceText("Apr 5 2024"));
-            onView(withId(R.id.eventAddActivity_eventStartTime_EditText)).perform(ViewActions.clearText(), ViewActions.typeText("7:00"));
-            onView(withId(R.id.eventAddActivity_eventEndDate_EditText)).perform(ViewActions.clearText(), replaceText("Apr 5 2024"));
-            onView(withId(R.id.eventAddActivity_eventEndTime_EditText)).perform(ViewActions.clearText(), ViewActions.typeText("9:00"));
+            onView(withId(R.id.eventAddActivity_StartDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+            onView(withId(R.id.eventAddActivity_eventStartTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+
+            onView(withId(R.id.eventAddActivity_eventEndDate_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+
+            onView(withId(R.id.eventAddActivity_eventEndTime_EditText)).perform(click());
+            onView(withText("OK")).perform(click());
+
             onView(withId(R.id.editMaxAttendeeText)).perform(ViewActions.clearText(), ViewActions.typeText("9"));
             onView(withId(R.id.editMaxAttendeeText)).perform(closeSoftKeyboard());
             onView(withId(R.id.eventPageDescriptionEditText)).perform(ViewActions.clearText(), ViewActions.typeText("This is to be tested."));
@@ -89,4 +97,3 @@ public class OrgCheckInTest {
             onView(withId(R.id.organizerEventInfo_CheckedInTitle)).check(matches(isDisplayed()));
         }
     }
-}

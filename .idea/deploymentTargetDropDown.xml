@@ -2,9 +2,6 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="OrgAddAnnouncementTest">
-        <State />
-      </entry>
       <entry key="OrgCheckInTest">
         <State>
           <runningDeviceTargetSelectedWithDropDown>
@@ -25,6 +22,9 @@
         <State />
       </entry>
       <entry key="OrgQRCodesInfoTest">
+        <State />
+      </entry>
+      <entry key="OrgSignUpCheck">
         <State />
       </entry>
       <entry key="OrganizerTest">
