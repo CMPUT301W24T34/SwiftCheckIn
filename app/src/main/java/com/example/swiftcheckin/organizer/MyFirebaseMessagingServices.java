@@ -20,11 +20,20 @@ import com.example.swiftcheckin.attendee.MainActivity;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+/**
+ * This class extends FirebaseMessagingService to handle FCM (Firebase Cloud Messaging) messages.
+ * It receives incoming messages and processes them accordingly.
+ */
 public class MyFirebaseMessagingServices extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMessagingServices";
     private static final String FOREGROUND_CHANNEL_ID = "com.example.swiftcheckin.foreground";
 
+    /**
+     * Called when a new FCM message is received.
+     *
+     * @param remoteMessage The RemoteMessage object containing the received message.
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d(TAG, "Received message: " + remoteMessage);
@@ -38,6 +47,12 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
         }
     }
 
+    /**
+     * Sends a notification with the specified title and body.
+     *
+     * @param title The title of the notification.
+     * @param body  The body of the notification.
+     */
     private void sendNotification(String title, String body) {
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -63,12 +78,18 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
         notificationManager.notify(0, builder.build());
     }
 
+    /**
+     * Called when the service is created. Creates a notification channel.
+     */
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
     }
 
+    /**
+     * Creates a notification channel for Android Oreo (API level 26) and above.
+     */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel("default", "Default Channel", NotificationManager.IMPORTANCE_HIGH);

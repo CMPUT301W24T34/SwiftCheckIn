@@ -28,6 +28,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+/**
+ * A dialog fragment for displaying organization details and a QR code.
+ */
 public class SwitchOrgDetailsFragment extends DialogFragment {
 
     String eventId;
@@ -36,14 +39,13 @@ public class SwitchOrgDetailsFragment extends DialogFragment {
     String eventTitle;
     private FirebaseOrganizer firebase_organizer;
 
-//    public static SwitchOrgDetailsFragment newInstance(String extraData) {
-//        SwitchOrgDetailsFragment fragment = new SwitchOrgDetailsFragment();
-//        Bundle args = new Bundle();
-//        args.putString("eventId", extraData);
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
-
+    /**
+     * Constructs a new SwitchOrgDetailsFragment with the provided event details.
+     *
+     * @param eventId    The ID of the event.
+     * @param bitmap     The QR code bitmap.
+     * @param eventTitle The title of the event.
+     */
     public SwitchOrgDetailsFragment(String eventId, Bitmap bitmap, String eventTitle)
     {
         this.eventId = eventId;

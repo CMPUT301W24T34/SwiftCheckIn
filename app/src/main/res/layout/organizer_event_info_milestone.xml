@@ -28,13 +28,13 @@
             android:layout_weight="3"
 
             android:text="1. First Signup"
-            android:textSize="20sp"/>
-
+            android:textSize="20sp" />
         <ImageView
             android:id="@+id/milestone_firstSignUp"
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
+            android:src="@drawable/cross"
             />
     </LinearLayout>
 
@@ -61,6 +61,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
+            android:src="@drawable/cross"
             />
     </LinearLayout>
 
@@ -87,6 +88,7 @@
             android:layout_width="0dp"
             android:layout_height="25dp"
             android:layout_weight="1"
+            android:src="@drawable/cross"
             />
     </LinearLayout>
 
@@ -111,7 +113,8 @@
             android:id="@+id/milestone_tenCheckIn"
             android:layout_width="0dp"
             android:layout_height="25dp"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:src="@drawable/cross"/>
     </LinearLayout>
 
     <TextView

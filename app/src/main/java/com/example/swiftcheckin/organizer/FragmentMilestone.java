@@ -16,17 +16,32 @@ import com.example.swiftcheckin.R;
 
 import java.util.ArrayList;
 
+/**
+ * A dialog fragment to display milestone achievements based on checked-in and signed-up lists.
+ */
 public class FragmentMilestone extends DialogFragment {
 
     ArrayList<Pair<String, String>> checkedInList;
     ArrayList<Pair<String, String>> signedUpList;
 
+    /**
+     * Constructs a new FragmentMilestone with the specified checked-in and signed-up lists.
+     *
+     * @param checkedInList The list of checked-in attendees.
+     * @param signedUpList  The list of signed-up attendees.
+     */
     FragmentMilestone(ArrayList<Pair<String, String>> checkedInList, ArrayList<Pair<String, String>> signedUpList)
     {
         this.checkedInList = checkedInList;
         this.signedUpList = signedUpList;
     }
 
+    /**
+     * Creates and returns a dialog for milestone achievements based on checked-in and signed-up lists.
+     *
+     * @param savedInstanceState The saved instance state.
+     * @return The created dialog.
+     */
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState)
