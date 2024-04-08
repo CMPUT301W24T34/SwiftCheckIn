@@ -72,7 +72,7 @@ public class AdminTest {
      */
     @Test
     public void testDeleteEvent(){
-        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click allow to a pop up
+        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click allow to a pop up in an android test
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
 
 
@@ -85,7 +85,7 @@ public class AdminTest {
 
             } catch (UiObjectNotFoundException e) {
 
-                e.printStackTrace(); // Or any other handling you might want to do
+                e.printStackTrace();
             }
         } else {
 
@@ -123,8 +123,7 @@ public class AdminTest {
                 i = 0;
                 boolean eventFound = false;
                 for (Event event : eventList) {
-                    if (event.getEventTitle().equals("Delete Event Test")) { // Assuming 'getName()' returns the event name
-
+                    if (event.getEventTitle().equals("Delete Event Test")) {
                         eventFound = true;
                         break;
                     }
@@ -134,15 +133,10 @@ public class AdminTest {
                 assertTrue("Expected event not found in the event list", eventFound);
             });
 
-            // call the event list from admin activity and check to see if the event "Delete Event Test"
-            // then get the index of the event
-            // click the list at that index
-            //then click remove_button
-            //assert that the event is no longer in event list
             //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click a list at a certain index
             onData(anything())
                     .inAdapterView(withId(R.id.listView))
-                    .atPosition(i) // Replace 0 with the position of the item if it's not the first one
+                    .atPosition(i)
                     .onChildView(withId(R.id.event_name))
                     .check(matches(withText("Delete Event Test")))
                     .perform(click());
@@ -180,101 +174,5 @@ public class AdminTest {
         }
 
     }
-//    /**
-//     * Test if a user can delete a profile
-//     */
-//    @Test
-//    public void testDeleteProfile(){
-//        onView(withId(R.id.profile_picture)).perform(click());
-//        onView(withId(R.id.profile)).check(matches(isDisplayed()));
-//        onView(withId(R.id.settings_button)).perform(click());
-//        onView(withId(R.id.settings)).check(matches(isDisplayed()));
-//        onView(withId(R.id.name)).perform(ViewActions.clearText(), ViewActions.typeText("DeleteProfileTest"));
-//        onView(withId(R.id.word_name)).perform(click());
-//        onView(withId(R.id.save_button)).perform(click());
-//        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to delay in a test
-//        try {
-//            Thread.sleep(5000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//        pressBack();
-//        onView(withId(R.id.switch_modes)).perform(click());
-//        onView(withId(R.id.admin_button)).perform(click());
-//        onView(withId(R.id.editTextTextPassword)).perform(ViewActions.clearText(), ViewActions.typeText("SwiftCheckIn"));
-//        onView(withId(R.id.editTextTextPassword)).perform(closeSoftKeyboard());
-//        onView(withId(R.id.login_button )).perform(click());
-//        onView(withId(R.id.profile_button)).perform(click());
-//        try {
-//            Thread.sleep(7000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        ActivityScenario<AdminActivity> activity2 = ActivityScenario.launch(AdminActivity.class);
-//        activity2.onActivity(activity -> {
-//            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
-//
-//
-//            i = 0;
-//            boolean profileFound = false;
-//            for (Profile profile : profileList) {
-//                if (profile.getName().equals("DeleteProfileTest")) { // Assuming 'getName()' returns the event name
-//
-//                    profileFound = true;
-//                    break;
-//                }
-//                i++;
-//            }
-//
-//            assertTrue("Expected profile not found in the list", profileFound);
-//        });
-//
-//        // call the event list from admin activity and check to see if the event "Delete Event Test"
-//        // then get the index of the event
-//        // click the list at that index
-//        //then click remove_button
-//        //assert that the event is no longer in event list
-//        onData(anything())
-//                .inAdapterView(withId(R.id.listView))
-//                .atPosition(i)
-//                .onChildView(withId(R.id.name_text))
-//                .check(matches(withText("DeleteProfileTest")))
-//                .perform(click());
-//
-//        onView(withId(R.id.remove_tab_button))
-//                .check(matches(isDisplayed()))
-//                .perform(click());
-//
-//
-//        try {
-//            Thread.sleep(5000); // 1 second delay
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        onView(withId(R.id.remove_tab_button)).perform(click());
-//
-//
-//
-//
-//        activity2.onActivity(activity -> {
-//            List<Profile> profileList = activity.getProfileList(); assertNotNull(profileList);
-//
-//            boolean profileFound = false;
-//            for (Profile profile : profileList) {
-//                if (profile.getName().equals("DeleteProfileTest")) { // Assuming 'getName()' returns the event name
-//
-//                    profileFound = true;
-//                    break;
-//                }
-//            }
-//
-//            assertFalse("Expected profile found in the event list",profileFound);
-//        });
-//
-//    }
 
 }
