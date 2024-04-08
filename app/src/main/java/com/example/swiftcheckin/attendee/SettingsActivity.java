@@ -116,13 +116,9 @@ public class SettingsActivity extends AppCompatActivity {
                 String website = websiteEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 boolean locationPermission = locationCheckBox.isChecked();
-                if (!name.equals("") && isValid(birthday)) {
+                if (!name.equals("")) {
                     saveData(name, birthday, phoneNumber, email, website, address, locationPermission);
                 }
-                if (!name.equals("") && !isValid(birthday)) {
-                    saveData(name, "", phoneNumber, email, website, address, locationPermission);
-                }
-
                 finish();
             }
         });
