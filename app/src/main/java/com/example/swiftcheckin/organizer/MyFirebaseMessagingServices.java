@@ -21,6 +21,10 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 /**
+ * Service for handling Firebase Cloud Messaging.
+ * Citations: https://firebase.google.com/docs/cloud-messaging/android/client
+ * https://developer.android.com/develop/ui/views/notifications (and further in this link)
+ * OpenAI | April 3 , 2024 | ChatGPT | Assist me in implementing the Firebase Cloud Messaging service for sending notifications to the app
  * This class extends FirebaseMessagingService to handle FCM (Firebase Cloud Messaging) messages.
  * It receives incoming messages and processes them accordingly.
  */
@@ -30,6 +34,8 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
     private static final String FOREGROUND_CHANNEL_ID = "com.example.swiftcheckin.foreground";
 
     /**
+     *
+     * @param remoteMessage the message received from Firebase Cloud Messaging
      * Called when a new FCM message is received.
      *
      * @param remoteMessage The RemoteMessage object containing the received message.
@@ -88,7 +94,7 @@ public class MyFirebaseMessagingServices extends FirebaseMessagingService {
     }
 
     /**
-     * Creates a notification channel for Android Oreo (API level 26) and above.
+     * Creates a notification channel for the app.
      */
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
