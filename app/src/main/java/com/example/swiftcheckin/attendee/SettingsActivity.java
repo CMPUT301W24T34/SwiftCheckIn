@@ -62,6 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
     private EditText websiteEditText;
     private EditText addressEditText;
     private CheckBox locationCheckBox;
+    // Citation: OpenAI, 03-29-2024, ChatGPT, How to get location of user
+    // said to use the following 3 lines
     private static final int LOCATION_PERMISSION = 1001;
     private LocationManager locationManager;
     private LocationListener locationListener;
