@@ -116,10 +116,16 @@ public class SettingsActivity extends AppCompatActivity {
                 String website = websiteEditText.getText().toString();
                 String address = addressEditText.getText().toString();
                 boolean locationPermission = locationCheckBox.isChecked();
-                if (!name.equals("")) {
+                if (!name.equals("") && isValid(phoneNumber)) {
                     saveData(name, birthday, phoneNumber, email, website, address, locationPermission);
+                    finish();
                 }
-                finish();
+                else if (!name.equals("") && !isValid(phoneNumber)){
+                    invalidPhoneDialog();
+                }
+                else if (name.equals("")){
+                    invalidNameDialog();
+                }
             }
         });
         // Citation: How to clear focus, Stack Overflow, License: CC-BY-SA, user name xtr, "Android: Force EditText to remove focus? [duplicate]", 2011-05-25, https://stackoverflow.com/questions/5056734/android-force-edittext-to-remove-focus
@@ -145,12 +151,12 @@ public class SettingsActivity extends AppCompatActivity {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
     }
 
-    private boolean isValid(String birthday) {
-        if (birthday.equals("")) {
+    private boolean isValid(String phone) {
+        if (phone.equals("")) {
             return true;
         } else {
-            String pattern = "\\d{2}/\\d{2}/\\d{4}";
-            return Pattern.matches(pattern, birthday);
+            String pattern = "\\d{3}-\\d{3}-\\d{4}";
+            return Pattern.matches(pattern, phone);
         }
     }
 
@@ -283,6 +289,36 @@ public class SettingsActivity extends AppCompatActivity {
                 data.put("longitude", "Unknown");
                 fb.updateLocationInfo(deviceId, data);
 
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = popup.create();
+        dialog.show();
+    }
+
+    private void invalidPhoneDialog() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Invalid Phone Number");
+        popup.setMessage("Phone Number must be in the format XXX-XXX-XXXX");
+
+        popup.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        AlertDialog dialog = popup.create();
+        dialog.show();
+    }
+
+    private void invalidNameDialog() {
+        AlertDialog.Builder popup = new AlertDialog.Builder(this);
+        popup.setTitle("Invalid Name");
+        popup.setMessage("Please enter your name to proceed.");
+
+        popup.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
