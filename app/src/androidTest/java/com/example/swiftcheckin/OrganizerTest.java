@@ -171,7 +171,7 @@ public class OrganizerTest {
             e.printStackTrace();
         }
 
-//        onView(withId(R.id.send_notifications_button)).perform(ViewActions.click());
+        //onView(withId(R.id.send_notifications_button)).perform(ViewActions.click());
         onView(withId(R.id.addAnnouncementCancelButton)).check(matches(isDisplayed()));
     }
 }

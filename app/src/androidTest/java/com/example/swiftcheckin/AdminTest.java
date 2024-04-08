@@ -72,9 +72,8 @@ public class AdminTest {
      */
     @Test
     public void testDeleteEvent(){
-        //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click allow to a pop up in an android test
+        //Citation: For the following ui device lines, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click allow to a pop up in an android test
         UiDevice uiDevice = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation());
-
 
         UiObject allowButton = uiDevice.findObject(new UiSelector().text("Allow").className("android.widget.Button"));
 
@@ -113,7 +112,7 @@ public class AdminTest {
             onView(withId(R.id.editTextTextPassword)).perform(closeSoftKeyboard());
             onView(withId(R.id.login_button)).perform(click());
 
-            //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get a list from another activity
+            //Citation: For the following activity lines, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to get a list from another activity
             ActivityScenario<AdminActivity> activityScenario = ActivityScenario.launch(AdminActivity.class);
             activityScenario.onActivity(activity -> {
                 List<Event> eventList = activity.getEventList();
@@ -133,7 +132,7 @@ public class AdminTest {
                 assertTrue("Expected event not found in the event list", eventFound);
             });
 
-            //Citation: For the following code idea, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click a list at a certain index
+            //Citation: For the following data lines, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to click a list at a certain index
             onData(anything())
                     .inAdapterView(withId(R.id.listView))
                     .atPosition(i)
@@ -163,7 +162,7 @@ public class AdminTest {
                 boolean eventFound = false;
                 for (Event event : eventList) {
                     if (event.getEventTitle().equals("Delete Event Test")) {
-//
+
                         eventFound = true;
                         break;
                     }
