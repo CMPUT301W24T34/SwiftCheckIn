@@ -31,10 +31,55 @@ public class EventSignUp {
      */
     // Instead of the eventId, why don't I pass an event entirely?
     public void addAttendeeToEvent(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
+        // Citation: OpenAI,  ChatGPT, how to query events before event sign up
+
+        db = FirebaseFirestore.getInstance();
+
+        try {
+            Thread.sleep(7000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        DocumentReference eventDoc = db.collection("events").document(eventId);
+
+        // Check if the event exists in the "events" collection
+        eventDoc.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    checkEventWithAttendees(eventId, attendeeDeviceId, eventMaxAttendees, eventCurrentAttendees);
+                    // Event exists in the "events" collection
+                    System.out.println("Event with ID " + eventId + " exists in the events collection.");
+                    // Perform additional operations here if needed
+                } else {
+                    // Event does not exist in the "events" collection
+                    System.out.println("Event with ID " + eventId + " does not exist in the events collection.");
+                    // Stop further processing here if needed
+                }
+            } else {
+                System.out.println("Error querying event document: " + task.getException());
+
+
+                // Now, check if the event exists in the "eventsWithAttendees" collection
+
+            }
+        });
+    }
+    /**
+     * This methods helps associate an attendee to an event.
+     *
+     * @param eventId          - The Id of the event the attendee wants to sign up for.
+     * @param attendeeDeviceId - The id of the attendee who wants to signs up
+     */
+    public void checkEventWithAttendees(String eventId, String attendeeDeviceId, String eventMaxAttendees, String eventCurrentAttendees) {
         int maxAttendees = Integer.parseInt(eventMaxAttendees);
         int currentAttendees = Integer.parseInt(eventCurrentAttendees);
         db = FirebaseFirestore.getInstance();
+
+
+
         DocumentReference eventDoc = db.collection("eventsWithAttendees").document(eventId);
+
 
         eventDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -67,6 +112,7 @@ public class EventSignUp {
         if (currentAttendees != maxAttendees) {
             HashMap<String, String> data = new HashMap<>();
             data.put(attendeeDeviceId, attendeeDeviceId);
+
             // Citation: OpenAI, 03-07-2024,  ChatGPT, updating data in documents without resetting the entire document.
         /*
         I wanted to know how to update fields without overwriting previous data and I tried using .update(), but that did not work
