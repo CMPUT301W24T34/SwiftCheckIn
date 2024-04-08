@@ -47,6 +47,11 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".organizer.EventQrReuseScanActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".attendee.QRCodeScannerActivity"
             android:screenOrientation="portrait"
             android:stateNotNeeded="true"

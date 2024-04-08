@@ -2,7 +2,9 @@ package com.example.swiftcheckin.organizer;
 
 import android.graphics.Bitmap;
 
-public class Qr_Code {
+import java.io.Serializable;
+
+public class Qr_Code{
     private Bitmap image;
     private String eventID;
     private String QrID;

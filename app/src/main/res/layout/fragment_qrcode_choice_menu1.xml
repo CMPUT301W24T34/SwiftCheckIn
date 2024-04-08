@@ -40,10 +40,10 @@
             android:text="Create New QR code"
             android:backgroundTint="@color/black"/>
         <Button
-            android:id="@+id/fragmentQrCodeMenu1ExistingButton"
+            android:id="@+id/fragmentQrCodeMenu1ScanButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:visibility="invisible"
+            android:visibility="visible"
 
             app:layout_constraintWidth_percent="0.7"
             app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1NewButton"
@@ -52,7 +52,23 @@
 
             android:layout_marginTop="10dp"
 
-            android:text="Select existing QR code"
+            android:text="Scan QR code"
+            android:backgroundTint="@color/black"/>
+
+        <Button
+            android:id="@+id/fragmentQrCodeMenu1ExistingButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:visibility="invisible"
+
+            app:layout_constraintWidth_percent="0.7"
+            app:layout_constraintTop_toBottomOf="@id/fragmentQrCodeMenu1ScanButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginTop="10dp"
+
+            android:text="Select unused QR code"
             android:backgroundTint="@color/black"/>
 
 

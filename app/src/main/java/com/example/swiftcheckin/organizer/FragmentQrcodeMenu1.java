@@ -2,12 +2,15 @@ package com.example.swiftcheckin.organizer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -22,6 +25,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.camera.core.processing.SurfaceProcessorNode;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.DialogFragment;
@@ -32,20 +36,25 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
  * DialogFragment to show generated QR and ask for user choice.
  */
-public class FragmentQrcodeMenu1 extends DialogFragment {
+public class FragmentQrcodeMenu1 extends DialogFragment{
     //Citation: The following code for sharing a QR code, 2024, Licensing: CC BY, Youtube, Share an image file from app cache directory, Sanjeev Kumar, https://www.youtube.com/watch?v=QbTCMe9RnJ0
 
     private Button selectQr;    // to be implemented
     private Button newQr;   // Button to generate new QR.
+
+    private Button scanQr;
     private String eventId;     // Stores eventId
     private Button saveButton;  // Button to save the event.
 
+    private BroadcastReceiver broadcastReceiver;
 
     private ImageView qrImageSuccess;
     private String deviceId;
@@ -56,7 +65,6 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     private ListView reuseQrList;
     private ArrayList<Qr_Code> qrDataList;
     private ReuseQrAdapter reuseQrAdapter;
-
 
     ConstraintLayout layout1;       // The layout with buttons to generate or select a Qr code.
     LinearLayout layout_selection;  // selection yet to be made
@@ -88,8 +96,12 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
     /**
      * Constructor of the FragmentQrcodeMenu1 class. Initialises the dialog fragment.
      */
-    public FragmentQrcodeMenu1(String eventId) {
-        this.eventId = eventId;
+    public static FragmentQrcodeMenu1 newInstance(String eventId) {
+        FragmentQrcodeMenu1 fragment = new FragmentQrcodeMenu1();
+        Bundle args = new Bundle();
+        args.putString("eventId", eventId);
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -108,8 +120,17 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.fragment_qrcode_choice_menu1, null);
         selectQr = view.findViewById(R.id.fragmentQrCodeMenu1ExistingButton);
         newQr = view.findViewById(R.id.fragmentQrCodeMenu1NewButton);
+        scanQr = view.findViewById(R.id.fragmentQrCodeMenu1ScanButton);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            eventId = args.getString("eventId");
+        }
+
         db_organizer = new FirebaseOrganizer(requireContext());    // citation: auto-suggested by android studio
         deviceId = Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        initializeBroadcastReceiver();
 
         // layout 1
         layout1 = view.findViewById(R.id.qrCodeCreationMenu_Layout1);
@@ -169,6 +190,20 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
             public void onClick(View v) {
                 layout1.setVisibility(View.INVISIBLE);
                 layout_selection.setVisibility(View.VISIBLE);
+            }
+        });
+
+        scanQr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), EventQrReuseScanActivity.class);
+                startActivity(intent);
+
+                promoQrCode = createQr();
+                promoQrCode.setIsPromo(true);
+                Log.d("Before success screen", qrCodeGenerated.getQrID());
+                Log.d("Before success screen - promo", promoQrCode.getQrID());
+                showSuccessScreen(view);
             }
         });
 
@@ -342,5 +377,39 @@ public class FragmentQrcodeMenu1 extends DialogFragment {
         }
         Log.d("Success Screen", "Showing success screen");
         successLayout.setVisibility(View.VISIBLE);
+    }
+
+    private void initializeBroadcastReceiver()
+    {
+         broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (Objects.equals(intent.getAction(), EventQrReuseScanActivity.ACTION_QR_BROADCAST)) {
+                    String qrtId = intent.getStringExtra("qrId");
+
+                }
+            }
+        };
+    }
+
+    public void setQrId(String qrId)
+    {
+        Qr_Code generatedCode = new Qr_Code(qrId, QrCodeManager.generateQRCode(qrId));
+        this.qrCodeGenerated = generatedCode;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        IntentFilter filter = new IntentFilter(EventQrReuseScanActivity.ACTION_QR_BROADCAST);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            requireActivity().registerReceiver(broadcastReceiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        requireActivity().unregisterReceiver(broadcastReceiver);
     }
 }

@@ -96,6 +96,42 @@ public class FirebaseOrganizer {
                 });
     }
 
+    public interface QrAvailabilityCallback
+    {
+        public void onAvailable(Boolean isAvailable, String qrId);
+        public void notAvailable(String qrId, String errorMessage);
+    }
+
+    public void checkQrAvailable(String qrId, QrAvailabilityCallback callback)
+    {
+        DocumentReference documentReference = db.collection("qrcodes").document(qrId);
+        documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful())
+                {
+                    DocumentSnapshot document = task.getResult();
+                    if(document.exists())
+                    {
+                        String deviceId = (String) document.get("deviceID");
+                        if(deviceId.equals(deviceID))
+                        {
+                            callback.onAvailable(true, qrId);
+                        }
+                        else
+                        {
+                            callback.notAvailable(qrId, "QRCode taken by other user");
+                        }
+                    }
+                    else
+                    {
+                        callback.onAvailable(true, qrId);
+                    }
+                }
+            }
+        });
+    }
+
     /**
      * Saves an event to the Firestore database.
      *

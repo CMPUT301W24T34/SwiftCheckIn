@@ -2,9 +2,11 @@ package com.example.swiftcheckin.organizer;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.Image;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.util.Size;
 import android.widget.Toast;
@@ -37,14 +39,24 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+
 public class EventQrReuseScanActivity extends AppCompatActivity {
 
 
-    // code take from QrCodeScannerActivity
+    public interface EventReuseQrListener
+    {
+        public void setID(String qrId);
+    }
 
+    // code take from QrCodeScannerActivity
     private static final int PERMISSION_REQUEST_CAMERA = 1;
     private PreviewView previewView;
     private ExecutorService cameraExecutor;
+
+    private FirebaseOrganizer dbOrganizer;
+
+    public static final String ACTION_QR_BROADCAST = "com.example.swiftcheckin.SCAN_QR_FETCH";
+    Intent broadcastIntent;
 
 
     @Override
@@ -55,6 +67,9 @@ public class EventQrReuseScanActivity extends AppCompatActivity {
 
         previewView = findViewById(R.id.organizerPreviewView);
         cameraExecutor = Executors.newSingleThreadExecutor();
+        dbOrganizer = new FirebaseOrganizer(getApplicationContext());
+
+        //reference = (FragmentQrcodeMenu1) getIntent().getSerializableExtra("callingFragment");
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             startCamera();
@@ -128,10 +143,24 @@ public class EventQrReuseScanActivity extends AppCompatActivity {
 
                         for (Barcode barcode : barcodes) {
                             if (barcode.getValueType() == Barcode.TYPE_TEXT) {
-                                String scannedQRCode = barcode.getDisplayValue();
-                                Log.d("QRCode", scannedQRCode);
+                                String scannedQRId = barcode.getDisplayValue();
+                                Log.d("QRCode", scannedQRId);
                                 isScanning = false;
-                                // handle the qr value retrieved
+                                dbOrganizer.checkQrAvailable(scannedQRId, new FirebaseOrganizer.QrAvailabilityCallback() {
+                                    @Override
+                                    public void onAvailable(Boolean isAvailable, String qrId) {
+                                        Toast.makeText(getApplicationContext(), "Qr Used", Toast.LENGTH_LONG);
+                                        // set the returned qrId as a value for a variable in the calling dialog fragment
+                                        broadcastIntent = new Intent(ACTION_QR_BROADCAST);
+                                        broadcastIntent.putExtra("qrId", qrId);
+                                        sendBroadcast(broadcastIntent);
+                                    }
+
+                                    @Override
+                                    public void notAvailable(String qrId, String errorMessage) {
+                                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_LONG);
+                                    }
+                                });
                                 break;
                             }
                         }
@@ -160,6 +189,12 @@ public class EventQrReuseScanActivity extends AppCompatActivity {
         }
     }
 
+
+    // handle qr
+
+    protected String retrieveDeviceId() {
+        return Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+    }
 
 
     private AlertDialog currentDialog = null; // Class level variable to hold the dialog
