@@ -104,6 +104,7 @@ public class FirebaseOrganizer {
 
     public void checkQrAvailable(String qrId, QrAvailabilityCallback callback)
     {
+        Log.d("FirbaseOrganizer - Qr avail", qrId);
         DocumentReference documentReference = db.collection("qrcodes").document(qrId);
         documentReference.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -116,15 +117,18 @@ public class FirebaseOrganizer {
                         String deviceId = (String) document.get("deviceID");
                         if(deviceId.equals(deviceID))
                         {
+                            Log.d("FirbaseOrganizer - Qr avail", "available: " + qrId);
                             callback.onAvailable(true, qrId);
                         }
                         else
                         {
+                            Log.d("FirbaseOrganizer - Qr avail", "not available: " + qrId);
                             callback.notAvailable(qrId, "QRCode taken by other user");
                         }
                     }
                     else
                     {
+                        Log.d("FirbaseOrganizer - Qr avail", "not available: " + qrId);
                         callback.onAvailable(true, qrId);
                     }
                 }

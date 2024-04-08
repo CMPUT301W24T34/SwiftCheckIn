@@ -149,11 +149,11 @@ public class EventQrReuseScanActivity extends AppCompatActivity {
                                 dbOrganizer.checkQrAvailable(scannedQRId, new FirebaseOrganizer.QrAvailabilityCallback() {
                                     @Override
                                     public void onAvailable(Boolean isAvailable, String qrId) {
-                                        Toast.makeText(getApplicationContext(), "Qr Used", Toast.LENGTH_LONG);
+                                        Toast.makeText(getApplicationContext(), "Qr Used", Toast.LENGTH_LONG).show();
                                         // set the returned qrId as a value for a variable in the calling dialog fragment
                                         broadcastIntent = new Intent(ACTION_QR_BROADCAST);
                                         broadcastIntent.putExtra("qrId", qrId);
-                                        sendBroadcast(broadcastIntent);
+                                        getApplicationContext().sendBroadcast(broadcastIntent);
                                     }
 
                                     @Override
@@ -172,7 +172,7 @@ public class EventQrReuseScanActivity extends AppCompatActivity {
                     })
                     .addOnCompleteListener(task -> imageProxy.close());
         }
-
+        this.finish();
     }
 
     @Override
