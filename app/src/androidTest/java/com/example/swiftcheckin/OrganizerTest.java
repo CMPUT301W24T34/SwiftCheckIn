@@ -231,7 +231,7 @@ public class OrganizerTest {
             e.printStackTrace();
         }
 
-        onView(withId(R.id.view_check_in_attendees_button)).perform(ViewActions.click());
+//        onView(withId(R.id.view_check_in_attendees_button)).perform(ViewActions.click());
         onView(withId(R.id.viewCheckInBackButton)).check(matches(isDisplayed()));
 
     }

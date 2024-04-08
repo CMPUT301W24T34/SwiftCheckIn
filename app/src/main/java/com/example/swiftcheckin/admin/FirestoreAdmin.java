@@ -561,20 +561,38 @@ public class FirestoreAdmin {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 String documentId = document.getId();
-                                qrcodesCollectionRef.document(documentId)
-                                        .update("eventID", "Null")
-                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void unused) {
-                                                Log.d(TAG, "QR code data has been deleted successfully!");
-                                            }
-                                        })
-                                        .addOnFailureListener(new OnFailureListener() {
-                                            @Override
-                                            public void onFailure(@NonNull Exception e) {
-                                                Log.d(TAG, "Failed to delete QR code data: " + e.toString());
-                                            }
-                                        });
+                                String isPromo = document.getString("isPromo");
+                                if ("true".equals(isPromo)) {
+                                    qrcodesCollectionRef.document(documentId)
+                                            .delete()
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "QR code data has been deleted successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to delete QR code data: " + e.toString());
+                                                }
+                                            });
+                                } else {
+                                    qrcodesCollectionRef.document(documentId)
+                                            .update("eventID", "null")
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void unused) {
+                                                    Log.d(TAG, "eventID has been set to null successfully!");
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Log.d(TAG, "Failed to update eventID: " + e.toString());
+                                                }
+                                            });
+                                }
                             }
                         } else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
