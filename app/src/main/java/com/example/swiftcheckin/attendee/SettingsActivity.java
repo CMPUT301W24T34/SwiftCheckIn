@@ -277,12 +277,26 @@ public class SettingsActivity extends AppCompatActivity {
 
     // Citation: OpenAI, 03-29-2024, ChatGPT, How to ask user for location permission
     // output is getLocationPermission and onRequestPermissionsResult functions below
+
+    /**
+     * gets location permission
+     */
     private void getLocationPermission() {
         ActivityCompat.requestPermissions(this,
                 new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
                 LOCATION_PERMISSION);
     }
 
+    /**
+     * calls on the settings dialog if permission is denied
+     * @param requestCode The request code passed in {@link # requestPermissions(
+     * android.app.Activity, String[], int)}
+     * @param permissions The requested permissions. Never null.
+     * @param grantResults The grant results for the corresponding permissions
+     *     which is either {@link android.content.pm.PackageManager#PERMISSION_GRANTED}
+     *     or {@link android.content.pm.PackageManager#PERMISSION_DENIED}. Never null.
+     *
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -338,6 +352,9 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * dialog for when phone number doesn't follow format
+     */
     private void invalidPhoneDialog() {
         AlertDialog.Builder popup = new AlertDialog.Builder(this);
         popup.setTitle("Invalid Phone Number");
@@ -353,6 +370,9 @@ public class SettingsActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * dialog for when name is not entered
+     */
     private void invalidNameDialog() {
         AlertDialog.Builder popup = new AlertDialog.Builder(this);
         popup.setTitle("Invalid Name");
@@ -367,6 +387,11 @@ public class SettingsActivity extends AppCompatActivity {
         AlertDialog dialog = popup.create();
         dialog.show();
     }
+
+    /**
+     * Gets a calendar for birthday and sets user choice to the field
+     * @param editText - the birthday textview that gets updated
+     */
     private void initDatePicker(TextView editText)
     {
         String[] monthNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
