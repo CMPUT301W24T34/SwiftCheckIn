@@ -19,13 +19,17 @@ import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.HashMap;
 
+
 public class LocationReceiver {
     FirebaseAttendee fb;
     private static final int LOCATION_PERMISSION = 1001;
     private LocationManager locationManager;
     private LocationListener locationListener;
+    // this file works on getting the location from the users device
 
-
+    /**
+     * constructs the locationreceiver object
+     */
     public LocationReceiver(){
         fb = new FirebaseAttendee();
     }
