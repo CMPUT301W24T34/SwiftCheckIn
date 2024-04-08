@@ -266,6 +266,7 @@ public class SettingsActivity extends AppCompatActivity {
             data.put("locationPermission", "True");
             fb.saveProfileToFirebase(deviceId, data);
             // Citation: OpenAI, 04-06-2024, ChatGPT, How to get context to use in this call
+            // gave me getApplicationContext()
             locationReceiver.getLocation(deviceId, getApplicationContext());
 
         }
