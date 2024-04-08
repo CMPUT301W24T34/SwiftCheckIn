@@ -62,7 +62,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-
+    /**
+     * Called when the Google Map is ready to be used.
+     *
+     * @param googleMap The Google Map object representing the map.
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         myMap = googleMap;

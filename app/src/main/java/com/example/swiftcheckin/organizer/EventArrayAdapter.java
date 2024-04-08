@@ -37,6 +37,14 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         super(context, 0, events);
     }
 
+    /**
+     * Get a View that displays the data at the specified position in the data set.
+     *
+     * @param position    The position of the item within the adapter's data set.
+     * @param convertView The old view to reuse, if possible.
+     * @param parent      The parent that this view will eventually be attached to.
+     * @return            A View corresponding to the data at the specified position.
+     */
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent){
@@ -73,6 +81,7 @@ public class EventArrayAdapter extends ArrayAdapter<Event> {
         }
         else
         {
+            
             timeString = event.getStartTime() + "  + 1 Day";
         }
         eventTime.setText(timeString);
