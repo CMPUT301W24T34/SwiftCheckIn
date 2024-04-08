@@ -35,6 +35,7 @@
             android:layout_width="332dp"
             android:layout_height="23dp"
             android:layout_marginStart="36dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="36dp"
             android:layout_marginBottom="4dp"
             android:background="#E6E0E0"
@@ -46,6 +47,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UnknownIdInLayout" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -53,7 +55,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 
-        android:layout_marginTop="2dp"
+
+        android:layout_marginTop="3dp"
+        android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/eventPoster2">
@@ -65,7 +69,6 @@
             android:layout_marginStart="3dp"
             android:layout_marginTop="3dp"
             android:text="03:00 PM"
-            android:textAlignment="center"
             android:textColor="#000000"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/time_dash"
@@ -79,7 +82,6 @@
             android:layout_marginTop="3dp"
             android:layout_marginEnd="4dp"
             android:text="@string/dash"
-            android:textAlignment="center"
             android:textColor="#020000"
             app:layout_constraintEnd_toStartOf="@+id/edit_event_end_Time"
             app:layout_constraintStart_toEndOf="@+id/edit_event_start_time"
@@ -116,7 +118,6 @@
             android:layout_marginStart="7dp"
             android:layout_marginTop="3dp"
             android:text="@string/march_22_2023"
-            android:textAlignment="center"
             android:textColor="#040000"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/calendar_icon"
@@ -126,7 +127,7 @@
             android:id="@+id/calendar_icon"
             android:layout_width="21dp"
             android:layout_height="26dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="50dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/edit_event_date"
             app:layout_constraintStart_toStartOf="parent"
