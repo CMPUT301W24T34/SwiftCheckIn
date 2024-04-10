@@ -289,7 +289,7 @@ public class FirebaseOrganizer {
 
                                                         String latitudeStr = (String) data.get("latitude");
                                                         String longitudeStr = (String) data.get("longitude");
-                                                        if (!latitudeStr.equals("Unknown") && !longitudeStr.equals("Unknown")){
+                                                        if (latitudeStr != null && longitudeStr != null && !latitudeStr.equals("Unknown") && !longitudeStr.equals("Unknown")){
                                                             //Citation: For the following code to convert string to double, Licensing: Creative Commons, OpenAI, 2024, ChatGPT, Prompt: How to turn a list into a double
 
                                                             Double latitude = Double.parseDouble(latitudeStr);
